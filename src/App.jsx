@@ -27,7 +27,7 @@ function statusOf(remaining) {
 }
 
 function ProgressRing({ progress, color, children }) {
-  const r = 52
+  const r = 54
   const c = 2 * Math.PI * r
   return (
     <div className="ring">
@@ -48,67 +48,60 @@ function ProgressRing({ progress, color, children }) {
   )
 }
 
-function Countdown({ ms }) {
+function Countdown({ ms, className = '' }) {
   const { h, m, s } = splitDuration(ms)
   return (
-    <div className="countdown" role="timer" aria-label={`${h} horas, ${m} minutos e ${s} segundos`}>
-      {[
-        [h, 'horas'],
-        [m, 'min'],
-        [s, 'seg'],
-      ].map(([v, label], i) => (
-        <div className="cd-group" key={label}>
-          {i > 0 && <span className="cd-sep">:</span>}
-          <div className="cd-unit">
-            <span className="cd-value">{pad(v)}</span>
-            <span className="cd-label">{label}</span>
-          </div>
-        </div>
-      ))}
-    </div>
+    <span
+      className={`countdown ${className}`}
+      role="timer"
+      aria-label={`${h} horas, ${m} minutos e ${s} segundos`}
+    >
+      {pad(h)}
+      <span className="sep">:</span>
+      {pad(m)}
+      <span className="sep">:</span>
+      {pad(s)}
+    </span>
   )
 }
 
-function BossCard({ boss, lastSpawn, now, isNext }) {
+function BossCard({ boss, lastSpawn, now }) {
   const cycle = getCycle(lastSpawn, now)
   const status = statusOf(cycle.remaining)
 
   return (
-    <article
-      className={`card status-${status.key} ${isNext ? 'is-next' : ''}`}
-      style={{ '--accent': boss.color }}
-    >
+    <article className={`card status-${status.key}`} style={{ '--accent': boss.color }}>
       <header className="card-head">
         <div>
-          <span className="realm-tag">
-            <span className="realm-dot" /> {boss.realm}
-          </span>
+          <span className="realm">{boss.realm}</span>
           <h2 className="boss-name">{boss.name}</h2>
         </div>
-        <span className={`badge badge-${status.key}`}>{status.label}</span>
+        <span className="status">
+          <span className="status-dot" />
+          {status.label}
+        </span>
       </header>
 
       <ProgressRing progress={cycle.progress} color={boss.color}>
-        <span className="ring-pct">{Math.floor(cycle.progress * 100)}%</span>
-        <span className="ring-caption">do ciclo</span>
+        <Countdown ms={cycle.remaining} className="ring-time" />
+        <span className="ring-caption">{Math.floor(cycle.progress * 100)}% do ciclo</span>
       </ProgressRing>
-
-      <Countdown ms={cycle.remaining} />
 
       <dl className="meta">
         <div>
-          <dt>Próximo spawn</dt>
+          <dt>Próximo</dt>
           <dd>{formatDate(cycle.next)}</dd>
         </div>
         <div>
-          <dt>Último spawn</dt>
+          <dt>Último</dt>
           <dd>{formatDate(cycle.prev)}</dd>
         </div>
       </dl>
-
     </article>
   )
 }
+
+const ALERT_MINUTES = 10
 
 // Horários fixos do último respawn informado; os próximos são calculados de 61 em 61 horas
 const SPAWNS = Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpawn)]))
@@ -178,65 +171,50 @@ export default function App() {
 
   return (
     <div className="app">
-      <div className="bg-glow" aria-hidden="true" />
-
       <header className="top">
         <div className="brand">
-          <svg className="brand-icon" viewBox="0 0 64 64" aria-hidden="true">
-            <path
-              d="M32 8l6 14 15 1-11.5 9.5L45 47 32 39l-13 8 3.5-14.5L11 23l15-1z"
-              fill="currentColor"
-            />
-          </svg>
+          <span className="brand-mark" aria-hidden="true" />
           <div>
             <h1>Regnum Boss Timer</h1>
-            <p className="subtitle">Respawn a cada {RESPAWN_HOURS} horas</p>
+            <p className="subtitle">Ciclo de respawn de {RESPAWN_HOURS} horas</p>
           </div>
         </div>
-        <div className="top-actions">
-          {notifSupported && (
-            <button
-              type="button"
-              className={`btn chip ${notify ? 'on' : ''}`}
-              onClick={toggleNotify}
-              aria-pressed={notify}
-            >
-              {notify ? '🔔 Alertas ligados' : '🔕 Ativar alertas'}
-            </button>
-          )}
-        </div>
+        {notifSupported && (
+          <button
+            type="button"
+            className={`chip ${notify ? 'on' : ''}`}
+            onClick={toggleNotify}
+            aria-pressed={notify}
+          >
+            <span className="chip-dot" />
+            {notify ? 'Alertas ligados' : 'Ativar alertas'}
+          </button>
+        )}
       </header>
 
       <section className="hero" style={{ '--accent': nextUp.boss.color }}>
-        <span className="hero-kicker">Próximo chefe</span>
-        <div className="hero-row">
-          <div>
-            <h2 className="hero-name">{nextUp.boss.name}</h2>
-            <span className="hero-realm">
-              {nextUp.boss.realm} · {formatDate(nextUp.cycle.next)}
-            </span>
-          </div>
-          <div className="hero-time">{formatShort(nextUp.cycle.remaining)}</div>
+        <div className="hero-info">
+          <span className="eyebrow">Próximo chefe</span>
+          <h2 className="hero-name">{nextUp.boss.name}</h2>
+          <span className="hero-sub">
+            <span className="realm-inline">{nextUp.boss.realm}</span>
+            {formatDate(nextUp.cycle.next)}
+          </span>
         </div>
+        <Countdown ms={nextUp.cycle.remaining} className="hero-time" />
         <div className="hero-bar">
           <span style={{ width: `${nextUp.cycle.progress * 100}%` }} />
         </div>
       </section>
 
       <main className="grid">
-        {rows.map(({ boss }, i) => (
-          <BossCard
-            key={boss.id}
-            boss={boss}
-            lastSpawn={spawns[boss.id]}
-            now={now}
-            isNext={i === 0}
-          />
+        {rows.map(({ boss }) => (
+          <BossCard key={boss.id} boss={boss} lastSpawn={spawns[boss.id]} now={now} />
         ))}
       </main>
 
       <section className="timeline">
-        <h3>Próximos spawns</h3>
+        <h3 className="eyebrow">Próximos spawns</h3>
         <ol>
           {timeline.map(({ boss, at }) => (
             <li key={`${boss.id}-${at}`} style={{ '--accent': boss.color }}>
@@ -244,17 +222,14 @@ export default function App() {
               <span className="tl-name">{boss.name}</span>
               <span className="tl-realm">{boss.realm}</span>
               <span className="tl-date">{formatDate(at)}</span>
-              <span className="tl-in">em {formatShort(at - now)}</span>
+              <Countdown ms={at - now} className="tl-in" />
             </li>
           ))}
         </ol>
       </section>
 
       <footer className="foot">
-        <p>
-          Horários exibidos no fuso do seu dispositivo (
-          {Intl.DateTimeFormat().resolvedOptions().timeZone}).
-        </p>
+        Horários no fuso do seu dispositivo · {Intl.DateTimeFormat().resolvedOptions().timeZone}
       </footer>
     </div>
   )

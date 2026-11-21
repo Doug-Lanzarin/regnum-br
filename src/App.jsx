@@ -9,6 +9,7 @@ import {
   formatShort,
   getCycle,
 } from './bosses.js'
+import WarMap from './WarMap.jsx'
 
 function useNow(interval = 1000) {
   const [now, setNow] = useState(() => Date.now())
@@ -173,7 +174,7 @@ function HomeView({ rows, now, onOpenEpics }) {
   const [first, ...others] = rows
   return (
     <>
-      <ViewTitle title="Início" subtitle="Resumo dos épicos de Regnum" />
+      <ViewTitle title="Início" subtitle="Épicos e mapa de guerra de Regnum" />
 
       <section className="home-next" style={{ '--realm-color': first.boss.color }}>
         <img src={first.boss.icon} alt="" className="home-portrait" />
@@ -189,6 +190,8 @@ function HomeView({ rows, now, onOpenEpics }) {
           <span className="home-when">{formatDate(first.cycle.next)}</span>
         </div>
       </section>
+
+      <WarMap />
 
       <section className="panel">
         <h3 className="panel-title">Na sequência</h3>
@@ -207,55 +210,6 @@ function HomeView({ rows, now, onOpenEpics }) {
         <button type="button" className="panel-link" onClick={onOpenEpics}>
           Ver todos os épicos ›
         </button>
-      </section>
-    </>
-  )
-}
-
-function InfoView() {
-  return (
-    <>
-      <ViewTitle title="Informações" subtitle="Como a contagem funciona" />
-
-      <section className="panel">
-        <h3 className="panel-title">Respawn</h3>
-        <p className="panel-text">
-          Cada épico reaparece <strong>{RESPAWN_HOURS} horas</strong> depois do último spawn. A
-          contagem parte sempre dos horários de referência abaixo e soma {RESPAWN_HOURS} horas a cada
-          ciclo.
-        </p>
-      </section>
-
-      <section className="panel">
-        <h3 className="panel-title">Horários de referência</h3>
-        <ul className="info-list">
-          {BOSSES.map((b) => (
-            <li key={b.id} style={{ '--realm-color': b.color }}>
-              <img src={b.icon} alt="" className="home-thumb" loading="lazy" />
-              <div className="home-list-text">
-                <strong>{b.name}</strong>
-                <span className="info-realm">{b.realm}</span>
-              </div>
-              <span className="info-date">{formatDate(Date.parse(b.lastSpawn))}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="panel">
-        <h3 className="panel-title">Alertas</h3>
-        <p className="panel-text">
-          Ative os alertas no topo da página para receber uma notificação {ALERT_MINUTES} minutos
-          antes de cada spawn e outra na hora. Os alertas só funcionam com a página aberta.
-        </p>
-      </section>
-
-      <section className="panel">
-        <h3 className="panel-title">Fuso horário</h3>
-        <p className="panel-text">
-          Todos os horários são exibidos no fuso do seu dispositivo (
-          {Intl.DateTimeFormat().resolvedOptions().timeZone}).
-        </p>
       </section>
     </>
   )
@@ -358,12 +312,13 @@ export default function App() {
           </>
         )}
 
-        {tab === 'info' && <InfoView />}
       </main>
 
-      <footer className="foot">
-        Horários no fuso do seu dispositivo · {Intl.DateTimeFormat().resolvedOptions().timeZone}
-      </footer>
+      {tab !== 'info' && (
+        <footer className="foot">
+          Horários no fuso do seu dispositivo · {Intl.DateTimeFormat().resolvedOptions().timeZone}
+        </footer>
+      )}
 
       <TabBar active={tab} onChange={goTo} />
     </div>

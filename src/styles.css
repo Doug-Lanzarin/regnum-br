@@ -542,6 +542,229 @@ button {
   white-space: nowrap;
 }
 
+/* Mapa de guerra */
+.wz-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.wz-title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.wz-updated {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.wz-worlds {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+}
+
+.wz-worlds button {
+  min-height: 34px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wz-worlds button.on {
+  background: rgba(214, 176, 106, 0.18);
+  color: var(--gold);
+}
+
+.wz-map {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  aspect-ratio: 1;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #16202e;
+  border: 1px solid var(--line);
+}
+
+.wz-map img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wz-map-fallback {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.wz-score {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.wz-score div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 6px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--realm-color) 10%, var(--surface-alt));
+  border: 1px solid color-mix(in srgb, var(--realm-color) 30%, var(--line));
+}
+
+.wz-score strong {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  line-height: 1.1;
+}
+
+.wz-score span {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--realm-color);
+}
+
+.wz-realms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.wz-realm {
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--realm-color);
+}
+
+.wz-realm-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.wz-realm-name {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--realm-color);
+}
+
+.wz-gems {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.wz-gem {
+  width: 10px;
+  height: 10px;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  background: var(--gem-color);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.wz-forts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wz-forts li {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  border-top: 1px solid var(--line-soft);
+  font-size: 0.84rem;
+}
+
+.wz-forts li:first-child {
+  border-top: none;
+}
+
+.wz-fort-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.wz-fort-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+
+.wz-forts li.captured .wz-fort-name {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.wz-owner {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--owner-color);
+  background: color-mix(in srgb, var(--owner-color) 15%, transparent);
+}
+
+.wz-relics {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.wz-error {
+  margin: 12px 0 0;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.wz-source {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold);
+  text-decoration: none;
+}
+
 /* ---------- Barra de navegação flutuante ---------- */
 .tabbar {
   position: fixed;

@@ -16,11 +16,15 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 - Alerta opcional no navegador 10 minutos antes do spawn e na hora dele
 - A contagem parte sempre dos horários fixos acima, somando 61 horas a cada ciclo
 - Barra de navegação flutuante com as abas Início, Épicos e Informações
+- Mapa de guerra na aba Início (servidores Ra e Amun), com dados lidos direto do site oficial championsofregnum.com pela função `api/wz.js` e atualizados a cada minuto
 - Layout responsivo para computador e celular
 
 ## Como rodar
 ```bash
 npm install
 npm run dev      # desenvolvimento
-npm run build    # gera a pasta dist/ (pode ser hospedada em qualquer servidor estático)
+npm run build    # gera a pasta dist/
 ```
+
+Na Vercel, a pasta `api/` vira a função serverless `/api/wz` automaticamente. Em outro servidor estático o mapa continua aparecendo, mas a lista de fortes e gemas depende dessa função.
+

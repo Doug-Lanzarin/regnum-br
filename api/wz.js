@@ -81,7 +81,7 @@ export default async function handler(req, res) {
     if (!upstream.ok) throw new Error(`site oficial respondeu ${upstream.status}`)
     const data = parseWarStatus(await upstream.text())
     if (data.realms.length === 0) throw new Error('nenhum reino encontrado na página')
-    send(200, { world: w, ...data }, 'public, max-age=0, s-maxage=60, stale-while-revalidate=120')
+    send(200, { world: w, ...data }, 'public, max-age=0, s-maxage=30')
   } catch (err) {
     console.error('wz:', err)
     send(502, { error: 'Site oficial indisponível no momento.' }, 'no-store')

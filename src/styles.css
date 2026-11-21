@@ -563,6 +563,28 @@ button {
   color: var(--muted);
 }
 
+.wz-live {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #6fd67f;
+  vertical-align: 1px;
+  animation: live 2s ease-in-out infinite;
+}
+
+.wz-live.off {
+  background: #ff8a50;
+  animation: none;
+}
+
+@keyframes live {
+  50% {
+    box-shadow: 0 0 0 4px rgba(111, 214, 127, 0.18);
+  }
+}
+
 .wz-worlds {
   display: inline-flex;
   padding: 3px;

@@ -9,7 +9,7 @@ import {
   formatShort,
   getCycle,
 } from './bosses.js'
-import WarMap from './WarMap.jsx'
+import WarMap, { useWarStatus } from './WarMap.jsx'
 
 function useNow(interval = 1000) {
   const [now, setNow] = useState(() => Date.now())
@@ -170,7 +170,7 @@ function ViewTitle({ title, subtitle }) {
   )
 }
 
-function HomeView({ rows, now, onOpenEpics }) {
+function HomeView({ rows, now, onOpenEpics, war }) {
   const [first, ...others] = rows
   return (
     <>
@@ -191,7 +191,7 @@ function HomeView({ rows, now, onOpenEpics }) {
         </div>
       </section>
 
-      <WarMap />
+      <WarMap {...war} />
 
       <section className="panel">
         <h3 className="panel-title">Na sequência</h3>
@@ -228,6 +228,8 @@ export default function App() {
   )
   const notified = useRef(new Set())
   const [tab, goTo] = useHashTab()
+  const [world, setWorld] = useState('ra')
+  const warStatus = useWarStatus(world)
 
   const rows = useMemo(
     () =>
@@ -293,7 +295,12 @@ export default function App() {
 
 
       <main key={tab} className="view">
-        {tab === 'inicio' && <HomeView rows={rows} now={now} onOpenEpics={() => goTo('epicos')} />}
+        {tab === 'inicio' && <HomeView
+            rows={rows}
+            now={now}
+            onOpenEpics={() => goTo('epicos')}
+            war={{ world, onWorldChange: setWorld, status: warStatus }}
+          />}
 
         {tab === 'epicos' && (
           <>

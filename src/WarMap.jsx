@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BOSSES } from './bosses.js'
 
 const REALM_COLOR = Object.fromEntries(BOSSES.map((b) => [b.realm, b.color]))
@@ -15,26 +15,57 @@ const mapUrl = (world, version) =>
 
 const timeFmt = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit' })
 
-function useWarStatus(world) {
-  const [state, setState] = useState({ data: null, error: false, loading: true })
+const secFmt = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
 
-  const load = useCallback(async () => {
-    try {
-      const res = await fetch(`./api/wz?world=${world}`)
-      if (!res.ok) throw new Error(String(res.status))
-      const data = await res.json()
-      setState({ data, error: false, loading: false })
-    } catch {
-      setState((s) => ({ ...s, error: true, loading: false }))
-    }
-  }, [world])
+/**
+ * Busca o status da warzone a cada minuto.
+ * Fica no App (e não dentro do mapa) para continuar atualizando em qualquer aba.
+ * Quando a página volta a ficar visível, atualiza na hora se passou mais de 1 minuto.
+ */
+export function useWarStatus(world) {
+  const [state, setState] = useState({ world, data: null, error: false, loading: true, checkedAt: null })
 
   useEffect(() => {
-    setState({ data: null, error: false, loading: true })
+    let alive = true
+    let lastRun = 0
+    let controller = null
+
+    const load = async () => {
+      lastRun = Date.now()
+      controller?.abort()
+      controller = new AbortController()
+      try {
+        const res = await fetch(`./api/wz?world=${world}&t=${Math.floor(lastRun / REFRESH_MS)}`, {
+          cache: 'no-store',
+          signal: controller.signal,
+        })
+        if (!res.ok) throw new Error(String(res.status))
+        const data = await res.json()
+        if (alive) setState({ world, data, error: false, loading: false, checkedAt: Date.now() })
+      } catch (err) {
+        if (alive && err.name !== 'AbortError') {
+          setState((s) => ({ ...s, error: true, loading: false, checkedAt: Date.now() }))
+        }
+      }
+    }
+
+    setState({ world, data: null, error: false, loading: true, checkedAt: null })
     load()
-    const id = setInterval(load, REFRESH_MS)
-    return () => clearInterval(id)
-  }, [load])
+    const id = setInterval(() => {
+      if (document.visibilityState === 'visible') load()
+    }, REFRESH_MS)
+    const onVisible = () => {
+      if (document.visibilityState === 'visible' && Date.now() - lastRun >= REFRESH_MS) load()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+
+    return () => {
+      alive = false
+      controller?.abort()
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', onVisible)
+    }
+  }, [world])
 
   return state
 }
@@ -49,19 +80,11 @@ function GemDot({ owner }) {
   )
 }
 
-export default function WarMap() {
-  const [world, setWorld] = useState('ra')
-  const [tick, setTick] = useState(() => Math.floor(Date.now() / REFRESH_MS))
+export default function WarMap({ world, onWorldChange, status }) {
+  const { data, error, loading, checkedAt } = status
   const [imgFailed, setImgFailed] = useState(false)
-  const { data, error, loading } = useWarStatus(world)
 
-  // Atualiza a imagem do mapa a cada minuto
-  useEffect(() => {
-    const id = setInterval(() => setTick(Math.floor(Date.now() / REFRESH_MS)), REFRESH_MS)
-    return () => clearInterval(id)
-  }, [])
-
-  useEffect(() => setImgFailed(false), [world])
+  useEffect(() => setImgFailed(false), [world, data?.updated])
 
   const realms = data?.realms ?? []
   const held = Object.fromEntries(
@@ -79,10 +102,17 @@ export default function WarMap() {
           <h3 className="wz-title">Mapa de guerra</h3>
           <span className="wz-updated">
             {data?.updated
-              ? `Atualizado às ${timeFmt.format(new Date(data.updated))}`
+              ? `Status de ${timeFmt.format(new Date(data.updated))}`
               : loading
                 ? 'Carregando…'
                 : 'Dados do site oficial'}
+            {checkedAt && (
+              <>
+                {' · '}
+                <span className={`wz-live ${error ? 'off' : ''}`} />
+                verificado às {secFmt.format(new Date(checkedAt))}
+              </>
+            )}
           </span>
         </div>
         <div className="wz-worlds" role="group" aria-label="Servidor">
@@ -92,7 +122,7 @@ export default function WarMap() {
               type="button"
               className={world === w.id ? 'on' : ''}
               aria-pressed={world === w.id}
-              onClick={() => setWorld(w.id)}
+              onClick={() => onWorldChange(w.id)}
             >
               {w.label}
             </button>
@@ -105,7 +135,7 @@ export default function WarMap() {
           <div className="wz-map-fallback">Não foi possível carregar o mapa agora.</div>
         ) : (
           <img
-            src={mapUrl(world, data?.updated ?? tick)}
+            src={mapUrl(world, data?.updated ?? Math.floor((checkedAt ?? Date.now()) / REFRESH_MS))}
             alt={`Mapa de guerra do servidor ${world === 'ra' ? 'Ra' : 'Amun'}`}
             width="500"
             height="500"
@@ -157,9 +187,11 @@ export default function WarMap() {
         </div>
       )}
 
-      {error && !data && (
+      {error && (
         <p className="wz-error">
-          Não foi possível ler os dados do site oficial agora. Tentando de novo a cada minuto.
+          {data
+            ? 'Não foi possível atualizar agora; mostrando o último status. Nova tentativa em 1 minuto.'
+            : 'Não foi possível ler os dados do site oficial agora. Nova tentativa em 1 minuto.'}
         </p>
       )}
 

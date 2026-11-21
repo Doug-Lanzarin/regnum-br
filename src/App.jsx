@@ -132,6 +132,7 @@ const INFO_SECTIONS = [
       { id: 'warmaster', label: 'Warmaster', groups: WARMASTER_CASTLES },
       { id: 'gold', label: 'Gold' },
       { id: 'eventos', label: 'Eventos' },
+      { id: 'epicos', label: 'Épicos' },
     ],
     icon: (
       <>

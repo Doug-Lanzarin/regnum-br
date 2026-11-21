@@ -1398,6 +1398,10 @@ button {
 }
 
 @media (max-width: 380px) {
+  .topicnav {
+    gap: 14px;
+  }
+
   .kicker-long,
   .xy-sub {
     display: none;

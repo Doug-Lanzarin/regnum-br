@@ -175,7 +175,13 @@ function XymeraldCard({ now }) {
   const resetAt = nextXymeraldReset(now)
   return (
     <section className="xy-card">
-      <span className="xy-name">Xymerald</span>
+      <div className="xy-header">
+        <img src="./xymerald.png" alt="" className="xy-icon" width="44" height="44" />
+        <div className="xy-header-text">
+          <span className="xy-name">Xymerald</span>
+          <span className="xy-sub">Xymerald ore</span>
+        </div>
+      </div>
       <div className="xy-countdown">
         <span className="xy-label">Reseta em</span>
         <span className="xy-value" role="timer">

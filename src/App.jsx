@@ -85,6 +85,182 @@ function BossCard({ boss, lastSpawn, now, featured }) {
   )
 }
 
+const TABS = [
+  {
+    id: 'inicio',
+    label: 'Início',
+    icon: (
+      <path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z" />
+    ),
+  },
+  {
+    id: 'epicos',
+    label: 'Épicos',
+    icon: (
+      <>
+        <path d="M14.5 4H20v5.5L10 19.5 4.5 14z" />
+        <path d="m7 17-3 3M5.5 12.5l6 6" />
+      </>
+    ),
+  },
+  {
+    id: 'info',
+    label: 'Informações',
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="8.5" />
+        <path d="M12 11v5.5M12 7.6v.01" />
+      </>
+    ),
+  },
+]
+
+const tabFromHash = () => {
+  const id = window.location.hash.replace('#', '')
+  return TABS.some((t) => t.id === id) ? id : 'inicio'
+}
+
+/** Aba atual guardada na URL (#inicio, #epicos, #info): o botão voltar funciona e dá para compartilhar o link */
+function useHashTab() {
+  const [tab, setTab] = useState(tabFromHash)
+  useEffect(() => {
+    const onHash = () => {
+      setTab(tabFromHash())
+      window.scrollTo({ top: 0 })
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+  const goTo = (id) => {
+    if (id === tab) window.scrollTo({ top: 0, behavior: 'smooth' })
+    else window.location.hash = id
+  }
+  return [tab, goTo]
+}
+
+function TabBar({ active, onChange }) {
+  return (
+    <nav className="tabbar" aria-label="Navegação principal">
+      {TABS.map((t) => (
+        <button
+          key={t.id}
+          type="button"
+          className={`tab ${active === t.id ? 'active' : ''}`}
+          aria-current={active === t.id ? 'page' : undefined}
+          aria-label={t.label}
+          onClick={() => onChange(t.id)}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            {t.icon}
+          </svg>
+          <span className="tab-label">{t.label}</span>
+        </button>
+      ))}
+    </nav>
+  )
+}
+
+function ViewTitle({ title, subtitle }) {
+  return (
+    <div className="view-title">
+      <h2>{title}</h2>
+      {subtitle && <p>{subtitle}</p>}
+    </div>
+  )
+}
+
+function HomeView({ rows, now, onOpenEpics }) {
+  const [first, ...others] = rows
+  return (
+    <>
+      <ViewTitle title="Início" subtitle="Resumo dos épicos de Regnum" />
+
+      <section className="home-next" style={{ '--realm-color': first.boss.color }}>
+        <img src={first.boss.icon} alt="" className="home-portrait" />
+        <div className="home-next-text">
+          <span className="home-kicker">Próximo a reaparecer</span>
+          <h3>{first.boss.name}</h3>
+          <span className="home-realm">{first.boss.realm}</span>
+        </div>
+        <div className="home-next-time">
+          <span className="home-countdown">
+            {first.cycle.remaining <= 0 ? 'Agora' : formatDuration(first.cycle.remaining)}
+          </span>
+          <span className="home-when">{formatDate(first.cycle.next)}</span>
+        </div>
+      </section>
+
+      <section className="panel">
+        <h3 className="panel-title">Na sequência</h3>
+        <ul className="home-list">
+          {others.map(({ boss, cycle }) => (
+            <li key={boss.id} style={{ '--realm-color': boss.color }}>
+              <img src={boss.icon} alt="" className="home-thumb" loading="lazy" />
+              <div className="home-list-text">
+                <strong>{boss.name}</strong>
+                <span>{formatDate(cycle.next)}</span>
+              </div>
+              <span className="home-list-time">{formatDuration(cycle.remaining)}</span>
+            </li>
+          ))}
+        </ul>
+        <button type="button" className="panel-link" onClick={onOpenEpics}>
+          Ver todos os épicos ›
+        </button>
+      </section>
+    </>
+  )
+}
+
+function InfoView() {
+  return (
+    <>
+      <ViewTitle title="Informações" subtitle="Como a contagem funciona" />
+
+      <section className="panel">
+        <h3 className="panel-title">Respawn</h3>
+        <p className="panel-text">
+          Cada épico reaparece <strong>{RESPAWN_HOURS} horas</strong> depois do último spawn. A
+          contagem parte sempre dos horários de referência abaixo e soma {RESPAWN_HOURS} horas a cada
+          ciclo.
+        </p>
+      </section>
+
+      <section className="panel">
+        <h3 className="panel-title">Horários de referência</h3>
+        <ul className="info-list">
+          {BOSSES.map((b) => (
+            <li key={b.id} style={{ '--realm-color': b.color }}>
+              <img src={b.icon} alt="" className="home-thumb" loading="lazy" />
+              <div className="home-list-text">
+                <strong>{b.name}</strong>
+                <span className="info-realm">{b.realm}</span>
+              </div>
+              <span className="info-date">{formatDate(Date.parse(b.lastSpawn))}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="panel">
+        <h3 className="panel-title">Alertas</h3>
+        <p className="panel-text">
+          Ative os alertas no topo da página para receber uma notificação {ALERT_MINUTES} minutos
+          antes de cada spawn e outra na hora. Os alertas só funcionam com a página aberta.
+        </p>
+      </section>
+
+      <section className="panel">
+        <h3 className="panel-title">Fuso horário</h3>
+        <p className="panel-text">
+          Todos os horários são exibidos no fuso do seu dispositivo (
+          {Intl.DateTimeFormat().resolvedOptions().timeZone}).
+        </p>
+      </section>
+    </>
+  )
+}
+
 const ALERT_MINUTES = 10
 
 // Horários fixos do último respawn informado; os próximos são calculados de 61 em 61 horas
@@ -97,6 +273,7 @@ export default function App() {
     () => typeof Notification !== 'undefined' && Notification.permission === 'granted',
   )
   const notified = useRef(new Set())
+  const [tab, goTo] = useHashTab()
 
   const rows = useMemo(
     () =>
@@ -168,22 +345,34 @@ export default function App() {
       </header>
 
 
-      <main className="grid">
-        {rows.map(({ boss }, i) => (
-          <BossCard
-            key={boss.id}
-            boss={boss}
-            lastSpawn={spawns[boss.id]}
-            now={now}
-            featured={i === 0}
-          />
-        ))}
-      </main>
+      <main key={tab} className="view">
+        {tab === 'inicio' && <HomeView rows={rows} now={now} onOpenEpics={() => goTo('epicos')} />}
 
+        {tab === 'epicos' && (
+          <>
+            <ViewTitle title="Épicos" subtitle="Ordenados pelo próximo a reaparecer" />
+            <div className="grid">
+              {rows.map(({ boss }, i) => (
+                <BossCard
+                  key={boss.id}
+                  boss={boss}
+                  lastSpawn={spawns[boss.id]}
+                  now={now}
+                  featured={i === 0}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        {tab === 'info' && <InfoView />}
+      </main>
 
       <footer className="foot">
         Horários no fuso do seu dispositivo · {Intl.DateTimeFormat().resolvedOptions().timeZone}
       </footer>
+
+      <TabBar active={tab} onChange={goTo} />
     </div>
   )
 }

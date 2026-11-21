@@ -178,7 +178,11 @@ function XymeraldCard({ now }) {
         <span className="xy-value" role="timer">
           {formatDuration(resetAt - now)}
         </span>
-        <span className="xy-at">{formatBrasilia(resetAt)} (horário de Brasília)</span>
+        <span className="xy-at">
+          {formatBrasilia(resetAt)}
+          <span className="xy-tz-long"> (horário de Brasília)</span>
+          <span className="xy-tz-short"> · Brasília</span>
+        </span>
       </div>
     </section>
   )
@@ -191,7 +195,9 @@ function HomeView({ rows, now, onOpenEpics, war }) {
       <section className="home-next" style={{ '--realm-color': first.boss.color }}>
         <img src={first.boss.icon} alt="" className="home-portrait" />
         <div className="home-next-text">
-          <span className="home-kicker">Próximo a reaparecer</span>
+          <span className="home-kicker">
+            Próximo<span className="kicker-long"> a reaparecer</span>
+          </span>
           <h3>{first.boss.name}</h3>
           <span className="home-realm">{first.boss.realm}</span>
         </div>

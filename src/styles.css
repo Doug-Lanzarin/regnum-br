@@ -540,6 +540,10 @@ button {
   box-shadow: var(--shadow-card);
 }
 
+.xy-tz-short {
+  display: none;
+}
+
 .xy-header {
   display: flex;
   align-items: center;
@@ -947,18 +951,96 @@ button {
     width: 100%;
   }
 
+  /* Cards compactos no celular: tudo numa linha só */
   .home-next {
-    grid-template-columns: auto 1fr;
-    padding: 18px;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 16px;
   }
 
-  .home-next-time {
-    grid-column: 1 / -1;
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: space-between;
-    padding-top: 12px;
-    border-top: 1px solid color-mix(in srgb, var(--realm-color) 25%, var(--line));
+  .home-portrait {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .home-kicker {
+    font-size: 0.6rem;
+  }
+
+  .home-next-text h3 {
+    margin: 2px 0 0;
+    font-size: 1.05rem;
+  }
+
+  .home-realm {
+    font-size: 0.72rem;
+  }
+
+  .home-countdown {
+    font-size: 1.25rem;
+  }
+
+  .home-when {
+    font-size: 0.7rem;
+  }
+
+  .xy-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+
+  .xy-header {
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .xy-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+
+  .xy-name {
+    font-size: 1.05rem;
+  }
+
+  .xy-sub {
+    font-size: 0.6rem;
+  }
+
+  .xy-countdown {
+    align-items: flex-end;
+    padding: 0;
+    background: none;
+    border: none;
+    text-align: right;
+  }
+
+  .xy-label {
+    font-size: 0.6rem;
+  }
+
+  .xy-value {
+    font-size: 1.25rem;
+  }
+
+  .xy-at {
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  .xy-tz-long {
+    display: none;
+  }
+
+  .xy-tz-short {
+    display: inline;
   }
 
   .tab-label {
@@ -967,6 +1049,19 @@ button {
 
   .tab.active .tab-label {
     display: inline;
+  }
+}
+
+@media (max-width: 380px) {
+  .kicker-long,
+  .xy-sub {
+    display: none;
+  }
+
+  .home-kicker,
+  .home-next-text h3,
+  .xy-name {
+    white-space: nowrap;
   }
 }
 

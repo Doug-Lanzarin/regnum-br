@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
 import { BOSSES } from './bosses.js'
-import { FORT_ICON_PATHS, FORT_MAP_POSITIONS, WZ_MAP_IMAGE, WZ_MAP_SIZE, fortLabel } from './wzMap.js'
 
 const REALM_COLOR = Object.fromEntries(BOSSES.map((b) => [b.realm, b.color]))
 const REALMS = ['Alsius', 'Ignis', 'Syrtis']
 const NEUTRAL = '#5b6577'
 const REFRESH_MS = 60_000
 const OFFICIAL_PAGE = 'https://www.championsofregnum.com/index.php?l=1&sec=3'
-const ICON_SIZE = 32
-const iconKind = (kind) => (kind === 'fort' ? 'keep' : kind)
+const mapUrl = (world, version) =>
+  `https://www.championsofregnum.com/ranking/data/${world}/gen_map.jpg?v=${version}`
 
 const timeFmt = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit' })
 
@@ -79,7 +78,9 @@ function GemDot({ owner }) {
 
 export default function WarMap({ world, status }) {
   const { data, error, loading, checkedAt } = status
-  const [selected, setSelected] = useState(null)
+  const [imgFailed, setImgFailed] = useState(false)
+
+  useEffect(() => setImgFailed(false), [world, data?.updated])
 
   const realms = data?.realms ?? []
   const held = Object.fromEntries(
@@ -89,9 +90,6 @@ export default function WarMap({ world, status }) {
     ]),
   )
   const totalForts = realms.reduce((n, x) => n + x.forts.length, 0)
-  const forts = realms.flatMap((x) => x.forts)
-  const selectedFort = forts.find((f) => f.number === selected)
-  const toggleFort = (n) => setSelected((cur) => (cur === n ? null : n))
 
   return (
     <section className="panel wz">
@@ -116,75 +114,19 @@ export default function WarMap({ world, status }) {
       </div>
 
       <div className="wz-map">
-        <svg
-          viewBox={`0 0 ${WZ_MAP_SIZE} ${WZ_MAP_SIZE}`}
-          role="img"
-          aria-label="Mapa da Zona de Guerra"
-        >
-          <image href={WZ_MAP_IMAGE} width={WZ_MAP_SIZE} height={WZ_MAP_SIZE} preserveAspectRatio="xMidYMid slice" />
-          {forts.map((fort) => {
-            const pos = FORT_MAP_POSITIONS[fort.number - 1]
-            if (!pos) return null
-            const label = fortLabel(fort.name)
-            return (
-              <g
-                key={fort.number}
-                className={`wz-fort ${fort.captured ? 'captured' : ''} ${selected === fort.number ? 'selected' : ''}`}
-                role="button"
-                tabIndex={0}
-                aria-label={`${label}: ${fort.owner}${fort.captured ? `, invadido (dono original ${fort.home})` : ''}`}
-                onClick={() => toggleFort(fort.number)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault()
-                    toggleFort(fort.number)
-                  }
-                }}
-              >
-                <title>
-                  {label} — {fort.owner}
-                  {fort.captured ? ` (invadido, dono original: ${fort.home})` : ''}
-                </title>
-                <rect
-                  x={Math.min(pos.x, pos.labelX) - 4}
-                  y={Math.min(pos.y, pos.labelY - 14) - 4}
-                  width={Math.max(pos.x + ICON_SIZE, pos.labelX + 30) - Math.min(pos.x, pos.labelX) + 8}
-                  height={Math.max(pos.y + ICON_SIZE, pos.labelY) - Math.min(pos.y, pos.labelY - 14) + 8}
-                  className="wz-hit"
-                />
-                {fort.captured && (
-                  <circle
-                    cx={pos.x + ICON_SIZE / 2}
-                    cy={pos.y + ICON_SIZE / 2}
-                    r={ICON_SIZE / 2 + 4}
-                    className="wz-capture-ring"
-                  />
-                )}
-                <svg x={pos.x} y={pos.y} width={ICON_SIZE} height={ICON_SIZE} viewBox="0 0 512 512">
-                  <path d={FORT_ICON_PATHS[iconKind(fort.kind)]} fill={REALM_COLOR[fort.owner]} className="wz-fort-icon" />
-                </svg>
-                <text x={pos.labelX} y={pos.labelY} className="wz-fort-label">
-                  ({fort.number})
-                </text>
-              </g>
-            )
-          })}
-        </svg>
-        {loading && !data && <div className="wz-map-loading">Carregando fortes…</div>}
+        {imgFailed ? (
+          <div className="wz-map-fallback">Não foi possível carregar o mapa agora.</div>
+        ) : (
+          <img
+            src={mapUrl(world, data?.updated ?? Math.floor((checkedAt ?? Date.now()) / REFRESH_MS))}
+            alt="Mapa de guerra"
+            width="500"
+            height="500"
+            referrerPolicy="no-referrer"
+            onError={() => setImgFailed(true)}
+          />
+        )}
       </div>
-
-      {selectedFort && (
-        <div className="wz-selected" style={{ '--realm-color': REALM_COLOR[selectedFort.owner] }}>
-          <span className="wz-fort-num">{selectedFort.number}</span>
-          <strong>{fortLabel(selectedFort.name)}</strong>
-          <span className="wz-owner" style={{ '--owner-color': REALM_COLOR[selectedFort.owner] }}>
-            {selectedFort.owner}
-          </span>
-          {selectedFort.captured && (
-            <span className="wz-selected-note">invadido · dono original {selectedFort.home}</span>
-          )}
-        </div>
-      )}
 
       {totalForts > 0 && (
         <div className="wz-score" aria-label="Fortes por reino">
@@ -211,13 +153,9 @@ export default function WarMap({ world, status }) {
               </div>
               <ul className="wz-forts">
                 {forts.map((f) => (
-                  <li
-                    key={f.name}
-                    className={`${f.captured ? 'captured' : ''} ${selected === f.number ? 'selected' : ''}`}
-                    onClick={() => toggleFort(f.number)}
-                  >
+                  <li key={f.name} className={f.captured ? 'captured' : ''}>
                     <span className="wz-fort-num">{f.number}</span>
-                    <span className="wz-fort-name">{fortLabel(f.name)}</span>
+                    <span className="wz-fort-name">{f.name}</span>
                     <span className="wz-owner" style={{ '--owner-color': REALM_COLOR[f.owner] }}>
                       {f.owner}
                     </span>

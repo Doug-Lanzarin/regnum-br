@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   BOSSES,
   RESPAWN_HOURS,
@@ -10,6 +10,7 @@ import {
   getCycle,
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
+import { notificationsSupported, useAlerts } from './alerts.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
 function useNow(interval = 1000) {
@@ -309,7 +310,12 @@ function HomeView({ rows, now, onOpenEpics, war }) {
 // Servidor usado no mapa de guerra
 const WAR_WORLD = 'ra'
 
-const ALERT_MINUTES = 10
+const isIOS = () =>
+  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+
+const isStandalone = () =>
+  window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone === true
 
 // Horários fixos do último respawn informado; os próximos são calculados de 61 em 61 horas
 const SPAWNS = Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpawn)]))
@@ -317,10 +323,6 @@ const SPAWNS = Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpaw
 export default function App() {
   const now = useNow()
   const spawns = SPAWNS
-  const [notify, setNotify] = useState(
-    () => typeof Notification !== 'undefined' && Notification.permission === 'granted',
-  )
-  const notified = useRef(new Set())
   const [tab, goTo, infoSection, goToInfoSection] = useHashTab()
   const warStatus = useWarStatus(WAR_WORLD)
 
@@ -338,53 +340,54 @@ export default function App() {
     document.title = `${formatShort(nextUp.cycle.remaining)} · ${nextUp.boss.name} | Regnum Boss Timer`
   }, [nextUp])
 
-  // Notificações no navegador
-  useEffect(() => {
-    if (!notify || typeof Notification === 'undefined') return
-    for (const { boss, cycle } of rows) {
-      const mins = cycle.remaining / 60000
-      const keys = [
-        [`${boss.id}-${cycle.next}-pre`, mins <= ALERT_MINUTES && mins > ALERT_MINUTES - 1,
-          `${boss.name} nasce em ${ALERT_MINUTES} minutos!`],
-        [`${boss.id}-${cycle.next}-now`, cycle.remaining <= 1000, `${boss.name} nasceu em ${boss.realm}!`],
-      ]
-      for (const [key, cond, msg] of keys) {
-        if (cond && !notified.current.has(key)) {
-          notified.current.add(key)
-          try {
-            new Notification('Regnum Boss Timer', { body: msg, icon: './favicon.svg' })
-          } catch {
-            /* ignora */
-          }
-        }
-      }
-    }
-  }, [rows, notify])
+  // Alertas: 30 min, 15 min e na hora (épicos e Xymerald) + quests WM às 23:45 de Brasília
+  const alerts = useAlerts(now, rows)
+  const [showInstallHint, setShowInstallHint] = useState(false)
+  const needsInstall = !notificationsSupported() && isIOS() && !isStandalone()
 
-  const toggleNotify = async () => {
-    if (typeof Notification === 'undefined') return
-    if (notify) return setNotify(false)
-    const perm = await Notification.requestPermission()
-    setNotify(perm === 'granted')
-  }
-
-  const notifSupported = typeof Notification !== 'undefined'
 
   return (
     <div className="app">
       <header className="top">
-        {notifSupported && (
+        {notificationsSupported() && (
           <button
             type="button"
-            className={`chip ${notify ? 'on' : ''}`}
-            onClick={toggleNotify}
-            aria-pressed={notify}
+            className={`chip ${alerts.enabled ? 'on' : ''}`}
+            onClick={alerts.toggle}
+            aria-pressed={alerts.enabled}
+            title="Avisos 30 min, 15 min e na hora dos épicos e do Xymerald, e às 23:45 para as quests WM"
           >
             <span className="chip-dot" />
-            {notify ? 'Alertas ligados' : 'Ativar alertas'}
+            {alerts.enabled
+              ? 'Alertas ligados'
+              : alerts.permission === 'denied'
+                ? 'Alertas bloqueados no navegador'
+                : 'Ativar alertas'}
+          </button>
+        )}
+        {needsInstall && (
+          <button
+            type="button"
+            className="chip"
+            onClick={() => setShowInstallHint((v) => !v)}
+            aria-expanded={showInstallHint}
+          >
+            <span className="chip-dot" />
+            Ativar alertas
           </button>
         )}
       </header>
+
+      {needsInstall && showInstallHint && (
+        <div className="install-hint" role="note">
+          <strong>Alertas no iPhone</strong>
+          <p>
+            O iPhone só permite alertas com o site instalado. Toque em <b>Compartilhar</b> no Safari,
+            depois em <b>Adicionar à Tela de Início</b>. Abra pelo ícone criado e toque em{' '}
+            <b>Ativar alertas</b>.
+          </p>
+        </div>
+      )}
 
 
       <main key={tab} className="view">

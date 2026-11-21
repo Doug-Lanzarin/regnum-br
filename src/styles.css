@@ -532,12 +532,11 @@ button {
   flex-direction: column;
   gap: 8px;
   margin-top: 16px;
-  padding: 16px;
-  border-radius: 18px;
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--counter-color);
-  background: color-mix(in srgb, var(--counter-color) 7%, var(--surface));
-  box-shadow: var(--shadow-card);
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid var(--counter-color);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--counter-color) 16%, var(--surface)), var(--surface) 70%);
+  box-shadow: 0 0 0 1px var(--counter-color), var(--shadow-card);
 }
 
 .xy-tz-short {

@@ -12,6 +12,7 @@ import {
 import WarMap, { useWarStatus } from './WarMap.jsx'
 import { notificationsSupported, useAlerts } from './alerts.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
+import { WARMASTER_CASTLES } from './joias.js'
 
 function useNow(interval = 1000) {
   const [now, setNow] = useState(() => Date.now())
@@ -128,7 +129,7 @@ const INFO_SECTIONS = [
     id: 'joias',
     label: 'Joias',
     topics: [
-      { id: 'warmaster', label: 'Warmaster' },
+      { id: 'warmaster', label: 'Warmaster', groups: WARMASTER_CASTLES },
       { id: 'gold', label: 'Gold' },
       { id: 'eventos', label: 'Eventos' },
     ],
@@ -153,11 +154,12 @@ const INFO_SECTIONS = [
 
 /** Lê o endereço: #inicio, #epicos, #info ou #info/<seção> */
 const parseHash = () => {
-  const [id, sub, sub2] = window.location.hash.replace('#', '').split('/')
+  const [id, sub, sub2, sub3] = window.location.hash.replace('#', '').split('/')
   const tab = TABS.some((t) => t.id === id) ? id : 'inicio'
   const info = INFO_SECTIONS.find((x) => x.id === sub) ?? INFO_SECTIONS[0]
-  const topic = info.topics ? (info.topics.find((t) => t.id === sub2) ?? info.topics[0]).id : null
-  return { tab, section: info.id, topic }
+  const topicObj = info.topics ? (info.topics.find((t) => t.id === sub2) ?? info.topics[0]) : null
+  const group = topicObj?.groups ? (topicObj.groups.find((g) => g.id === sub3) ?? topicObj.groups[0]).id : null
+  return { tab, section: info.id, topic: topicObj?.id ?? null, group }
 }
 
 /** Aba e sub-aba guardadas na URL: o botão voltar funciona e dá para compartilhar o link */
@@ -178,15 +180,54 @@ function useHashTab() {
     if (id === route.tab) window.scrollTo({ top: 0, behavior: 'smooth' })
     else window.location.hash = id
   }
-  const goToSection = (section, topic) => {
-    window.location.hash = ['info', section, topic].filter(Boolean).join('/')
+  const goToSection = (section, topic, group) => {
+    window.location.hash = ['info', section, topic, group].filter(Boolean).join('/')
   }
   return [route.tab, goTo, route, goToSection]
 }
 
-function InfoView({ section, topic, onSection }) {
+function JewelCard({ item }) {
+  return (
+    <article className="jewel">
+      <header className="jewel-head">
+        <img src={item.icon} alt="" className="jewel-icon" width="40" height="40" loading="lazy" />
+        <h3>{item.name}</h3>
+      </header>
+      <dl className="jewel-body">
+        {item.damage && (
+          <div className="jewel-damage">
+            <dt>Daño:</dt>
+            <dd>
+              <img src={item.damage.icon} alt={item.damage.type} width="12" height="15" />
+              {item.damage.value}
+            </dd>
+          </div>
+        )}
+        <div>
+          <dt>Categoría:</dt>
+          <dd>{item.category}</dd>
+        </div>
+        <div>
+          <dt>Peso:</dt>
+          <dd>{item.weight}</dd>
+        </div>
+        <div className="jewel-level">Requiere Nivel {item.level}</div>
+      </dl>
+      <ul className="jewel-stats">
+        {item.stats.map((st) => (
+          <li key={st.text} className={st.tone === 'bad' ? 'bad' : ''}>
+            {st.text}
+          </li>
+        ))}
+      </ul>
+    </article>
+  )
+}
+
+function InfoView({ section, topic, group, onSection }) {
   const current = INFO_SECTIONS.find((x) => x.id === section)
   const currentTopic = current.topics?.find((t) => t.id === topic)
+  const currentGroup = currentTopic?.groups?.find((g) => g.id === group)
   return (
     <>
       <nav className="subnav" aria-label="Seções de informações">
@@ -222,14 +263,40 @@ function InfoView({ section, topic, onSection }) {
         </nav>
       )}
 
-      <section key={`${current.id}-${topic}`} className="info-section">
-        <div className="info-empty">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            {current.icon}
-          </svg>
-          <strong>{currentTopic ? `${current.label} · ${currentTopic.label}` : current.label}</strong>
-          <span>Em breve</span>
-        </div>
+      {currentTopic?.groups && (
+        <nav className="groupnav" aria-label={`${currentTopic.label} por castelo`}>
+          {currentTopic.groups.map((g) => (
+            <button
+              key={g.id}
+              type="button"
+              className={`groupnav-item ${g.id === group ? 'active' : ''}`}
+              style={{ '--group-color': g.color }}
+              aria-current={g.id === group ? 'page' : undefined}
+              onClick={() => onSection(current.id, currentTopic.id, g.id)}
+            >
+              <span className="groupnav-dot" />
+              {g.label}
+            </button>
+          ))}
+        </nav>
+      )}
+
+      <section key={`${current.id}-${topic}-${group}`} className="info-section">
+        {currentGroup ? (
+          <div className="jewel-grid" style={{ '--group-color': currentGroup.color }}>
+            {currentGroup.items.map((item) => (
+              <JewelCard key={item.id} item={item} />
+            ))}
+          </div>
+        ) : (
+          <div className="info-empty">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              {current.icon}
+            </svg>
+            <strong>{currentTopic ? `${current.label} · ${currentTopic.label}` : current.label}</strong>
+            <span>Em breve</span>
+          </div>
+        )}
       </section>
     </>
   )
@@ -437,7 +504,12 @@ export default function App() {
           </>
         )}
 
-        {tab === 'info' && <InfoView section={route.section} topic={route.topic} onSection={goToInfoSection} />}
+        {tab === 'info' && <InfoView
+            section={route.section}
+            topic={route.topic}
+            group={route.group}
+            onSection={goToInfoSection}
+          />}
       </main>
 
       {tab !== 'info' && (

@@ -984,6 +984,157 @@ button {
   transform: scaleX(1);
 }
 
+.groupnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.groupnav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.groupnav-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--group-color);
+  opacity: 0.6;
+}
+
+@media (hover: hover) {
+  .groupnav-item:hover {
+    color: var(--ink);
+  }
+}
+
+.groupnav-item:focus-visible {
+  outline: 2px solid var(--group-color);
+  outline-offset: 2px;
+}
+
+.groupnav-item.active {
+  color: var(--group-color);
+  border-color: color-mix(in srgb, var(--group-color) 55%, transparent);
+  background: color-mix(in srgb, var(--group-color) 12%, var(--surface));
+}
+
+.groupnav-item.active .groupnav-dot {
+  opacity: 1;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--group-color) 22%, transparent);
+}
+
+/* Joias */
+.jewel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.jewel {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--group-color);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.jewel-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: color-mix(in srgb, var(--group-color) 7%, var(--surface-alt));
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.jewel-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.jewel-head h3 {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.jewel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  padding: 12px 14px 0;
+  font-size: 0.82rem;
+}
+
+.jewel-body > div {
+  display: flex;
+  gap: 5px;
+}
+
+.jewel-body dt {
+  color: var(--ink-2);
+}
+
+.jewel-body dd {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  color: var(--ink);
+}
+
+.jewel-damage dt {
+  color: #e8c96a;
+}
+
+.jewel-damage dd {
+  color: #e8c96a;
+  font-weight: 600;
+}
+
+.jewel-level {
+  color: var(--muted);
+}
+
+.jewel-stats {
+  margin: 0;
+  padding: 10px 14px 14px;
+  list-style: none;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.jewel-stats li {
+  padding: 2px 0;
+  color: #7cc0ff;
+}
+
+.jewel-stats li.bad {
+  color: #ff8a7a;
+}
+
 .info-section {
   margin-top: 16px;
   animation: view-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1021,6 +1172,12 @@ button {
 .info-empty span {
   font-size: 0.85rem;
   color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .jewel-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ---------- Barra de navegação flutuante ---------- */
@@ -1218,6 +1375,21 @@ button {
 
   .tab-label {
     display: none;
+  }
+
+  .jewel-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .groupnav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .groupnav-item {
+    justify-content: center;
+    padding: 0 8px;
   }
 
   .tab.active .tab-label {

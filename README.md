@@ -13,9 +13,8 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 ## Funcionalidades
 - Contagem regressiva ao vivo, com anel de progresso do ciclo
 - Destaque para o próximo chefe e lista com os próximos spawns
-- Botões **Nasceu agora** e **Editar horário**; os horários ficam salvos no navegador
 - Alerta opcional no navegador 10 minutos antes do spawn e na hora dele
-- Se passar mais de um ciclo sem atualização, os próximos spawns são projetados de 61 em 61 horas
+- A contagem parte sempre dos horários fixos acima, somando 61 horas a cada ciclo
 - Layout responsivo para computador e celular
 
 ## Como rodar

@@ -69,9 +69,3 @@ const dateFmt = new Intl.DateTimeFormat('pt-BR', {
 export function formatDate(ms) {
   return dateFmt.format(new Date(ms)).replace('.', '')
 }
-
-// Converte timestamp para o formato aceito por <input type="datetime-local">
-export function toLocalInput(ms) {
-  const d = new Date(ms)
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
-}

@@ -8,24 +8,7 @@ import {
   getCycle,
   pad,
   splitDuration,
-  toLocalInput,
 } from './bosses.js'
-
-const STORAGE_KEY = 'regnum-br:last-spawns:v1'
-const ALERT_MINUTES = 10
-
-function loadSpawns() {
-  const defaults = Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpawn)]))
-  try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')
-    for (const id of Object.keys(defaults)) {
-      if (Number.isFinite(saved[id])) defaults[id] = saved[id]
-    }
-  } catch {
-    /* armazenamento indisponível: usa os padrões */
-  }
-  return defaults
-}
 
 function useNow(interval = 1000) {
   const [now, setNow] = useState(() => Date.now())
@@ -86,25 +69,9 @@ function Countdown({ ms }) {
   )
 }
 
-function BossCard({ boss, lastSpawn, now, onUpdate, isNext }) {
-  const [editing, setEditing] = useState(false)
-  const [draft, setDraft] = useState('')
+function BossCard({ boss, lastSpawn, now, isNext }) {
   const cycle = getCycle(lastSpawn, now)
   const status = statusOf(cycle.remaining)
-
-  const openEditor = () => {
-    setDraft(toLocalInput(lastSpawn))
-    setEditing(true)
-  }
-
-  const save = (e) => {
-    e.preventDefault()
-    const ms = new Date(draft).getTime()
-    if (Number.isFinite(ms)) {
-      onUpdate(boss.id, ms)
-      setEditing(false)
-    }
-  }
 
   return (
     <article
@@ -134,59 +101,25 @@ function BossCard({ boss, lastSpawn, now, onUpdate, isNext }) {
           <dd>{formatDate(cycle.next)}</dd>
         </div>
         <div>
-          <dt>{cycle.projected ? 'Último (projetado)' : 'Último spawn'}</dt>
+          <dt>Último spawn</dt>
           <dd>{formatDate(cycle.prev)}</dd>
         </div>
       </dl>
 
-      {editing ? (
-        <form className="editor" onSubmit={save}>
-          <label htmlFor={`in-${boss.id}`}>Horário do último spawn</label>
-          <input
-            id={`in-${boss.id}`}
-            type="datetime-local"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            required
-          />
-          <div className="actions">
-            <button type="button" className="btn ghost" onClick={() => setEditing(false)}>
-              Cancelar
-            </button>
-            <button type="submit" className="btn primary">
-              Salvar
-            </button>
-          </div>
-        </form>
-      ) : (
-        <div className="actions">
-          <button type="button" className="btn ghost" onClick={openEditor}>
-            Editar horário
-          </button>
-          <button type="button" className="btn primary" onClick={() => onUpdate(boss.id, Date.now())}>
-            Nasceu agora
-          </button>
-        </div>
-      )}
     </article>
   )
 }
 
+// Horários fixos do último respawn informado; os próximos são calculados de 61 em 61 horas
+const SPAWNS = Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpawn)]))
+
 export default function App() {
   const now = useNow()
-  const [spawns, setSpawns] = useState(loadSpawns)
+  const spawns = SPAWNS
   const [notify, setNotify] = useState(
     () => typeof Notification !== 'undefined' && Notification.permission === 'granted',
   )
   const notified = useRef(new Set())
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(spawns))
-    } catch {
-      /* ignora */
-    }
-  }, [spawns])
 
   const rows = useMemo(
     () =>
@@ -239,13 +172,6 @@ export default function App() {
     if (notify) return setNotify(false)
     const perm = await Notification.requestPermission()
     setNotify(perm === 'granted')
-  }
-
-  const updateSpawn = (id, ms) => setSpawns((s) => ({ ...s, [id]: ms }))
-  const resetAll = () => {
-    if (confirm('Restaurar os horários originais de todos os chefes?')) {
-      setSpawns(Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpawn)])))
-    }
   }
 
   const notifSupported = typeof Notification !== 'undefined'
@@ -304,7 +230,6 @@ export default function App() {
             boss={boss}
             lastSpawn={spawns[boss.id]}
             now={now}
-            onUpdate={updateSpawn}
             isNext={i === 0}
           />
         ))}
@@ -328,12 +253,8 @@ export default function App() {
       <footer className="foot">
         <p>
           Horários exibidos no fuso do seu dispositivo (
-          {Intl.DateTimeFormat().resolvedOptions().timeZone}). Os horários salvos ficam neste
-          navegador.
+          {Intl.DateTimeFormat().resolvedOptions().timeZone}).
         </p>
-        <button type="button" className="link" onClick={resetAll}>
-          Restaurar horários originais
-        </button>
       </footer>
     </div>
   )

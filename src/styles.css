@@ -124,21 +124,11 @@ h1 {
   transform: scale(0.97);
 }
 
-.btn:focus-visible,
-.link:focus-visible,
-input:focus-visible {
+.btn:focus-visible {
   outline: 2px solid var(--accent, var(--gold));
   outline-offset: 2px;
 }
 
-.btn.primary {
-  background: color-mix(in srgb, var(--accent) 22%, transparent);
-  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-}
-
-.btn.primary:hover {
-  background: color-mix(in srgb, var(--accent) 32%, transparent);
-}
 
 .btn.chip {
   border-radius: 999px;
@@ -151,19 +141,7 @@ input:focus-visible {
   color: #ffe6ad;
 }
 
-.link {
-  background: none;
-  border: none;
-  color: var(--muted);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-  padding: 8px;
-}
 
-.link:hover {
-  color: var(--text);
-}
 
 /* ---------- Destaque ---------- */
 .hero {
@@ -477,36 +455,9 @@ input:focus-visible {
   text-transform: capitalize;
 }
 
-.actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: auto;
-}
 
-.editor {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: auto;
-}
 
-.editor label {
-  font-size: 0.8rem;
-  color: var(--muted);
-}
 
-.editor input {
-  width: 100%;
-  min-height: 44px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--card-border);
-  background: rgba(0, 0, 0, 0.35);
-  color: var(--text);
-  font: inherit;
-  font-size: 16px; /* evita zoom no iOS */
-}
 
 /* ---------- Linha do tempo ---------- */
 .timeline {

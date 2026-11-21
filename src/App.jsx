@@ -163,7 +163,7 @@ function TabBar({ active, onChange }) {
 function ViewTitle({ title, subtitle }) {
   return (
     <div className="view-title">
-      <h2>{title}</h2>
+      <h1>{title}</h1>
       {subtitle && <p>{subtitle}</p>}
     </div>
   )
@@ -324,13 +324,6 @@ export default function App() {
   return (
     <div className="app">
       <header className="top">
-        <div className="brand">
-          <span className="brand-mark" aria-hidden="true" />
-          <div>
-            <h1>Regnum Boss Timer</h1>
-            <p className="subtitle">Ciclo de respawn de {RESPAWN_HOURS} horas</p>
-          </div>
-        </div>
         {notifSupported && (
           <button
             type="button"

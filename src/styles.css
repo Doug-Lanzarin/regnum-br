@@ -54,52 +54,16 @@ button {
 .top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
 
-.brand-mark {
-  position: relative;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 2px solid var(--line);
-  flex-shrink: 0;
-}
 
-.brand-mark::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  border-top-color: var(--gold);
-  border-right-color: var(--gold);
-  transform: rotate(20deg);
-}
 
-h1 {
-  margin: 0;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: clamp(1.45rem, 4.2vw, 1.8rem);
-  letter-spacing: 0.01em;
-  line-height: 1.1;
-}
 
-.subtitle {
-  margin: 3px 0 0;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
 
 .chip {
   display: inline-flex;
@@ -382,7 +346,7 @@ h1 {
   margin-bottom: 22px;
 }
 
-.view-title h2 {
+.view-title h1 {
   margin: 0;
   font-family: var(--display);
   font-size: 1.5rem;
@@ -661,7 +625,7 @@ h1 {
 /* ---------- Responsivo ---------- */
 @media (max-width: 560px) {
   .top {
-    margin-bottom: 26px;
+    margin-bottom: 20px;
   }
 
   .chip {

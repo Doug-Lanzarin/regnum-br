@@ -16,6 +16,7 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 - Alerta opcional no navegador 10 minutos antes do spawn e na hora dele
 - A contagem parte sempre dos horários fixos acima, somando 61 horas a cada ciclo
 - Barra de navegação flutuante com as abas Início, Épicos e Informações
+- Contador de reset do Xymerald na aba Início (a cada 23 horas, mesma regra do Regnum Warlords, horário de Brasília)
 - Mapa de guerra na aba Início (servidores Ra e Amun), com dados lidos direto do site oficial championsofregnum.com pela função `api/wz.js` e atualizados a cada minuto
 - Layout responsivo para computador e celular
 

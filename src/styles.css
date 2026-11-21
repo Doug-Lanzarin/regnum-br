@@ -542,6 +542,62 @@ button {
   white-space: nowrap;
 }
 
+/* Xymerald (mesmo modelo do Regnum Warlords) */
+.xy-card {
+  --counter-color: #8ec9e0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--counter-color);
+  background: color-mix(in srgb, var(--counter-color) 7%, var(--surface));
+  box-shadow: var(--shadow-card);
+}
+
+.xy-name {
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--counter-color);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--counter-color) 45%, transparent);
+}
+
+.xy-countdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--counter-color) 12%, var(--surface-alt));
+  border: 1px solid color-mix(in srgb, var(--counter-color) 35%, var(--line));
+}
+
+.xy-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.xy-value {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.xy-at {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
 /* Mapa de guerra */
 .wz-head {
   display: flex;

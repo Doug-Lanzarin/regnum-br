@@ -10,6 +10,7 @@ import {
   getCycle,
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
+import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
 function useNow(interval = 1000) {
   const [now, setNow] = useState(() => Date.now())
@@ -170,11 +171,27 @@ function ViewTitle({ title, subtitle }) {
   )
 }
 
+function XymeraldCard({ now }) {
+  const resetAt = nextXymeraldReset(now)
+  return (
+    <section className="xy-card">
+      <span className="xy-name">Xymerald</span>
+      <div className="xy-countdown">
+        <span className="xy-label">Reseta em</span>
+        <span className="xy-value" role="timer">
+          {formatDuration(resetAt - now)}
+        </span>
+        <span className="xy-at">{formatBrasilia(resetAt)} (horário de Brasília)</span>
+      </div>
+    </section>
+  )
+}
+
 function HomeView({ rows, now, onOpenEpics, war }) {
   const [first, ...others] = rows
   return (
     <>
-      <ViewTitle title="Início" subtitle="Épicos e mapa de guerra de Regnum" />
+      <ViewTitle title="Início" subtitle="Épicos, Xymerald e mapa de guerra de Regnum" />
 
       <section className="home-next" style={{ '--realm-color': first.boss.color }}>
         <img src={first.boss.icon} alt="" className="home-portrait" />
@@ -190,6 +207,8 @@ function HomeView({ rows, now, onOpenEpics, war }) {
           <span className="home-when">{formatDate(first.cycle.next)}</span>
         </div>
       </section>
+
+      <XymeraldCard now={now} />
 
       <WarMap {...war} />
 

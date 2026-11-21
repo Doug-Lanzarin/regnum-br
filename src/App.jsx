@@ -196,7 +196,7 @@ function JewelCard({ item }) {
       <dl className="jewel-body">
         {item.damage && (
           <div className="jewel-damage">
-            <dt>Daño:</dt>
+            <dt>Dano:</dt>
             <dd>
               <img src={item.damage.icon} alt={item.damage.type} width="12" height="15" />
               {item.damage.value}
@@ -204,14 +204,14 @@ function JewelCard({ item }) {
           </div>
         )}
         <div>
-          <dt>Categoría:</dt>
+          <dt>Categoria:</dt>
           <dd>{item.category}</dd>
         </div>
         <div>
           <dt>Peso:</dt>
           <dd>{item.weight}</dd>
         </div>
-        <div className="jewel-level">Requiere Nivel {item.level}</div>
+        <div className="jewel-level">Requer Nível {item.level}</div>
       </dl>
       <ul className="jewel-stats">
         {item.stats.map((st) => (

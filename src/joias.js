@@ -1,8 +1,8 @@
 // Joias Warmaster, transcritas da imagem da SyrtisBR (sem os preços em WMC).
-// Os textos seguem o tooltip do jogo. `tone: 'bad'` marca as linhas vermelhas.
+// Textos traduzidos do tooltip do jogo (espanhol) para o português. `tone: 'bad'` marca as linhas vermelhas.
 
 const AMULETO = { category: 'Amuletos', weight: '15 Grms', level: 60 }
-const ANILLO = { category: 'Anillos', weight: '5 Grms', level: 60 }
+const ANILLO = { category: 'Anéis', weight: '5 Grms', level: 60 }
 
 const icon = (id) => `./joias/warmaster/${id}.png`
 const dano = (type, value) => ({ icon: `./joias/dano/${type}.png`, type, value })
@@ -16,43 +16,43 @@ export const WARMASTER_CASTLES = [
     items: [
       {
         id: 'amuleto-tormenta',
-        name: 'Amuleto de la Tormenta',
+        name: 'Amuleto da Tempestade',
         ...AMULETO,
         damage: dano('eletrico', 40),
-        stats: [{ text: 'Daño de electricidad +40' }, { text: 'Salud +200' }],
+        stats: [{ text: 'Dano de eletricidade +40' }, { text: 'Vida +200' }],
       },
       {
         id: 'amuleto-hechicero-nocturno',
-        name: 'Amuleto del Hechicero Nocturno',
+        name: 'Amuleto do Feiticeiro Noturno',
         ...AMULETO,
         damage: dano('eletrico', 40),
-        stats: [{ text: 'Daño de electricidad +40' }, { text: 'Mana +150' }],
+        stats: [{ text: 'Dano de eletricidade +40' }, { text: 'Mana +150' }],
       },
       {
         id: 'amuleto-bosque-radiante',
-        name: 'Amuleto del Bosque Radiante',
+        name: 'Amuleto do Bosque Radiante',
         ...AMULETO,
-        stats: [{ text: 'Mana +150' }, { text: 'Velocidad de ataque +10%' }],
+        stats: [{ text: 'Mana +150' }, { text: 'Velocidade de ataque +10%' }],
       },
       {
         id: 'anillo-mirada-suprema',
-        name: 'Anillo de la Mirada Suprema',
+        name: 'Anel do Olhar Supremo',
         ...ANILLO,
         damage: dano('perfurante', 25),
-        stats: [{ text: 'Daño punzante +25' }, { text: 'Chance de crítico +30%' }],
+        stats: [{ text: 'Dano perfurante +25' }, { text: 'Chance de crítico +30%' }],
       },
       {
         id: 'anillo-alma-elevada',
-        name: 'Anillo del Alma Elevada',
+        name: 'Anel da Alma Elevada',
         ...ANILLO,
         damage: dano('cortante', 25),
-        stats: [{ text: 'Daño cortante +25' }, { text: 'Velocidad de invocación +7%' }],
+        stats: [{ text: 'Dano cortante +25' }, { text: 'Velocidade de conjuração +7%' }],
       },
       {
         id: 'anillo-piel-arborea',
-        name: 'Anillo de la Piel Arbórea',
+        name: 'Anel da Pele Arbórea',
         ...ANILLO,
-        stats: [{ text: 'Salud +125' }, { text: 'Daño melee recibido -7%', tone: 'bad' }],
+        stats: [{ text: 'Vida +125' }, { text: 'Dano corpo a corpo recebido -7%', tone: 'bad' }],
       },
     ],
   },
@@ -64,43 +64,43 @@ export const WARMASTER_CASTLES = [
     items: [
       {
         id: 'amuleto-sangre-hirviente',
-        name: 'Amuleto de la Sangre Hirviente',
+        name: 'Amuleto do Sangue Fervente',
         ...AMULETO,
         damage: dano('fogo', 40),
-        stats: [{ text: 'Daño de fuego +40' }, { text: 'Salud +200' }],
+        stats: [{ text: 'Dano de fogo +40' }, { text: 'Vida +200' }],
       },
       {
         id: 'amuleto-lumbre-rauda',
-        name: 'Amuleto de la Lumbre Rauda',
+        name: 'Amuleto da Chama Veloz',
         ...AMULETO,
         damage: dano('fogo', 40),
-        stats: [{ text: 'Daño de fuego +40' }, { text: 'Velocidad de invocación +10%' }],
+        stats: [{ text: 'Dano de fogo +40' }, { text: 'Velocidade de conjuração +10%' }],
       },
       {
         id: 'amuleto-furia-sultar',
-        name: 'Amuleto de la Furia de Sultar',
+        name: 'Amuleto da Fúria de Sultar',
         ...AMULETO,
-        stats: [{ text: 'Daño melee recibido -10%', tone: 'bad' }, { text: 'Duración de poder +15%' }],
+        stats: [{ text: 'Dano corpo a corpo recebido -10%', tone: 'bad' }, { text: 'Duração de poder +15%' }],
       },
       {
         id: 'anillo-mirada-destructiva',
-        name: 'Anillo de la Mirada Destructiva',
+        name: 'Anel do Olhar Destrutivo',
         ...ANILLO,
         damage: dano('esmagamento', 25),
-        stats: [{ text: 'Daño aplastante +25' }, { text: 'Chance de crítico +30%' }],
+        stats: [{ text: 'Dano esmagador +25' }, { text: 'Chance de crítico +30%' }],
       },
       {
         id: 'anillo-vinculo-matriarca',
-        name: 'Anillo del Vínculo Matriarca',
+        name: 'Anel do Vínculo Matriarca',
         ...ANILLO,
         damage: dano('perfurante', 25),
-        stats: [{ text: 'Daño punzante +25' }, { text: 'Bonus de Curación +7%' }],
+        stats: [{ text: 'Dano perfurante +25' }, { text: 'Bônus de cura +7%' }],
       },
       {
         id: 'anillo-presteza-magica',
-        name: 'Anillo de la Presteza Mágica',
+        name: 'Anel da Presteza Mágica',
         ...ANILLO,
-        stats: [{ text: 'Velocidad de invocación +5%' }, { text: 'Mana +100' }],
+        stats: [{ text: 'Velocidade de conjuração +5%' }, { text: 'Mana +100' }],
       },
     ],
   },
@@ -112,43 +112,43 @@ export const WARMASTER_CASTLES = [
     items: [
       {
         id: 'amuleto-piel-helada',
-        name: 'Amuleto de la Piel Helada',
+        name: 'Amuleto da Pele Gelada',
         ...AMULETO,
         damage: dano('gelo', 40),
-        stats: [{ text: 'Daño de hielo +40' }, { text: 'Salud +200' }],
+        stats: [{ text: 'Dano de gelo +40' }, { text: 'Vida +200' }],
       },
       {
         id: 'amuleto-fulgor-niveo',
-        name: 'Amuleto del Fulgor Níveo',
+        name: 'Amuleto do Fulgor Níveo',
         ...AMULETO,
         damage: dano('gelo', 40),
-        stats: [{ text: 'Daño de hielo +40' }, { text: 'Daño de rango recibido -10%', tone: 'bad' }],
+        stats: [{ text: 'Dano de gelo +40' }, { text: 'Dano à distância recebido -10%', tone: 'bad' }],
       },
       {
         id: 'amuleto-fusion-gelida',
-        name: 'Amuleto de la Fusión Gélida',
+        name: 'Amuleto da Fusão Gélida',
         ...AMULETO,
-        stats: [{ text: 'Salud +200' }, { text: 'Daño de rango recibido -10%', tone: 'bad' }],
+        stats: [{ text: 'Vida +200' }, { text: 'Dano à distância recebido -10%', tone: 'bad' }],
       },
       {
         id: 'anillo-fortaleza',
-        name: 'Anillo de la Fortaleza',
+        name: 'Anel da Fortaleza',
         ...ANILLO,
         damage: dano('esmagamento', 25),
-        stats: [{ text: 'Daño aplastante +25' }, { text: 'Fuerza +8' }],
+        stats: [{ text: 'Dano esmagador +25' }, { text: 'Força +8' }],
       },
       {
         id: 'anillo-vinculo-sanguineo',
-        name: 'Anillo del Vínculo Sanguíneo',
+        name: 'Anel do Vínculo Sanguíneo',
         ...ANILLO,
         damage: dano('cortante', 25),
-        stats: [{ text: 'Daño cortante +25' }, { text: 'Bonus de Curación +7%' }],
+        stats: [{ text: 'Dano cortante +25' }, { text: 'Bônus de cura +7%' }],
       },
       {
         id: 'anillo-experto',
-        name: 'Anillo del Experto',
+        name: 'Anel do Especialista',
         ...ANILLO,
-        stats: [{ text: 'Daño melee recibido -5%', tone: 'bad' }, { text: 'Atributo de clase +7' }],
+        stats: [{ text: 'Dano corpo a corpo recebido -5%', tone: 'bad' }, { text: 'Atributo de classe +7' }],
       },
     ],
   },

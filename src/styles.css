@@ -1,6 +1,7 @@
 :root {
   --bg: #1f2530;
   --surface: #272e3b;
+  --surface-alt: #2e3646;
   --line: #364051;
   --line-soft: #313a49;
   --ink: #eef1f6;
@@ -9,6 +10,9 @@
   --gold: #d6b06a;
   --radius: 22px;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --display: 'Sora', 'Inter', system-ui, sans-serif;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.24), 0 12px 28px rgba(0, 0, 0, 0.28);
+  --shadow-pop: 0 4px 10px rgba(0, 0, 0, 0.3), 0 20px 40px rgba(0, 0, 0, 0.32);
   --serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
   color-scheme: dark;
 }
@@ -243,184 +247,220 @@ h1 {
   transition: width 1s linear;
 }
 
-/* ---------- Cards ---------- */
+/* ---------- Cards (mesmo modelo do Regnum Warlords) ---------- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  gap: 16px;
+  align-items: start;
+  padding-top: 6px;
 }
 
-.card {
+.bc-card {
+  --realm-color: var(--gold);
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 26px;
-  padding: 26px 26px 24px;
-  border-radius: var(--radius);
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
   background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
 }
 
-@media (hover: hover) {
-  .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 18px 36px -22px rgba(0, 0, 0, 0.5);
-  }
+.bc-featured {
+  border-color: var(--realm-color);
+  box-shadow: 0 0 0 1px var(--realm-color), var(--shadow-card);
 }
 
-.card-head {
+.bc-featured-tag {
+  position: absolute;
+  top: -11px;
+  left: 16px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--realm-color);
+  color: #10121a;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow-pop);
+}
+
+.bc-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
 }
 
-.realm {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.boss-name {
-  margin: 6px 0 0;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 1.9rem;
-  line-height: 1;
-}
-
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
+.bc-emblem {
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
-  padding: 6px 11px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  font-size: 0.74rem;
-  font-weight: 500;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-.status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #5b6577;
-}
-
-.status-near .status {
-  color: #e3c17f;
-  border-color: rgba(214, 176, 106, 0.35);
-  background: rgba(214, 176, 106, 0.1);
-}
-
-.status-near .status-dot {
-  background: var(--gold);
-}
-
-.status-soon .status,
-.status-live .status {
-  color: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-}
-
-.status-soon .status-dot,
-.status-live .status-dot {
-  background: var(--accent);
-  animation: blink 1.4s ease-in-out infinite;
-}
-
-@keyframes blink {
-  50% {
-    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 18%, transparent);
-  }
-}
-
-/* Anel */
-.ring {
-  position: relative;
-  width: min(220px, 100%);
-  aspect-ratio: 1;
-  margin: 0 auto;
-}
-
-.ring svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-
-.ring-track {
-  fill: none;
-  stroke: var(--line-soft);
-  stroke-width: 3;
-}
-
-.ring-bar {
-  fill: none;
-  stroke-width: 3;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 1s linear;
-}
-
-.ring-content {
-  position: absolute;
-  inset: 0;
   display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 8px;
-  text-align: center;
+  place-items: center;
+  border-radius: 12px;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: #10121a;
+  background: linear-gradient(135deg, var(--realm-color), color-mix(in srgb, var(--realm-color) 55%, white));
+  box-shadow: var(--shadow-pop);
+  object-fit: cover;
 }
 
-.ring-time {
-  font-size: 2.15rem;
-  line-height: 1;
+.bc-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
-.ring-caption {
-  font-size: 0.74rem;
+.bc-name {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.bc-realm {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--realm-color);
+}
+
+.bc-countdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--realm-color) 10%, var(--surface-alt));
+  border: 1px solid color-mix(in srgb, var(--realm-color) 30%, var(--line));
+}
+
+.bc-countdown-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--muted);
-  letter-spacing: 0.04em;
 }
 
-/* Metadados */
-.meta {
+.bc-countdown-value {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.bc-meta {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 12px;
   margin: 0;
-  border-top: 1px solid var(--line-soft);
 }
 
-.meta div {
-  padding-top: 16px;
-}
-
-.meta div + div {
-  padding-left: 18px;
-  border-left: 1px solid var(--line-soft);
-}
-
-.meta dt {
+.bc-meta dt {
+  margin-bottom: 2px;
   font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--muted);
 }
 
-.meta dd {
-  margin: 6px 0 0;
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: var(--ink-2);
+.bc-meta dd {
+  margin: 0;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.35;
   text-transform: capitalize;
+}
+
+.bc-relative {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: none;
+}
+
+.bc-upcoming {
+  border-top: 1px dashed var(--line);
+  padding-top: 8px;
+}
+
+.bc-upcoming summary {
+  padding: 8px 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gold);
+  cursor: pointer;
+  list-style: none;
+}
+
+.bc-upcoming summary::-webkit-details-marker {
+  display: none;
+}
+
+.bc-upcoming summary::before {
+  content: '› ';
+  display: inline-block;
+  transition: transform 0.18s ease;
+}
+
+.bc-upcoming[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.bc-upcoming ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bc-upcoming li {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--surface-alt);
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+.bc-description {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bc-meta {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .bc-countdown-value {
+    font-size: 1.7rem;
+  }
+
+  .bc-upcoming summary {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
 }
 
 /* ---------- Linha do tempo ---------- */
@@ -532,18 +572,6 @@ h1 {
     grid-template-columns: 1fr;
     padding: 24px 22px 22px;
     gap: 14px;
-  }
-
-  .card {
-    padding: 22px 20px 20px;
-  }
-
-  .ring {
-    width: min(200px, 100%);
-  }
-
-  .ring-time {
-    font-size: 1.95rem;
   }
 
   .timeline {

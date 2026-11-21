@@ -4,6 +4,8 @@ import {
   RESPAWN_HOURS,
   RESPAWN_MS,
   formatDate,
+  formatDuration,
+  formatRelativePast,
   formatShort,
   getCycle,
   pad,
@@ -17,35 +19,6 @@ function useNow(interval = 1000) {
     return () => clearInterval(id)
   }, [interval])
   return now
-}
-
-function statusOf(remaining) {
-  if (remaining <= 0) return { key: 'live', label: 'Nascendo agora' }
-  if (remaining <= 60 * 60 * 1000) return { key: 'soon', label: 'Iminente' }
-  if (remaining <= 6 * 60 * 60 * 1000) return { key: 'near', label: 'Em breve' }
-  return { key: 'wait', label: 'Aguardando' }
-}
-
-function ProgressRing({ progress, color, children }) {
-  const r = 54
-  const c = 2 * Math.PI * r
-  return (
-    <div className="ring">
-      <svg viewBox="0 0 120 120" aria-hidden="true">
-        <circle className="ring-track" cx="60" cy="60" r={r} />
-        <circle
-          className="ring-bar"
-          cx="60"
-          cy="60"
-          r={r}
-          stroke={color}
-          strokeDasharray={c}
-          strokeDashoffset={c * (1 - progress)}
-        />
-      </svg>
-      <div className="ring-content">{children}</div>
-    </div>
-  )
 }
 
 function Countdown({ ms, className = '' }) {
@@ -65,38 +38,68 @@ function Countdown({ ms, className = '' }) {
   )
 }
 
-function BossCard({ boss, lastSpawn, now }) {
+function BossCard({ boss, lastSpawn, now, featured }) {
+  const [iconFailed, setIconFailed] = useState(false)
   const cycle = getCycle(lastSpawn, now)
-  const status = statusOf(cycle.remaining)
+  const upcoming = [1, 2, 3].map((i) => cycle.next + i * RESPAWN_MS)
 
   return (
-    <article className={`card status-${status.key}`} style={{ '--accent': boss.color }}>
-      <header className="card-head">
-        <div>
-          <span className="realm">{boss.realm}</span>
-          <h2 className="boss-name">{boss.name}</h2>
+    <article className={`bc-card ${featured ? 'bc-featured' : ''}`} style={{ '--realm-color': boss.color }}>
+      {featured && <span className="bc-featured-tag">Próximo a reaparecer</span>}
+
+      <div className="bc-header">
+        {iconFailed ? (
+          <span className="bc-emblem" aria-hidden="true">
+            {boss.realm[0]}
+          </span>
+        ) : (
+          <img
+            src={boss.icon}
+            alt=""
+            className="bc-emblem"
+            loading="lazy"
+            onError={() => setIconFailed(true)}
+          />
+        )}
+        <div className="bc-header-text">
+          <h2 className="bc-name">{boss.name}</h2>
+          <span className="bc-realm">{boss.realm}</span>
         </div>
-        <span className="status">
-          <span className="status-dot" />
-          {status.label}
+      </div>
+
+      <div className="bc-countdown">
+        <span className="bc-countdown-label">
+          {cycle.remaining <= 0 ? 'Status' : 'Reaparece em'}
         </span>
-      </header>
+        <span className="bc-countdown-value" role="timer">
+          {cycle.remaining <= 0 ? 'Pode já ter reaparecido' : formatDuration(cycle.remaining)}
+        </span>
+      </div>
 
-      <ProgressRing progress={cycle.progress} color={boss.color}>
-        <Countdown ms={cycle.remaining} className="ring-time" />
-        <span className="ring-caption">{Math.floor(cycle.progress * 100)}% do ciclo</span>
-      </ProgressRing>
-
-      <dl className="meta">
+      <dl className="bc-meta">
         <div>
-          <dt>Próximo</dt>
+          <dt>Último spawn</dt>
+          <dd>
+            {formatDate(cycle.prev)}
+            <span className="bc-relative"> ({formatRelativePast(now - cycle.prev)})</span>
+          </dd>
+        </div>
+        <div>
+          <dt>Próximo horário</dt>
           <dd>{formatDate(cycle.next)}</dd>
         </div>
-        <div>
-          <dt>Último</dt>
-          <dd>{formatDate(cycle.prev)}</dd>
-        </div>
       </dl>
+
+      <details className="bc-upcoming">
+        <summary>Ver mais horários</summary>
+        <ul>
+          {upcoming.map((at) => (
+            <li key={at}>{formatDate(at)}</li>
+          ))}
+        </ul>
+      </details>
+
+      <p className="bc-description">Chefe de mundo do reino de {boss.realm}.</p>
     </article>
   )
 }
@@ -208,8 +211,14 @@ export default function App() {
       </section>
 
       <main className="grid">
-        {rows.map(({ boss }) => (
-          <BossCard key={boss.id} boss={boss} lastSpawn={spawns[boss.id]} now={now} />
+        {rows.map(({ boss }, i) => (
+          <BossCard
+            key={boss.id}
+            boss={boss}
+            lastSpawn={spawns[boss.id]}
+            now={now}
+            featured={i === 0}
+          />
         ))}
       </main>
 

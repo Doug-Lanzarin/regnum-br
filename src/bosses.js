@@ -8,21 +8,24 @@ export const BOSSES = [
     id: 'evendim',
     name: 'Evendim',
     realm: 'Syrtis',
-    color: '#5cc492',
+    color: '#6fd67f',
+    icon: './bosses/evendim.webp',
     lastSpawn: '2026-11-20T17:58:00-03:00',
   },
   {
     id: 'thorkul',
     name: 'Thorkul',
     realm: 'Alsius',
-    color: '#6ea6f2',
+    color: '#7cb8f0',
+    icon: './bosses/thorkul.webp',
     lastSpawn: '2026-11-20T04:00:00-03:00',
   },
   {
     id: 'daenrha',
     name: 'Daen Rha',
     realm: 'Ignis',
-    color: '#ee7a66',
+    color: '#ff8a50',
+    icon: './bosses/daen.webp',
     lastSpawn: '2026-11-18T15:12:00-03:00',
   },
 ]
@@ -68,4 +71,30 @@ const dateFmt = new Intl.DateTimeFormat('pt-BR', {
 
 export function formatDate(ms) {
   return dateFmt.format(new Date(ms)).replace('.', '')
+}
+
+/** Duração compacta como no Regnum Warlords: "2d 3h 20m", "3h 20m", "5m 30s" */
+export function formatDuration(ms) {
+  const total = Math.floor(ms / 1000)
+  const d = Math.floor(total / 86400)
+  const h = Math.floor((total % 86400) / 3600)
+  const m = Math.floor((total % 3600) / 60)
+  const s = total % 60
+  if (d > 0) return `${d}d ${h}h ${m}m`
+  if (h > 0) return `${h}h ${m}m`
+  if (m > 0) return `${m}m ${s}s`
+  return `${s}s`
+}
+
+/** "há 2d 3h", "há 3h 20m", "há 5m" */
+export function formatRelativePast(ms) {
+  if (ms <= 0) return 'agora'
+  const total = Math.floor(ms / 1000)
+  const d = Math.floor(total / 86400)
+  const h = Math.floor((total % 86400) / 3600)
+  const m = Math.floor((total % 3600) / 60)
+  if (d > 0) return `há ${d}d ${h}h`
+  if (h > 0) return `há ${h}h ${m}m`
+  if (m > 0) return `há ${m}m`
+  return 'há poucos segundos'
 }

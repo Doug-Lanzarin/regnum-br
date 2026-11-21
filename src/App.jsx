@@ -117,27 +117,98 @@ const TABS = [
   },
 ]
 
-const tabFromHash = () => {
-  const id = window.location.hash.replace('#', '')
-  return TABS.some((t) => t.id === id) ? id : 'inicio'
+const INFO_SECTIONS = [
+  {
+    id: 'armaduras',
+    label: 'Armaduras',
+    icon: <path d="M12 3.5 5 6v5.5c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6z" />,
+  },
+  {
+    id: 'joias',
+    label: 'Joias',
+    icon: (
+      <>
+        <path d="M7.5 4h9L20 9l-8 11L4 9z" />
+        <path d="M4 9h16M9.5 9 12 20l2.5-11M7.5 4 9.5 9l2.5-5 2.5 5 2-5" />
+      </>
+    ),
+  },
+  {
+    id: 'crafting',
+    label: 'Crafting',
+    icon: (
+      <>
+        <path d="m13.5 5.5 5 5-2 2-5-5z" />
+        <path d="M12.5 6.5 9 3 6 6l3.5 3.5M14 11l-9 9-2-2 9-9" />
+      </>
+    ),
+  },
+]
+
+/** Lê o endereço: #inicio, #epicos, #info ou #info/<seção> */
+const parseHash = () => {
+  const [id, sub] = window.location.hash.replace('#', '').split('/')
+  const tab = TABS.some((t) => t.id === id) ? id : 'inicio'
+  const section = INFO_SECTIONS.some((x) => x.id === sub) ? sub : INFO_SECTIONS[0].id
+  return { tab, section }
 }
 
-/** Aba atual guardada na URL (#inicio, #epicos, #info): o botão voltar funciona e dá para compartilhar o link */
+/** Aba e sub-aba guardadas na URL: o botão voltar funciona e dá para compartilhar o link */
 function useHashTab() {
-  const [tab, setTab] = useState(tabFromHash)
+  const [route, setRoute] = useState(parseHash)
   useEffect(() => {
     const onHash = () => {
-      setTab(tabFromHash())
-      window.scrollTo({ top: 0 })
+      const next = parseHash()
+      setRoute((prev) => {
+        if (next.tab !== prev.tab) window.scrollTo({ top: 0 })
+        return next
+      })
     }
     window.addEventListener('hashchange', onHash)
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
   const goTo = (id) => {
-    if (id === tab) window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (id === route.tab) window.scrollTo({ top: 0, behavior: 'smooth' })
     else window.location.hash = id
   }
-  return [tab, goTo]
+  const goToSection = (section) => {
+    window.location.hash = `info/${section}`
+  }
+  return [route.tab, goTo, route.section, goToSection]
+}
+
+function InfoView({ section, onSection }) {
+  const current = INFO_SECTIONS.find((x) => x.id === section)
+  return (
+    <>
+      <nav className="subnav" aria-label="Seções de informações">
+        {INFO_SECTIONS.map((x) => (
+          <button
+            key={x.id}
+            type="button"
+            className={`subnav-item ${x.id === section ? 'active' : ''}`}
+            aria-current={x.id === section ? 'page' : undefined}
+            onClick={() => onSection(x.id)}
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              {x.icon}
+            </svg>
+            {x.label}
+          </button>
+        ))}
+      </nav>
+
+      <section key={current.id} className="info-section">
+        <div className="info-empty">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            {current.icon}
+          </svg>
+          <strong>{current.label}</strong>
+          <span>Em breve</span>
+        </div>
+      </section>
+    </>
+  )
 }
 
 function TabBar({ active, onChange }) {
@@ -247,7 +318,7 @@ export default function App() {
     () => typeof Notification !== 'undefined' && Notification.permission === 'granted',
   )
   const notified = useRef(new Set())
-  const [tab, goTo] = useHashTab()
+  const [tab, goTo, infoSection, goToInfoSection] = useHashTab()
   const [world, setWorld] = useState('ra')
   const warStatus = useWarStatus(world)
 
@@ -338,6 +409,7 @@ export default function App() {
           </>
         )}
 
+        {tab === 'info' && <InfoView section={infoSection} onSection={goToInfoSection} />}
       </main>
 
       {tab !== 'info' && (

@@ -861,6 +861,108 @@ button {
   text-decoration: none;
 }
 
+/* ---------- Informações: sub-navegação ---------- */
+.subnav {
+  position: sticky;
+  top: max(10px, env(safe-area-inset-top));
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  max-width: 520px;
+  padding: 5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  border: 1px solid var(--line);
+  box-shadow: 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.subnav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 42px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.subnav-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (hover: hover) {
+  .subnav-item:hover {
+    color: var(--ink);
+  }
+}
+
+.subnav-item:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.subnav-item.active {
+  color: var(--gold);
+  background: rgba(214, 176, 106, 0.16);
+}
+
+.info-section {
+  margin-top: 16px;
+  animation: view-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.info-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 48px 20px;
+  border-radius: 18px;
+  border: 1px dashed var(--line);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  text-align: center;
+}
+
+.info-empty svg {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 6px;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.8;
+}
+
+.info-empty strong {
+  font-family: var(--display);
+  font-size: 1.1rem;
+}
+
+.info-empty span {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
 /* ---------- Barra de navegação flutuante ---------- */
 .tabbar {
   position: fixed;
@@ -1041,6 +1143,17 @@ button {
 
   .xy-tz-short {
     display: inline;
+  }
+
+  .subnav-item {
+    gap: 6px;
+    padding: 0 6px;
+    font-size: 0.8rem;
+  }
+
+  .subnav-item svg {
+    width: 16px;
+    height: 16px;
   }
 
   .tab-label {

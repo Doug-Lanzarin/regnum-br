@@ -56,10 +56,6 @@ export function splitDuration(ms) {
 
 export const pad = (n) => String(n).padStart(2, '0')
 
-export function formatShort(ms) {
-  const { h, m, s } = splitDuration(ms)
-  return `${pad(h)}:${pad(m)}:${pad(s)}`
-}
 
 const dateFmt = new Intl.DateTimeFormat('pt-BR', {
   weekday: 'short',

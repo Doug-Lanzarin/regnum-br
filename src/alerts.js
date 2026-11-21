@@ -17,7 +17,7 @@ const WM_MINUTE = 45
 /** Um aviso dispara se a página o "vê" até 3 min depois do horário (abas em segundo plano atualizam mais devagar) */
 const FIRE_WINDOW = 3 * MIN
 
-const TITLE = 'Regnum Boss Timer'
+const TITLE = 'Regnum BR'
 const PREF_KEY = 'regnum-br:alerts-enabled'
 const SENT_KEY = 'regnum-br:alerts-sent'
 

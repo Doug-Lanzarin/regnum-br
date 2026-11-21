@@ -6,7 +6,6 @@ import {
   formatDate,
   formatDuration,
   formatRelativePast,
-  formatShort,
   getCycle,
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
@@ -423,12 +422,6 @@ export default function App() {
       ),
     [spawns, now],
   )
-  const nextUp = rows[0]
-
-  // Título da aba mostra o próximo chefe
-  useEffect(() => {
-    document.title = `${formatShort(nextUp.cycle.remaining)} · ${nextUp.boss.name} | Regnum Boss Timer`
-  }, [nextUp])
 
   // Alertas: 30 min, 15 min e na hora (épicos e Xymerald) + quests WM às 23:45 de Brasília
   const alerts = useAlerts(now, rows)

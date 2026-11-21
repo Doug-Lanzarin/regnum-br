@@ -1,4 +1,4 @@
-# Regnum Boss Timer
+# Regnum BR
 
 Contador de respawn dos chefes de Regnum. Cada chefe volta a nascer **61 horas** depois do último spawn.
 

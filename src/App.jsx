@@ -12,7 +12,6 @@ import {
 import WarMap, { useWarStatus } from './WarMap.jsx'
 import { notificationsSupported, useAlerts } from './alerts.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
-import { WARMASTER_CASTLES } from './joias.js'
 
 function useNow(interval = 1000) {
   const [now, setNow] = useState(() => Date.now())
@@ -129,7 +128,7 @@ const INFO_SECTIONS = [
     id: 'joias',
     label: 'Joias',
     topics: [
-      { id: 'warmaster', label: 'Warmaster', groups: WARMASTER_CASTLES },
+      { id: 'warmaster', label: 'Warmaster' },
       { id: 'gold', label: 'Gold' },
       { id: 'eventos', label: 'Eventos' },
       { id: 'epicos', label: 'Épicos' },

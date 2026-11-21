@@ -1,16 +1,16 @@
 :root {
-  --bg: #f5f2ec;
-  --surface: #ffffff;
-  --line: #e6e1d7;
-  --line-soft: #efebe3;
-  --ink: #1c1b19;
-  --ink-2: #4a4741;
-  --muted: #8a857a;
-  --gold: #b48a3c;
+  --bg: #1f2530;
+  --surface: #272e3b;
+  --line: #364051;
+  --line-soft: #313a49;
+  --ink: #eef1f6;
+  --ink-2: #c5ccd8;
+  --muted: #8d97a8;
+  --gold: #d6b06a;
   --radius: 22px;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 * {
@@ -31,7 +31,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   background:
-    radial-gradient(1200px 600px at 50% -200px, #fffdf8 0%, transparent 70%),
+    radial-gradient(1200px 600px at 50% -200px, #2c3442 0%, transparent 70%),
     var(--bg);
 }
 
@@ -142,7 +142,7 @@ h1 {
 }
 
 .chip:hover {
-  border-color: #d3ccbe;
+  border-color: #4a5568;
 }
 
 .chip:active {
@@ -158,19 +158,19 @@ h1 {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #cfc8ba;
+  background: #5b6577;
   transition: background 0.2s, box-shadow 0.2s;
 }
 
 .chip.on {
   color: var(--ink);
-  border-color: #dcc79c;
-  background: #fbf6ea;
+  border-color: rgba(214, 176, 106, 0.45);
+  background: rgba(214, 176, 106, 0.1);
 }
 
 .chip.on .chip-dot {
   background: var(--gold);
-  box-shadow: 0 0 0 4px rgba(180, 138, 60, 0.15);
+  box-shadow: 0 0 0 4px rgba(214, 176, 106, 0.18);
 }
 
 /* ---------- Destaque ---------- */
@@ -184,7 +184,7 @@ h1 {
   border-radius: var(--radius);
   background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: 0 1px 2px rgba(28, 27, 25, 0.03), 0 12px 32px -20px rgba(28, 27, 25, 0.18);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 12px 32px -20px rgba(0, 0, 0, 0.45);
 }
 
 .hero .eyebrow {
@@ -217,7 +217,7 @@ h1 {
   font-weight: 600;
   letter-spacing: 0.06em;
   color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
 .hero-time {
@@ -258,14 +258,14 @@ h1 {
   border-radius: var(--radius);
   background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: 0 1px 2px rgba(28, 27, 25, 0.03);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 @media (hover: hover) {
   .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 1px 2px rgba(28, 27, 25, 0.03), 0 18px 36px -22px rgba(28, 27, 25, 0.25);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 18px 36px -22px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -310,13 +310,13 @@ h1 {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #cfc8ba;
+  background: #5b6577;
 }
 
 .status-near .status {
-  color: #8a6a24;
-  border-color: #ead9b3;
-  background: #fbf5e6;
+  color: #e3c17f;
+  border-color: rgba(214, 176, 106, 0.35);
+  background: rgba(214, 176, 106, 0.1);
 }
 
 .status-near .status-dot {
@@ -327,7 +327,7 @@ h1 {
 .status-live .status {
   color: var(--accent);
   border-color: color-mix(in srgb, var(--accent) 30%, transparent);
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .status-soon .status-dot,

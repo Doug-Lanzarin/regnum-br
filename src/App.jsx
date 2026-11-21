@@ -8,8 +8,6 @@ import {
   formatRelativePast,
   formatShort,
   getCycle,
-  pad,
-  splitDuration,
 } from './bosses.js'
 
 function useNow(interval = 1000) {
@@ -19,23 +17,6 @@ function useNow(interval = 1000) {
     return () => clearInterval(id)
   }, [interval])
   return now
-}
-
-function Countdown({ ms, className = '' }) {
-  const { h, m, s } = splitDuration(ms)
-  return (
-    <span
-      className={`countdown ${className}`}
-      role="timer"
-      aria-label={`${h} horas, ${m} minutos e ${s} segundos`}
-    >
-      {pad(h)}
-      <span className="sep">:</span>
-      {pad(m)}
-      <span className="sep">:</span>
-      {pad(s)}
-    </span>
-  )
 }
 
 function BossCard({ boss, lastSpawn, now, featured }) {
@@ -126,15 +107,6 @@ export default function App() {
   )
   const nextUp = rows[0]
 
-  // Próximos spawns de todos os chefes (linha do tempo)
-  const timeline = useMemo(() => {
-    const items = []
-    for (const { boss, cycle } of rows) {
-      for (let i = 0; i < 3; i++) items.push({ boss, at: cycle.next + i * RESPAWN_MS })
-    }
-    return items.sort((a, b) => a.at - b.at).slice(0, 6)
-  }, [rows])
-
   // Título da aba mostra o próximo chefe
   useEffect(() => {
     document.title = `${formatShort(nextUp.cycle.remaining)} · ${nextUp.boss.name} | Regnum Boss Timer`
@@ -195,20 +167,6 @@ export default function App() {
         )}
       </header>
 
-      <section className="hero" style={{ '--accent': nextUp.boss.color }}>
-        <div className="hero-info">
-          <span className="eyebrow">Próximo chefe</span>
-          <h2 className="hero-name">{nextUp.boss.name}</h2>
-          <span className="hero-sub">
-            <span className="realm-inline">{nextUp.boss.realm}</span>
-            {formatDate(nextUp.cycle.next)}
-          </span>
-        </div>
-        <Countdown ms={nextUp.cycle.remaining} className="hero-time" />
-        <div className="hero-bar">
-          <span style={{ width: `${nextUp.cycle.progress * 100}%` }} />
-        </div>
-      </section>
 
       <main className="grid">
         {rows.map(({ boss }, i) => (
@@ -222,20 +180,6 @@ export default function App() {
         ))}
       </main>
 
-      <section className="timeline">
-        <h3 className="eyebrow">Próximos spawns</h3>
-        <ol>
-          {timeline.map(({ boss, at }) => (
-            <li key={`${boss.id}-${at}`} style={{ '--accent': boss.color }}>
-              <span className="tl-dot" />
-              <span className="tl-name">{boss.name}</span>
-              <span className="tl-realm">{boss.realm}</span>
-              <span className="tl-date">{formatDate(at)}</span>
-              <Countdown ms={at - now} className="tl-in" />
-            </li>
-          ))}
-        </ol>
-      </section>
 
       <footer className="foot">
         Horários no fuso do seu dispositivo · {Intl.DateTimeFormat().resolvedOptions().timeZone}

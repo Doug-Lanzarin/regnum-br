@@ -11,8 +11,8 @@ Contador de respawn dos chefes de Regnum. Cada chefe volta a nascer **61 horas**
 Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosses.js`.
 
 ## Funcionalidades
-- Contagem regressiva ao vivo, com anel de progresso do ciclo
-- Destaque para o próximo chefe e lista com os próximos spawns
+- Contagem regressiva ao vivo em cada card, com retrato e cor do reino
+- Destaque para o chefe que reaparece primeiro e lista de próximos horários em cada card
 - Alerta opcional no navegador 10 minutos antes do spawn e na hora dele
 - A contagem parte sempre dos horários fixos acima, somando 61 horas a cada ciclo
 - Layout responsivo para computador e celular

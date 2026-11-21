@@ -50,33 +50,6 @@ button {
     max(36px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
 }
 
-.eyebrow {
-  display: block;
-  margin: 0;
-  font-family: var(--sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.countdown {
-  font-family: var(--sans);
-  font-weight: 300;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-}
-
-.countdown .sep {
-  display: inline-block;
-  margin: 0 0.06em;
-  color: var(--muted);
-  opacity: 0.6;
-  transform: translateY(-0.06em);
-}
-
 /* ---------- Topo ---------- */
 .top {
   display: flex;
@@ -175,76 +148,6 @@ h1 {
 .chip.on .chip-dot {
   background: var(--gold);
   box-shadow: 0 0 0 4px rgba(214, 176, 106, 0.18);
-}
-
-/* ---------- Destaque ---------- */
-.hero {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
-  gap: 18px 32px;
-  padding: 32px 36px 30px;
-  margin-bottom: 24px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 12px 32px -20px rgba(0, 0, 0, 0.45);
-}
-
-.hero .eyebrow {
-  color: var(--accent);
-}
-
-.hero-name {
-  margin: 8px 0 6px;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: clamp(2.2rem, 7vw, 3.2rem);
-  line-height: 1;
-  letter-spacing: -0.005em;
-}
-
-.hero-sub {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  color: var(--muted);
-  font-size: 0.92rem;
-  text-transform: capitalize;
-}
-
-.realm-inline {
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-}
-
-.hero-time {
-  font-size: clamp(2.6rem, 10vw, 4.6rem);
-  line-height: 0.9;
-  color: var(--ink);
-}
-
-.hero-bar {
-  grid-column: 1 / -1;
-  height: 3px;
-  margin-top: 8px;
-  border-radius: 99px;
-  background: var(--line-soft);
-  overflow: hidden;
-}
-
-.hero-bar span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--accent);
-  transition: width 1s linear;
 }
 
 /* ---------- Cards (mesmo modelo do Regnum Warlords) ---------- */
@@ -463,75 +366,6 @@ h1 {
   }
 }
 
-/* ---------- Linha do tempo ---------- */
-.timeline {
-  margin-top: 24px;
-  padding: 26px 30px 14px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--line);
-}
-
-.timeline .eyebrow {
-  margin-bottom: 10px;
-}
-
-.timeline ol {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.timeline li {
-  display: grid;
-  grid-template-columns: 8px 1fr 100px 170px 110px;
-  grid-template-areas: 'dot name realm date in';
-  align-items: center;
-  gap: 4px 16px;
-  padding: 15px 0;
-  border-top: 1px solid var(--line-soft);
-}
-
-.timeline li:first-child {
-  border-top: none;
-}
-
-.tl-dot {
-  grid-area: dot;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-.tl-name {
-  grid-area: name;
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 1.2rem;
-}
-
-.tl-realm {
-  grid-area: realm;
-  font-size: 0.82rem;
-  color: var(--muted);
-}
-
-.tl-date {
-  grid-area: date;
-  font-size: 0.88rem;
-  color: var(--ink-2);
-  text-transform: capitalize;
-}
-
-.tl-in {
-  grid-area: in;
-  justify-self: end;
-  font-size: 0.98rem;
-  font-weight: 400;
-  color: var(--ink);
-}
-
 /* ---------- Rodapé ---------- */
 .foot {
   margin-top: 30px;
@@ -541,24 +375,6 @@ h1 {
 }
 
 /* ---------- Responsivo ---------- */
-@media (max-width: 720px) {
-  .timeline li {
-    grid-template-columns: 8px 1fr auto;
-    grid-template-areas:
-      'dot name in'
-      '. date date';
-  }
-
-  .tl-realm {
-    display: none;
-  }
-
-  .tl-date {
-    font-size: 0.82rem;
-    color: var(--muted);
-  }
-}
-
 @media (max-width: 560px) {
   .top {
     margin-bottom: 26px;
@@ -566,16 +382,6 @@ h1 {
 
   .chip {
     width: 100%;
-  }
-
-  .hero {
-    grid-template-columns: 1fr;
-    padding: 24px 22px 22px;
-    gap: 14px;
-  }
-
-  .timeline {
-    padding: 22px 20px 8px;
   }
 }
 

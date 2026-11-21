@@ -15,7 +15,7 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 - Destaque para o chefe que reaparece primeiro e lista de próximos horários em cada card
 - Alertas no navegador: 30 min, 15 min e na hora de cada épico e do reset do Xymerald, e todo dia às 23:45 (Brasília) para entregar as quests WMs. Funcionam com a página aberta; no iPhone, com o site instalado na Tela de Início
 - A contagem parte sempre dos horários fixos acima, somando 61 horas a cada ciclo
-- Barra de navegação flutuante com as abas Início, Épicos e Informações
+- Barra de navegação flutuante com as abas Início, Épicos e Crafting
 - Contador de reset do Xymerald na aba Início (a cada 23 horas, mesma regra do Regnum Warlords, horário de Brasília)
 - Mapa de guerra na aba Início (servidor Ra), com dados lidos direto do site oficial championsofregnum.com pela função `api/wz.js` e atualizados a cada minuto
 - Layout responsivo para computador e celular

@@ -106,12 +106,12 @@ const TABS = [
     ),
   },
   {
-    id: 'info',
-    label: 'Informações',
+    id: 'crafting',
+    label: 'Crafting',
     icon: (
       <>
-        <circle cx="12" cy="12" r="8.5" />
-        <path d="M12 11v5.5M12 7.6v.01" />
+        <path d="m13.5 5.5 5 5-2 2-5-5z" />
+        <path d="M12.5 6.5 9 3 6 6l3.5 3.5M14 11l-9 9-2-2 9-9" />
       </>
     ),
   },
@@ -153,7 +153,8 @@ const INFO_SECTIONS = [
 
 /** Lê o endereço: #inicio, #epicos, #info ou #info/<seção> */
 const parseHash = () => {
-  const [id, sub, sub2, sub3] = window.location.hash.replace('#', '').split('/')
+  const [rawId, sub, sub2, sub3] = window.location.hash.replace('#', '').split('/')
+  const id = rawId === 'info' ? 'crafting' : rawId // links antigos da aba Informações
   const tab = TABS.some((t) => t.id === id) ? id : 'inicio'
   const info = INFO_SECTIONS.find((x) => x.id === sub) ?? INFO_SECTIONS[0]
   const topicObj = info.topics ? (info.topics.find((t) => t.id === sub2) ?? info.topics[0]) : null
@@ -223,6 +224,22 @@ function JewelCard({ item }) {
   )
 }
 
+function CraftingView() {
+  const crafting = INFO_SECTIONS.find((x) => x.id === 'crafting')
+  return (
+    <section className="info-section">
+      <div className="info-empty">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          {crafting.icon}
+        </svg>
+        <strong>Crafting</strong>
+        <span>Em breve</span>
+      </div>
+    </section>
+  )
+}
+
+// Armaduras e Joias estão fora da navegação por enquanto; InfoView fica pronta para quando voltarem.
 function InfoView({ section, topic, group, onSection }) {
   const current = INFO_SECTIONS.find((x) => x.id === section)
   const currentTopic = current.topics?.find((t) => t.id === topic)
@@ -412,7 +429,7 @@ const SPAWNS = Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpaw
 export default function App() {
   const now = useNow()
   const spawns = SPAWNS
-  const [tab, goTo, route, goToInfoSection] = useHashTab()
+  const [tab, goTo] = useHashTab()
   const warStatus = useWarStatus(WAR_WORLD)
 
   const rows = useMemo(
@@ -497,15 +514,10 @@ export default function App() {
           </>
         )}
 
-        {tab === 'info' && <InfoView
-            section={route.section}
-            topic={route.topic}
-            group={route.group}
-            onSection={goToInfoSection}
-          />}
+        {tab === 'crafting' && <CraftingView />}
       </main>
 
-      {tab !== 'info' && (
+      {tab !== 'crafting' && (
         <footer className="foot">
           Horários no fuso do seu dispositivo · {Intl.DateTimeFormat().resolvedOptions().timeZone}
         </footer>

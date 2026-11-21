@@ -127,6 +127,11 @@ const INFO_SECTIONS = [
   {
     id: 'joias',
     label: 'Joias',
+    topics: [
+      { id: 'warmaster', label: 'Warmaster' },
+      { id: 'gold', label: 'Gold' },
+      { id: 'eventos', label: 'Eventos' },
+    ],
     icon: (
       <>
         <path d="M7.5 4h9L20 9l-8 11L4 9z" />
@@ -148,10 +153,11 @@ const INFO_SECTIONS = [
 
 /** Lê o endereço: #inicio, #epicos, #info ou #info/<seção> */
 const parseHash = () => {
-  const [id, sub] = window.location.hash.replace('#', '').split('/')
+  const [id, sub, sub2] = window.location.hash.replace('#', '').split('/')
   const tab = TABS.some((t) => t.id === id) ? id : 'inicio'
-  const section = INFO_SECTIONS.some((x) => x.id === sub) ? sub : INFO_SECTIONS[0].id
-  return { tab, section }
+  const info = INFO_SECTIONS.find((x) => x.id === sub) ?? INFO_SECTIONS[0]
+  const topic = info.topics ? (info.topics.find((t) => t.id === sub2) ?? info.topics[0]).id : null
+  return { tab, section: info.id, topic }
 }
 
 /** Aba e sub-aba guardadas na URL: o botão voltar funciona e dá para compartilhar o link */
@@ -172,14 +178,15 @@ function useHashTab() {
     if (id === route.tab) window.scrollTo({ top: 0, behavior: 'smooth' })
     else window.location.hash = id
   }
-  const goToSection = (section) => {
-    window.location.hash = `info/${section}`
+  const goToSection = (section, topic) => {
+    window.location.hash = ['info', section, topic].filter(Boolean).join('/')
   }
-  return [route.tab, goTo, route.section, goToSection]
+  return [route.tab, goTo, route, goToSection]
 }
 
-function InfoView({ section, onSection }) {
+function InfoView({ section, topic, onSection }) {
   const current = INFO_SECTIONS.find((x) => x.id === section)
+  const currentTopic = current.topics?.find((t) => t.id === topic)
   return (
     <>
       <nav className="subnav" aria-label="Seções de informações">
@@ -199,12 +206,28 @@ function InfoView({ section, onSection }) {
         ))}
       </nav>
 
-      <section key={current.id} className="info-section">
+      {current.topics && (
+        <nav className="topicnav" aria-label={`Tópicos de ${current.label}`}>
+          {current.topics.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              className={`topicnav-item ${t.id === topic ? 'active' : ''}`}
+              aria-current={t.id === topic ? 'page' : undefined}
+              onClick={() => onSection(current.id, t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </nav>
+      )}
+
+      <section key={`${current.id}-${topic}`} className="info-section">
         <div className="info-empty">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             {current.icon}
           </svg>
-          <strong>{current.label}</strong>
+          <strong>{currentTopic ? `${current.label} · ${currentTopic.label}` : current.label}</strong>
           <span>Em breve</span>
         </div>
       </section>
@@ -323,7 +346,7 @@ const SPAWNS = Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpaw
 export default function App() {
   const now = useNow()
   const spawns = SPAWNS
-  const [tab, goTo, infoSection, goToInfoSection] = useHashTab()
+  const [tab, goTo, route, goToInfoSection] = useHashTab()
   const warStatus = useWarStatus(WAR_WORLD)
 
   const rows = useMemo(
@@ -414,7 +437,7 @@ export default function App() {
           </>
         )}
 
-        {tab === 'info' && <InfoView section={infoSection} onSection={goToInfoSection} />}
+        {tab === 'info' && <InfoView section={route.section} topic={route.topic} onSection={goToInfoSection} />}
       </main>
 
       {tab !== 'info' && (

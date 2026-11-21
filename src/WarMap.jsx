@@ -5,10 +5,6 @@ const REALM_COLOR = Object.fromEntries(BOSSES.map((b) => [b.realm, b.color]))
 const REALMS = ['Alsius', 'Ignis', 'Syrtis']
 const NEUTRAL = '#5b6577'
 const REFRESH_MS = 60_000
-const WORLDS = [
-  { id: 'ra', label: 'Ra' },
-  { id: 'amun', label: 'Amun' },
-]
 const OFFICIAL_PAGE = 'https://www.championsofregnum.com/index.php?l=1&sec=3'
 const mapUrl = (world, version) =>
   `https://www.championsofregnum.com/ranking/data/${world}/gen_map.jpg?v=${version}`
@@ -80,7 +76,7 @@ function GemDot({ owner }) {
   )
 }
 
-export default function WarMap({ world, onWorldChange, status }) {
+export default function WarMap({ world, status }) {
   const { data, error, loading, checkedAt } = status
   const [imgFailed, setImgFailed] = useState(false)
 
@@ -115,19 +111,6 @@ export default function WarMap({ world, onWorldChange, status }) {
             )}
           </span>
         </div>
-        <div className="wz-worlds" role="group" aria-label="Servidor">
-          {WORLDS.map((w) => (
-            <button
-              key={w.id}
-              type="button"
-              className={world === w.id ? 'on' : ''}
-              aria-pressed={world === w.id}
-              onClick={() => onWorldChange(w.id)}
-            >
-              {w.label}
-            </button>
-          ))}
-        </div>
       </div>
 
       <div className="wz-map">
@@ -136,7 +119,7 @@ export default function WarMap({ world, onWorldChange, status }) {
         ) : (
           <img
             src={mapUrl(world, data?.updated ?? Math.floor((checkedAt ?? Date.now()) / REFRESH_MS))}
-            alt={`Mapa de guerra do servidor ${world === 'ra' ? 'Ra' : 'Amun'}`}
+            alt="Mapa de guerra"
             width="500"
             height="500"
             referrerPolicy="no-referrer"

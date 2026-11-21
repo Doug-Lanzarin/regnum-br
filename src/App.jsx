@@ -306,6 +306,9 @@ function HomeView({ rows, now, onOpenEpics, war }) {
   )
 }
 
+// Servidor usado no mapa de guerra
+const WAR_WORLD = 'ra'
+
 const ALERT_MINUTES = 10
 
 // Horários fixos do último respawn informado; os próximos são calculados de 61 em 61 horas
@@ -319,8 +322,7 @@ export default function App() {
   )
   const notified = useRef(new Set())
   const [tab, goTo, infoSection, goToInfoSection] = useHashTab()
-  const [world, setWorld] = useState('ra')
-  const warStatus = useWarStatus(world)
+  const warStatus = useWarStatus(WAR_WORLD)
 
   const rows = useMemo(
     () =>
@@ -390,7 +392,7 @@ export default function App() {
             rows={rows}
             now={now}
             onOpenEpics={() => goTo('epicos')}
-            war={{ world, onWorldChange: setWorld, status: warStatus }}
+            war={{ world: WAR_WORLD, status: warStatus }}
           />}
 
         {tab === 'epicos' && (

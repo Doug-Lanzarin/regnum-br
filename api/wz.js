@@ -5,7 +5,7 @@
 // A imagem do mapa (gen_map.jpg) é carregada direto do site oficial.
 
 const OFFICIAL_URL = 'https://www.championsofregnum.com/index.php?l=1&sec=3'
-const WORLDS = ['ra', 'amun']
+const WORLDS = ['ra']
 const REALMS = ['Alsius', 'Ignis', 'Syrtis']
 const GEM_OWNER = { 0: null, 1: 'Ignis', 2: 'Alsius', 3: 'Syrtis' }
 

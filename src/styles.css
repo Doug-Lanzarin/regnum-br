@@ -659,31 +659,6 @@ button {
   }
 }
 
-.wz-worlds {
-  display: inline-flex;
-  padding: 3px;
-  border-radius: 999px;
-  background: var(--surface-alt);
-  border: 1px solid var(--line);
-}
-
-.wz-worlds button {
-  min-height: 34px;
-  padding: 0 14px;
-  border: none;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.wz-worlds button.on {
-  background: rgba(214, 176, 106, 0.18);
-  color: var(--gold);
-}
-
 .wz-map {
   width: 100%;
   max-width: 560px;

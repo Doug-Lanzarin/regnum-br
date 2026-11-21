@@ -342,23 +342,6 @@ button {
   }
 }
 
-.view-title {
-  margin-bottom: 22px;
-}
-
-.view-title h1 {
-  margin: 0;
-  font-family: var(--display);
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.view-title p {
-  margin: 4px 0 0;
-  font-size: 0.88rem;
-  color: var(--muted);
-}
-
 .panel {
   margin-top: 16px;
   padding: 18px;

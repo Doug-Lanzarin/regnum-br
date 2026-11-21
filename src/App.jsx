@@ -162,15 +162,6 @@ function TabBar({ active, onChange }) {
   )
 }
 
-function ViewTitle({ title, subtitle }) {
-  return (
-    <div className="view-title">
-      <h1>{title}</h1>
-      {subtitle && <p>{subtitle}</p>}
-    </div>
-  )
-}
-
 function XymeraldCard({ now }) {
   const resetAt = nextXymeraldReset(now)
   return (
@@ -197,8 +188,6 @@ function HomeView({ rows, now, onOpenEpics, war }) {
   const [first, ...others] = rows
   return (
     <>
-      <ViewTitle title="Início" subtitle="Épicos, Xymerald e mapa de guerra de Regnum" />
-
       <section className="home-next" style={{ '--realm-color': first.boss.color }}>
         <img src={first.boss.icon} alt="" className="home-portrait" />
         <div className="home-next-text">
@@ -329,7 +318,6 @@ export default function App() {
 
         {tab === 'epicos' && (
           <>
-            <ViewTitle title="Épicos" subtitle="Ordenados pelo próximo a reaparecer" />
             <div className="grid">
               {rows.map(({ boss }, i) => (
                 <BossCard

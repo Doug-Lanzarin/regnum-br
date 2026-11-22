@@ -11,7 +11,7 @@ const M = {
   hickory: { name: 'Hickory wood log', icon: icon('hickory-wood-log') },
   coal: { name: 'Coal', icon: icon('coal') },
   essencia: { name: 'Essência de inimigo', icon: icon('essencia-de-inimigo') },
-  enemyBones: { name: 'Enemy bones' },
+  enemyBones: { name: 'Enemy bones', icon: icon('enemy-bones') },
   bastaoLinho: { name: 'Bastão de linho', icon: icon('bastao-de-linho') },
   capsulasAlgodao: { name: 'Cápsulas de algodão', icon: icon('capsulas-de-algodao') },
   sabaoSeiva: { name: 'Sabão de seiva de árvore', icon: icon('sabao-de-seiva') },
@@ -20,13 +20,13 @@ const M = {
   treeSap: { name: 'Tree sap', icon: icon('tree-sap') },
   titaniumOre: { name: 'Titanium ore', icon: icon('titanium-ore') },
   titaniumIngot: { name: 'Titanium ingot', icon: icon('titanium-ingot') },
-  xymeraldOre: { name: 'Xymerald ore', icon: './xymerald.png' },
+  xymeraldOre: { name: 'Xymerald ore', icon: icon('xymerald-ore') },
   lesser: { name: 'Lesser enchantment', icon: icon('lesser-enchantment') },
   ench: { name: 'Enchantment', icon: icon('enchantment') },
 }
 const LESSER = M.lesser
 const ENCH = M.ench
-const XYMERALD = { name: 'Xymerald' }
+const XYMERALD = { name: 'Xymerald', icon: icon('xymerald-refinado') }
 
 const MIN = 60
 const T_26_40 = 26 * MIN + 40
@@ -73,7 +73,7 @@ export const CRAFTING_GROUPS = [
       rec('enchantment', 'Enchantment', 40, 90, 8 * MIN, mats([M.enemyBones, 5], [M.essencia, 25]), 'enchantment'),
       rec('barra-de-aco-fino', 'Barra de aço fino', 40, 90, 4 * MIN, mats([M.minerioFerro, 10], [M.coal, 2], [M.lesser, 1]), 'barra-de-aco-fino'),
       rec('coal', 'Coal', 40, 90, 4 * MIN, mats([M.hickory, 5], [M.carbonOre, 10]), 'coal'),
-      rec('tecido-trama-eterea', 'Tecido de trama etérea', 40, 90, 4 * MIN, mats([M.capsulasAlgodao, 10], [M.sabaoSeiva, 2], [M.lesser, 1])),
+      rec('tecido-trama-eterea', 'Tecido de trama etérea', 40, 90, 4 * MIN, mats([M.capsulasAlgodao, 10], [M.sabaoSeiva, 2], [M.lesser, 1]), 'tecido-de-trama-eterea'),
       rec('fine-hardened-wood-plank', 'Fine hardened wood plank', 40, 90, 4 * MIN, mats([M.hickory, 10], [M.coal, 2], [M.lesser, 1]), 'fine-hardened-wood-plank'),
       rec('tecido-seda-real', 'Tecido de seda real', 45, 80, 8 * MIN, mats([M.casuloSeda, 10], [M.sabaoSeiva, 2], [M.ench, 1]), 'tecido-de-seda-real'),
       rec('strengthened-wood-plank', 'Strengthened wood plank', 45, 80, 8 * MIN, mats([M.resin, 1], [M.hickory, 9], [M.coal, 2], [M.ench, 1]), 'strengthened-wood-plank'),
@@ -82,7 +82,7 @@ export const CRAFTING_GROUPS = [
       rec('resin', 'Resin', 45, 80, 8 * MIN, mats([M.treeSap, 10]), 'resin'),
       {
         ...rec('xymerald', 'Xymerald', 50, 50, 60 * MIN, mats([M.ench, 2], [M.xymeraldOre, 10])),
-        icon: './xymerald.png',
+        icon: icon('xymerald-refinado'),
       },
     ],
   },
@@ -109,6 +109,7 @@ export const CRAFTING_GROUPS = [
       }),
       up('tecido-tratado-eter-trancado', 'Tecido Tratado → Éter Trançado', 90, T_1_50, {
         name: 'Tecido de trama etérea',
+        icon: icon('tecido-de-trama-eterea'),
       }),
       up('fine-hardened-strengthened', 'Fine hardened wood → Strengthened wood', 80, T_5_32, { name: 'Strengthened wood plank', icon: icon('strengthened-wood-plank') }, ENCH),
       up('aco-tratado-aco-liga', 'Aço Tratado → Aço-Liga', 80, T_5_32, { name: 'Alloy steel ingot', icon: icon('alloy-steel-ingot') }, ENCH),

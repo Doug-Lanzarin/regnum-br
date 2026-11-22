@@ -1317,7 +1317,24 @@ button {
   font-size: 0.9rem;
 }
 
-.recipe-materials img {
+.item-icon-fallback {
+  display: inline-grid;
+  place-items: center;
+  font-family: var(--display);
+  font-weight: 700;
+  color: #f1e6ff;
+  background: radial-gradient(circle at 50% 40%, #8a5fa8, #4b2d5f);
+}
+
+.recipe-icon.item-icon-fallback {
+  font-size: 1rem;
+}
+
+.recipe-mat-icon.item-icon-fallback {
+  font-size: 0.8rem;
+}
+
+.recipe-materials .recipe-mat-icon {
   width: 28px;
   height: 28px;
   border-radius: 6px;

@@ -224,6 +224,16 @@ function JewelCard({ item }) {
   )
 }
 
+/** Ícone do item; sem imagem, mostra a inicial num quadrado no estilo do jogo */
+function ItemIcon({ src, name, className, size }) {
+  if (src) return <img src={src} alt="" className={className} width={size} height={size} loading="lazy" />
+  return (
+    <span className={`${className} item-icon-fallback`} aria-hidden="true">
+      {name.charAt(0)}
+    </span>
+  )
+}
+
 function RecipeItem({ recipe, open, onToggle }) {
   const panelId = `recipe-${recipe.id}`
   const icon = recipe.icon ?? recipe.materials[0]?.icon
@@ -236,7 +246,7 @@ function RecipeItem({ recipe, open, onToggle }) {
         aria-controls={panelId}
         onClick={onToggle}
       >
-        <img src={icon} alt="" className="recipe-icon" width="36" height="36" loading="lazy" />
+        <ItemIcon src={icon} name={recipe.name} className="recipe-icon" size={36} />
         <span className="recipe-name">{recipe.name}</span>
         {recipe.level && <span className="recipe-level">Nv. {recipe.level}</span>}
         <svg className="recipe-chevron" viewBox="0 0 24 24" aria-hidden="true">
@@ -268,7 +278,7 @@ function RecipeItem({ recipe, open, onToggle }) {
           <ul>
             {recipe.materials.map((m) => (
               <li key={m.name}>
-                <img src={m.icon} alt="" width="28" height="28" loading="lazy" />
+                <ItemIcon src={m.icon} name={m.name} className="recipe-mat-icon" size={28} />
                 <span className="recipe-qty">{m.qty}×</span>
                 <span>{m.name}</span>
               </li>

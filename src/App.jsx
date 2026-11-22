@@ -9,6 +9,7 @@ import {
   getCycle,
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
+import MaterialsMap from './MaterialsMap.jsx'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -302,6 +303,7 @@ function CraftingView() {
 
   return (
     <div className="crafting">
+      <MaterialsMap />
       {CRAFTING_GROUPS.map((group) => (
         <section key={group.id} className="crafting-group">
           <h2 className="crafting-title">{group.label}</h2>

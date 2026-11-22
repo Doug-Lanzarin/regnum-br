@@ -1,0 +1,100 @@
+// Materiais de crafting na zona de guerra (fora das muralhas).
+// Posições em % do mapa base (public/wz-materiais/base.jpg). Mapa base: REDO.
+
+export const WZ_MAP_RATIO = 1.004950495049505
+
+export const WZ_MATERIALS = [
+  {
+    id: 'carvao',
+    name: 'Minério de carvão',
+    game: 'Carbon ore',
+    icon: './crafting/carbon-ore.png',
+    color: '#c7d0dc',
+    overlay: './wz-materiais/carvao.png',
+    bbox: [9.852, 24.611, 85.644, 55.092],
+    spots: [[31.06, 28.57], [50.4, 29.13], [68.4, 31.7], [11.48, 39.32], [22.89, 48.03], [31.94, 50.82], [20.16, 55.41], [23.51, 67.18], [55.9, 76.04], [93.29, 59.41]],
+  },
+  {
+    id: 'nogueira',
+    name: 'Tronco de nogueira',
+    game: 'Hickory wood log',
+    icon: './crafting/hickory-wood-log.png',
+    color: '#ffb21a',
+    overlay: './wz-materiais/nogueira.png',
+    bbox: [28.36, 31.047, 37.298, 45.403],
+    spots: [[41.56, 34.91], [37.87, 44.44], [54.89, 46.6], [33.0, 55.31], [60.79, 60.53], [33.06, 72.35]],
+  },
+  {
+    id: 'seiva',
+    name: 'Seiva de árvore',
+    game: 'Tree sap',
+    icon: './crafting/tree-sap.png',
+    color: '#ff6fae',
+    overlay: './wz-materiais/seiva.png',
+    bbox: [5.278, 17.327, 63.969, 59.406],
+    spots: [[15.7, 36.46], [48.55, 44.78], [7.16, 58.52], [67.14, 65.32], [40.82, 74.38], [58.92, 19.22]],
+  },
+  {
+    id: 'ferro',
+    name: 'Minério de ferro',
+    game: 'Iron ore',
+    icon: './crafting/mineral-de-ferro.png',
+    color: '#ff7b3d',
+    overlay: './wz-materiais/ferro.png',
+    bbox: [21.534, 18.317, 54.469, 74.47],
+    spots: [[34.9, 22.07], [25.57, 27.89], [74.49, 49.66], [59.3, 89.89]],
+  },
+  {
+    id: 'titanio',
+    name: 'Minério de titânio',
+    game: 'Titanium ore',
+    icon: './crafting/titanium-ore.png',
+    color: '#36d9ff',
+    overlay: './wz-materiais/titanio.png',
+    bbox: [57.143, 38.614, 19.704, 27.016],
+    spots: [[71.0, 41.29], [69.85, 45.07], [58.81, 41.83], [74.92, 64.21]],
+  },
+  {
+    id: 'seda',
+    name: 'Casulo de seda',
+    game: 'Silk cocoon',
+    icon: './crafting/casulo-de-seda.png',
+    color: '#fff15a',
+    overlay: './wz-materiais/seda.png',
+    bbox: [10.626, 52.687, 45.25, 27.652],
+    spots: [[12.57, 54.81], [52.36, 64.52], [46.34, 77.01]],
+  },
+  {
+    id: 'algodao',
+    name: 'Cápsulas de algodão',
+    game: 'Cotton bolls',
+    icon: './crafting/capsulas-de-algodao.png',
+    color: '#ffffff',
+    overlay: './wz-materiais/algodao.png',
+    bbox: [6.193, 17.822, 58.832, 68.529],
+    spots: [[9.23, 47.03], [61.94, 20.92], [61.99, 81.62]],
+  },
+  {
+    id: 'linho',
+    name: 'Fibra de linho',
+    game: 'Flax bast',
+    icon: './crafting/bastao-de-linho.png',
+    color: '#47f28f',
+    overlay: './wz-materiais/linho.png',
+    bbox: [15.06, 17.68, 31.668, 32.249],
+    spots: [[23.68, 42.09], [45.02, 19.22]],
+  },
+  {
+    id: 'ossos',
+    name: 'Bolsa de ossos',
+    game: 'Bag of bones',
+    icon: null,
+    color: '#c08bff',
+    overlay: './wz-materiais/ossos.png',
+    bbox: [45.32, 5.233, 5.137, 4.597],
+    spots: [[47.4, 7.18]],
+  },
+]
+
+/** Só existem dentro dos reinos, não na zona de guerra */
+export const WZ_ONLY_INSIDE = ['Minério de prata', 'Minério de cobre', 'Cobre e cassiterita', 'Tronco de pinho']

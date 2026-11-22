@@ -1,7 +1,7 @@
 // Materiais de crafting na zona de guerra (fora das muralhas).
 // Posições em % do mapa base (public/wz-materiais/base.jpg). Mapa base: REDO.
 
-export const WZ_MAP_RATIO = 1.004950495049505
+export const WZ_MAP_RATIO = 1.2376237623762376
 
 export const WZ_MATERIALS = [
   {
@@ -11,8 +11,8 @@ export const WZ_MATERIALS = [
     icon: './crafting/carbon-ore.png',
     color: '#c7d0dc',
     overlay: './wz-materiais/carvao.png',
-    bbox: [9.852, 24.611, 85.644, 55.092],
-    spots: [[31.06, 28.57], [50.4, 29.13], [68.4, 31.7], [11.48, 39.32], [22.89, 48.03], [31.94, 50.82], [20.16, 55.41], [23.51, 67.18], [55.9, 76.04], [93.29, 59.41]],
+    bbox: [8.0, 24.611, 91.6, 55.092],
+    spots: [[87.06, 72.59], [91.4, 73.95], [98.37, 65.51], [25.22, 28.57], [40.93, 29.13], [55.54, 31.7], [9.32, 39.32], [18.59, 48.03], [25.94, 50.82], [16.37, 55.41], [19.09, 67.18], [45.39, 76.04], [75.75, 59.41]],
   },
   {
     id: 'nogueira',
@@ -21,8 +21,8 @@ export const WZ_MATERIALS = [
     icon: './crafting/hickory-wood-log.png',
     color: '#ffb21a',
     overlay: './wz-materiais/nogueira.png',
-    bbox: [28.36, 31.047, 37.298, 45.403],
-    spots: [[41.56, 34.91], [37.87, 44.44], [54.89, 46.6], [33.0, 55.31], [60.79, 60.53], [33.06, 72.35]],
+    bbox: [23.029, 31.047, 30.286, 45.403],
+    spots: [[33.75, 34.91], [30.75, 44.44], [44.57, 46.6], [26.8, 55.31], [49.36, 60.53], [26.85, 72.35]],
   },
   {
     id: 'seiva',
@@ -31,8 +31,8 @@ export const WZ_MATERIALS = [
     icon: './crafting/tree-sap.png',
     color: '#ff6fae',
     overlay: './wz-materiais/seiva.png',
-    bbox: [5.278, 17.327, 63.969, 59.406],
-    spots: [[15.7, 36.46], [48.55, 44.78], [7.16, 58.52], [67.14, 65.32], [40.82, 74.38], [58.92, 19.22]],
+    bbox: [4.286, 17.327, 93.257, 59.406],
+    spots: [[91.54, 66.98], [12.75, 36.46], [39.42, 44.78], [5.82, 58.52], [54.52, 65.32], [33.15, 74.38], [47.84, 19.22]],
   },
   {
     id: 'ferro',
@@ -41,8 +41,8 @@ export const WZ_MATERIALS = [
     icon: './crafting/mineral-de-ferro.png',
     color: '#ff7b3d',
     overlay: './wz-materiais/ferro.png',
-    bbox: [21.534, 18.317, 54.469, 74.47],
-    spots: [[34.9, 22.07], [25.57, 27.89], [74.49, 49.66], [59.3, 89.89]],
+    bbox: [17.486, 18.317, 44.229, 74.47],
+    spots: [[28.34, 22.07], [20.77, 27.89], [60.49, 49.66], [48.15, 89.89]],
   },
   {
     id: 'titanio',
@@ -51,8 +51,8 @@ export const WZ_MATERIALS = [
     icon: './crafting/titanium-ore.png',
     color: '#36d9ff',
     overlay: './wz-materiais/titanio.png',
-    bbox: [57.143, 38.614, 19.704, 27.016],
-    spots: [[71.0, 41.29], [69.85, 45.07], [58.81, 41.83], [74.92, 64.21]],
+    bbox: [46.4, 38.614, 16.0, 27.016],
+    spots: [[57.66, 41.29], [56.72, 45.07], [47.75, 41.83], [60.83, 64.21]],
   },
   {
     id: 'seda',
@@ -61,8 +61,8 @@ export const WZ_MATERIALS = [
     icon: './crafting/casulo-de-seda.png',
     color: '#fff15a',
     overlay: './wz-materiais/seda.png',
-    bbox: [10.626, 52.687, 45.25, 27.652],
-    spots: [[12.57, 54.81], [52.36, 64.52], [46.34, 77.01]],
+    bbox: [8.629, 52.687, 36.743, 27.652],
+    spots: [[10.21, 54.81], [42.52, 64.52], [37.63, 77.01]],
   },
   {
     id: 'algodao',
@@ -71,8 +71,8 @@ export const WZ_MATERIALS = [
     icon: './crafting/capsulas-de-algodao.png',
     color: '#ffffff',
     overlay: './wz-materiais/algodao.png',
-    bbox: [6.193, 17.822, 58.832, 68.529],
-    spots: [[9.23, 47.03], [61.94, 20.92], [61.99, 81.62]],
+    bbox: [5.029, 17.822, 47.771, 68.529],
+    spots: [[7.49, 47.03], [50.29, 20.92], [50.34, 81.62]],
   },
   {
     id: 'linho',
@@ -81,8 +81,8 @@ export const WZ_MATERIALS = [
     icon: './crafting/bastao-de-linho.png',
     color: '#47f28f',
     overlay: './wz-materiais/linho.png',
-    bbox: [15.06, 17.68, 31.668, 32.249],
-    spots: [[23.68, 42.09], [45.02, 19.22]],
+    bbox: [12.229, 17.68, 25.714, 32.249],
+    spots: [[19.23, 42.09], [36.55, 19.22]],
   },
   {
     id: 'ossos',
@@ -91,8 +91,8 @@ export const WZ_MATERIALS = [
     icon: null,
     color: '#c08bff',
     overlay: './wz-materiais/ossos.png',
-    bbox: [45.32, 5.233, 5.137, 4.597],
-    spots: [[47.4, 7.18]],
+    bbox: [36.8, 5.233, 4.171, 4.597],
+    spots: [[38.49, 7.18]],
   },
 ]
 

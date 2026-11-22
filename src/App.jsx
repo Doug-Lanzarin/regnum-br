@@ -9,6 +9,7 @@ import {
   getCycle,
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
+import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
 function useNow(interval = 1000) {
@@ -223,18 +224,85 @@ function JewelCard({ item }) {
   )
 }
 
-function CraftingView() {
-  const crafting = INFO_SECTIONS.find((x) => x.id === 'crafting')
+function RecipeItem({ recipe, open, onToggle }) {
+  const panelId = `recipe-${recipe.id}`
+  const icon = recipe.icon ?? recipe.materials[0]?.icon
   return (
-    <section className="info-section">
-      <div className="info-empty">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          {crafting.icon}
+    <li className={`recipe ${open ? 'open' : ''}`}>
+      <button
+        type="button"
+        className="recipe-head"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={onToggle}
+      >
+        <img src={icon} alt="" className="recipe-icon" width="36" height="36" loading="lazy" />
+        <span className="recipe-name">{recipe.name}</span>
+        {recipe.level && <span className="recipe-level">Nv. {recipe.level}</span>}
+        <svg className="recipe-chevron" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m6 9 6 6 6-6" />
         </svg>
-        <strong>Crafting</strong>
-        <span>Em breve</span>
+      </button>
+
+      <div id={panelId} className="recipe-panel" hidden={!open}>
+        <dl className="recipe-stats">
+          <div>
+            <dt>Probabilidade de êxito</dt>
+            <dd>
+              <span className="recipe-chance">{recipe.chance}%</span>
+              <span className="recipe-bar" aria-hidden="true">
+                <span style={{ width: `${recipe.chance}%` }} />
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>Tempo para craftar</dt>
+            <dd>
+              <span className="recipe-time">{formatCraftTime(recipe.time)}</span>
+              <span className="recipe-time-game">{formatGameTime(recipe.time)}</span>
+            </dd>
+          </div>
+        </dl>
+        <div className="recipe-materials">
+          <span className="recipe-label">Materiais necessários</span>
+          <ul>
+            {recipe.materials.map((m) => (
+              <li key={m.name}>
+                <img src={m.icon} alt="" width="28" height="28" loading="lazy" />
+                <span className="recipe-qty">{m.qty}×</span>
+                <span>{m.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </section>
+    </li>
+  )
+}
+
+function CraftingView() {
+  const [openIds, setOpenIds] = useState(() => new Set())
+  const toggle = (id) =>
+    setOpenIds((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+
+  return (
+    <div className="crafting">
+      {CRAFTING_GROUPS.map((group) => (
+        <section key={group.id} className="crafting-group">
+          <h2 className="crafting-title">{group.label}</h2>
+          <ul className="recipe-list">
+            {group.recipes.map((r) => (
+              <RecipeItem key={r.id} recipe={r} open={openIds.has(r.id)} onToggle={() => toggle(r.id)} />
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
   )
 }
 

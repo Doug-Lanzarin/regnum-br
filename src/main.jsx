@@ -9,9 +9,7 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
-// Service worker: necessário para os alertas no iPhone (site instalado na Tela de Início)
+// Os alertas foram removidos: desliga o service worker que eles usavam em quem já tinha instalado
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {})
-  })
+  navigator.serviceWorker.getRegistrations().then((regs) => regs.forEach((r) => r.unregister())).catch(() => {})
 }

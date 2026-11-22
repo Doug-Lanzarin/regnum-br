@@ -9,7 +9,6 @@ import {
   getCycle,
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
-import { notificationsSupported, useAlerts } from './alerts.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
 function useNow(interval = 1000) {
@@ -416,13 +415,6 @@ function HomeView({ rows, now, onOpenEpics, war }) {
 // Servidor usado no mapa de guerra
 const WAR_WORLD = 'ra'
 
-const isIOS = () =>
-  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-
-const isStandalone = () =>
-  window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone === true
-
 // Horários fixos do último respawn informado; os próximos são calculados de 61 em 61 horas
 const SPAWNS = Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpawn)]))
 
@@ -440,56 +432,8 @@ export default function App() {
     [spawns, now],
   )
 
-  // Alertas: 30 min, 15 min e na hora (épicos e Xymerald) + quests WM às 23:45 de Brasília
-  const alerts = useAlerts(now, rows)
-  const [showInstallHint, setShowInstallHint] = useState(false)
-  const needsInstall = !notificationsSupported() && isIOS() && !isStandalone()
-
-
   return (
     <div className="app">
-      <header className="top">
-        {notificationsSupported() && (
-          <button
-            type="button"
-            className={`chip ${alerts.enabled ? 'on' : ''}`}
-            onClick={alerts.toggle}
-            aria-pressed={alerts.enabled}
-            title="Avisos 30 min, 15 min e na hora dos épicos e do Xymerald, e às 23:45 para as quests WM"
-          >
-            <span className="chip-dot" />
-            {alerts.enabled
-              ? 'Alertas ligados'
-              : alerts.permission === 'denied'
-                ? 'Alertas bloqueados no navegador'
-                : 'Ativar alertas'}
-          </button>
-        )}
-        {needsInstall && (
-          <button
-            type="button"
-            className="chip"
-            onClick={() => setShowInstallHint((v) => !v)}
-            aria-expanded={showInstallHint}
-          >
-            <span className="chip-dot" />
-            Ativar alertas
-          </button>
-        )}
-      </header>
-
-      {needsInstall && showInstallHint && (
-        <div className="install-hint" role="note">
-          <strong>Alertas no iPhone</strong>
-          <p>
-            O iPhone só permite alertas com o site instalado. Toque em <b>Compartilhar</b> no Safari,
-            depois em <b>Adicionar à Tela de Início</b>. Abra pelo ícone criado e toque em{' '}
-            <b>Ativar alertas</b>.
-          </p>
-        </div>
-      )}
-
-
       <main key={tab} className="view">
         {tab === 'inicio' && <HomeView
             rows={rows}

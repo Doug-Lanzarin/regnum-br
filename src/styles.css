@@ -51,68 +51,18 @@ button {
 }
 
 /* ---------- Topo ---------- */
-.top {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
 
 
 
 
 
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  min-height: 42px;
-  padding: 0 18px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--ink-2);
-  font-size: 0.86rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.1s;
-}
 
-.chip:hover {
-  border-color: #4a5568;
-}
 
-.chip:active {
-  transform: scale(0.98);
-}
 
-.chip:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 2px;
-}
 
-.chip-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #5b6577;
-  transition: background 0.2s, box-shadow 0.2s;
-}
 
-.chip.on {
-  color: var(--ink);
-  border-color: rgba(214, 176, 106, 0.45);
-  background: rgba(214, 176, 106, 0.1);
-}
 
-.chip.on .chip-dot {
-  background: var(--gold);
-  box-shadow: 0 0 0 4px rgba(214, 176, 106, 0.18);
-}
 
 /* ---------- Cards (mesmo modelo do Regnum Warlords) ---------- */
 .grid {
@@ -330,30 +280,9 @@ button {
   }
 }
 
-.install-hint {
-  margin: -8px 0 20px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: rgba(214, 176, 106, 0.08);
-  border: 1px solid rgba(214, 176, 106, 0.3);
-  font-size: 0.86rem;
-  line-height: 1.5;
-  color: var(--ink-2);
-}
 
-.install-hint strong {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--gold);
-}
 
-.install-hint p {
-  margin: 0;
-}
 
-.install-hint b {
-  color: var(--ink);
-}
 
 /* ---------- Telas ---------- */
 .view {
@@ -1262,14 +1191,6 @@ button {
 
 /* ---------- Responsivo ---------- */
 @media (max-width: 560px) {
-  .top {
-    margin-bottom: 20px;
-  }
-
-  .chip {
-    width: 100%;
-  }
-
   /* Cards compactos no celular: tudo numa linha só */
   .home-next {
     gap: 12px;

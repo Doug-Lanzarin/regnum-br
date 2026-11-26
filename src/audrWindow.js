@@ -1,6 +1,5 @@
 // Janela do Audr no horário de Brasília (UTC-3, sem horário de verão).
-// Normal: de sexta 12:00 até domingo 16:00.
-// TESTE: abrindo na quinta 08:00 — para voltar ao normal, troque OPEN_AT por FRIDAY_NOON.
+// Aberto de sexta 12:00 até domingo 16:00 (para testes, OPEN_AT = THURSDAY_8AM abre na quinta 08:00).
 // Usado tanto no site quanto na função do servidor (api/audr.js).
 
 const HOUR = 3600 * 1000
@@ -8,9 +7,9 @@ const DAY = 24 * HOUR
 const BRT = -3 * HOUR
 
 // tempos contados a partir de quinta 00:00 (Brasília)
-const THURSDAY_8AM = 8 * HOUR
-const FRIDAY_NOON = DAY + 12 * HOUR // eslint-disable-line no-unused-vars
-const OPEN_AT = THURSDAY_8AM
+const THURSDAY_8AM = 8 * HOUR // eslint-disable-line no-unused-vars
+const FRIDAY_NOON = DAY + 12 * HOUR
+const OPEN_AT = FRIDAY_NOON
 const CLOSE_AT = 3 * DAY + 16 * HOUR // domingo 16:00
 
 /** Início e fim da janela da semana de `now`, em ms UTC */

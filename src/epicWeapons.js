@@ -49,32 +49,32 @@ export const EPIC_WEAPONS = {
   ],
   evendim: [
     w('evendim-veneno', 'Veneno do Rei Lich de Aço Fino (Mestre)', {
-      icon: false, bonus: 21, parts: [['gelo', '11-16'], ['eletrico', '51-73']],
+bonus: 21, parts: [['gelo', '11-16'], ['eletrico', '51-73']],
       category: 'Cajados', speed: 'Média', range: 30, weight: '6 Kg', level: 73, cls: 'Mago',
       stats: ['Velocidade de conjuração +5%', 'Inteligência +7', 'Vida +50', 'Chance de crítico +16%'],
     }),
     w('evendim-arremetida', 'Arremetida Poderosa de Evendim de Aço Fino (Mestre)', {
-      icon: false, bonus: 41, parts: [['esmagamento', '444-508'], ['eletrico', '30']],
+bonus: 41, parts: [['esmagamento', '444-508'], ['eletrico', '30']],
       category: 'Martelos', speed: 'Muito lenta', weight: '15 Kg', level: 67, cls: 'Bárbaro',
       stats: ['Força +6', 'Velocidade de ataque +5%', 'Chance de crítico +32%'],
     }),
     w('evendim-garra', 'Garra Inevitável dos Mortos-Vivos de Madeira Endurecida (Mestre)', {
-      icon: false, bonus: 27, parts: [['perfurante', '78-98'], ['eletrico', '17-22']],
+bonus: 27, parts: [['perfurante', '78-98'], ['eletrico', '17-22']],
       category: 'Arcos longos', speed: 'Média', range: 30, durability: '186/186', weight: '6 Kg', level: 66, cls: 'Arqueiro',
       stats: ['Destreza +5', 'Dano crítico +15%', 'Chance de crítico +18%'],
     }),
     w('evendim-carga', 'Carga Poderosa dos Mortos-Vivos de Aço Fino (Mestre)', {
-      icon: false, bonus: 41, parts: [['cortante', '285-315'], ['eletrico', '30']],
+bonus: 41, parts: [['cortante', '285-315'], ['eletrico', '30']],
       category: 'Machados', speed: 'Média', weight: '15 Kg', level: 66, cls: 'Bárbaro',
       stats: ['Constituição +6', 'Velocidade de ataque +5%', 'Chance de crítico +32%'],
     }),
     w('evendim-fio', 'Fio Sombrio dos Mortos-Vivos de Aço Fino (Mestre)', {
-      icon: false, bonus: 41, parts: [['cortante', '180-200'], ['esmagamento', '20-30'], ['eletrico', '20']],
+bonus: 41, parts: [['cortante', '180-200'], ['esmagamento', '20-30'], ['eletrico', '20']],
       category: 'Espadas', speed: 'Média', weight: '8 Kg', level: 64, cls: 'Guerreiro',
       stats: ['Força +5', 'Chance de crítico +32%'],
     }),
     w('evendim-lasca', 'Lasca Perfuradora dos Mortos-Vivos de Aço Fino (Mestre)', {
-      icon: false, bonus: 41, parts: [['perfurante', '180-245'], ['eletrico', '30']],
+bonus: 41, parts: [['perfurante', '180-245'], ['eletrico', '30']],
       category: 'Lanças', speed: 'Média', range: 2, weight: '8 Kg', level: 68, cls: 'Guerreiro',
       stats: ['Força +6', 'Velocidade de ataque +5%', 'Chance de crítico +32%'],
     }),

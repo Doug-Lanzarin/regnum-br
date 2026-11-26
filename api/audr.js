@@ -7,8 +7,15 @@
 import { audrWindow } from '../src/audrWindow.js'
 
 const KEY = 'audr:mark'
-const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL
-const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN
+// A integração da Vercel cria as variáveis com o prefixo escolhido (KV_, STORAGE_, ...):
+// procura qualquer par *_REST_API_URL / *_REST_API_TOKEN, além dos nomes padrão do Upstash.
+function findEnv(suffix, fallback) {
+  if (process.env[fallback]) return process.env[fallback]
+  const key = Object.keys(process.env).find((k) => k.endsWith(suffix) && !k.includes('READ_ONLY'))
+  return key ? process.env[key] : undefined
+}
+const REDIS_URL = findEnv('_REST_API_URL', 'UPSTASH_REDIS_REST_URL')
+const REDIS_TOKEN = findEnv('_REST_API_TOKEN', 'UPSTASH_REDIS_REST_TOKEN')
 
 let memory = null // { value, expiresAt }
 const memLimits = new Map()

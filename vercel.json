@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/audr", "destination": "/index.html" },
+    { "source": "/audr/", "destination": "/index.html" }
+  ]
+}

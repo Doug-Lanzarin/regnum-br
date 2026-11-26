@@ -2455,3 +2455,112 @@ button {
     transition: none !important;
   }
 }
+
+/* ---------- Audr off ---------- */
+.audr-off {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 24px 16px;
+}
+
+.audr-off-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(420px, 100%);
+  padding: 28px 22px 24px;
+  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+  text-align: center;
+}
+
+.audr-off-npc {
+  width: 150px;
+  height: auto;
+  border-radius: 16px;
+  filter: grayscale(0.6) brightness(0.85);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+}
+
+.audr-off-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 138, 122, 0.4);
+  background: rgba(255, 138, 122, 0.1);
+  color: #ff8a7a;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.audr-off-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff8a7a;
+}
+
+.audr-off h1 {
+  margin: 4px 0 0;
+  font-family: var(--display);
+  font-size: 1.6rem;
+}
+
+.audr-off p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.audr-off p b {
+  color: var(--ink);
+}
+
+.audr-off-next {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line-soft);
+}
+
+.audr-off-next span {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.audr-off-next strong {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.audr-off-next small {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+.audr-off-home {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+  text-decoration: none;
+}

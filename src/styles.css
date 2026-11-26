@@ -2889,25 +2889,3 @@ button {
   }
 }
 
-/* ondinha ao tocar */
-.ripple-host {
-  position: relative;
-  overflow: hidden;
-}
-
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.18;
-  transform: scale(0);
-  pointer-events: none;
-  animation: ripple 0.55s ease-out forwards;
-}
-
-@keyframes ripple {
-  to {
-    transform: scale(1);
-    opacity: 0;
-  }
-}

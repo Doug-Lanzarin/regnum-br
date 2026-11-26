@@ -39,3 +39,10 @@ npm run build    # gera a pasta dist/
 
 Na Vercel, a pasta `api/` vira a função serverless `/api/wz` automaticamente. Em outro servidor estático o mapa continua aparecendo, mas a lista de fortes e gemas depende dessa função.
 
+
+## Banco de dados do Audr
+
+A marcação da aba Audr fica num banco **Upstash Redis** conectado ao projeto pela Vercel
+(Storage → Upstash → Redis → Connect ao `regnum-br`). A função `api/audr.js` lê as variáveis
+`*_REST_API_URL` e `*_REST_API_TOKEN` criadas pela integração (qualquer prefixo, ex.: `KV_`).
+Para conferir, abra `/api/audr` no site: deve aparecer `"persistent":true`.

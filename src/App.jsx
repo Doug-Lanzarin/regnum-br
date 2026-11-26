@@ -329,6 +329,15 @@ function GearCard({ item }) {
             ? `${item.upgrades} níveis de melhoria`
             : 'Sem níveis de melhoria'}
       </p>
+      {item.cost != null && (
+        <footer className="gear-cost">
+          <span>Custo</span>
+          <strong>
+            <img src="./champion/moeda.png" alt="" width="16" height="17" />
+            {item.cost.toLocaleString('pt-BR')}
+          </strong>
+        </footer>
+      )}
     </article>
   )
 }

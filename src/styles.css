@@ -1105,6 +1105,26 @@ button {
   color: var(--muted);
 }
 
+.gear-cost {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line-soft);
+  background: var(--surface-alt);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.gear-cost strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
 .info-section {
   margin-top: 16px;
   animation: view-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);

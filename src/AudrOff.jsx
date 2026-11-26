@@ -38,7 +38,7 @@ export default function AudrOff() {
   return (
     <main className="audr-off">
       <div className="audr-off-card">
-        <img src="./audr/audr-npc.png" alt="Audr, Regnum Coins Merchant" className="audr-off-npc" width="212" height="309" />
+        <img src="./audr/audr-npc.png" alt="Audr, Regnum Coins Merchant" className="audr-off-npc" width="516" height="996" />
         <span className="audr-off-badge">
           <span className="audr-off-dot" /> Offline
         </span>

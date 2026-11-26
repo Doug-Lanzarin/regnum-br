@@ -2482,9 +2482,15 @@ button {
 .audr-off-npc {
   width: 150px;
   height: auto;
-  border-radius: 16px;
-  filter: grayscale(0.6) brightness(0.85);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+  margin: -8px 0 -4px;
+  filter: saturate(0.7) drop-shadow(0 12px 18px rgba(0, 0, 0, 0.55));
+  animation: audr-float 4s ease-in-out infinite;
+}
+
+@keyframes audr-float {
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 .audr-off-badge {

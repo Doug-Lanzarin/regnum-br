@@ -19,6 +19,7 @@ import { HALLOWEEN_JEWELS } from './halloweenJewels.js'
 import { MOMO_JEWELS } from './momoJewels.js'
 import { AQUANTIS_JEWELS } from './aquantisJewels.js'
 import { ALGAROS_JEWELS } from './algarosJewels.js'
+import { BOSS_WEAPONS } from './bossWeapons.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -184,6 +185,7 @@ const ITEM_SECTIONS = [
     topics: [
       { id: 'champion', label: 'Champion', groups: CHAMPION_WEAPONS },
       { id: 'epicos', label: 'Épicos', groups: EPIC_WEAPON_GROUPS },
+      { id: 'chefes', label: 'Chefes', groups: BOSS_WEAPONS },
     ],
     icon: (
       <>
@@ -303,18 +305,18 @@ function formatLongTime(sec) {
 function CraftDetails({ craft }) {
   return (
     <dl className="gear-craft">
-      <div>
+      {craft.chance != null && <div>
         <dt>Êxito</dt>
         <dd>{craft.chance}%</dd>
-      </div>
-      <div>
+      </div>}
+      {craft.time != null && <div>
         <dt>Tempo para craftar</dt>
         <dd>{formatLongTime(craft.time)}</dd>
-      </div>
-      <div>
+      </div>}
+      {craft.level != null && <div>
         <dt>Nível craft</dt>
         <dd>{craft.level}</dd>
-      </div>
+      </div>}
       <div className="gear-craft-mats">
         <dt>Materiais necessários</dt>
         <dd>
@@ -336,7 +338,7 @@ function GearCard({ item }) {
     <article className="jewel gear">
       <header className="jewel-head">
         <ItemIcon src={item.icon} name={item.name} className="jewel-icon" size={40} />
-        <h3 className={item.rarity === 'Mágico' ? 'gear-magic-name' : item.rarity ? 'gear-epic-name' : undefined}>{item.name}</h3>
+        <h3 className={item.rarity === 'Mágico' ? 'gear-magic-name' : item.rarity === 'Superior' ? undefined : item.rarity ? 'gear-epic-name' : undefined}>{item.name}</h3>
       </header>
       <dl className="jewel-body">
         {item.armor && (
@@ -425,7 +427,7 @@ function GearCard({ item }) {
             ? `${item.upgrades} níveis de melhoria`
             : 'Sem níveis de melhoria'}
       </p>}
-      {item.rarity && <p className={`gear-rarity ${item.rarity === 'Mágico' ? 'magic' : ''}`}>{item.rarity}</p>}
+      {item.rarity && item.rarity !== 'Superior' && <p className={`gear-rarity ${item.rarity === 'Mágico' ? 'magic' : ''}`}>{item.rarity}</p>}
       {(item.paintable || item.bound) && (
         <p className="gear-flags">
           {item.paintable && <span>Pintável nos canais A, B</span>}

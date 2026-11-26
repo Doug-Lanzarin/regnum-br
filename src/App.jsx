@@ -148,6 +148,17 @@ const ITEM_SECTIONS = [
     icon: <path d="M12 3.5 5 6v5.5c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6z" />,
   },
   {
+    id: 'armas',
+    label: 'Armas',
+    desc: 'Espadas, arcos, cajados e mais',
+    icon: (
+      <>
+        <path d="M14.5 4H20v5.5L10 19.5 4.5 14z" />
+        <path d="m7 17-3 3M5.5 12.5l6 6" />
+      </>
+    ),
+  },
+  {
     id: 'eventos',
     label: 'Eventos',
     desc: 'Itens de eventos',

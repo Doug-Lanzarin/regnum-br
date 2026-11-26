@@ -15,7 +15,7 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 - Destaque para o chefe que reaparece primeiro e lista de próximos horários em cada card
 - A contagem parte sempre dos horários fixos acima, somando 61 horas a cada ciclo
 - Barra de navegação flutuante com as abas Início, Épicos, Crafting e Items
-- Aba Items com navegação em lista: Jóias, Armaduras, Armas e Eventos
+- Aba Items com navegação em lista: Jóias, Armaduras e Armas
 - Jóias → Warmaster: joias de cada reino (Alsius, Ignis, Syrtis), dados em `src/joias.js`
 - Armaduras e Armas → Champion: peças por classe, dados em `src/champion.js`
 - Armaduras → Magnanita: peças por classe com crafting e custo, dados em `src/magnanita.js`

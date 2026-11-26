@@ -2081,7 +2081,8 @@ button {
   }
 
   .topicnav {
-    gap: 14px;
+    gap: 10px;
+    padding: 0 2px;
   }
 
   .kicker-long,

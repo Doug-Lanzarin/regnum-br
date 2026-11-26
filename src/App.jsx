@@ -16,6 +16,7 @@ import { MAGNANITA_ARMORS } from './magnanita.js'
 import { EPIC_WEAPONS } from './epicWeapons.js'
 import { EPIC_JEWELS } from './epicJewels.js'
 import { HALLOWEEN_JEWELS } from './halloweenJewels.js'
+import { MOMO_JEWELS } from './momoJewels.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -153,6 +154,7 @@ const ITEM_SECTIONS = [
       { id: 'warmaster', label: 'Warmaster', groups: WARMASTER_REALMS },
       { id: 'epicos', label: 'Épicos', groups: EPIC_JEWEL_GROUPS },
       { id: 'halloween', label: 'Halloween', items: HALLOWEEN_JEWELS },
+      { id: 'momo', label: 'Momo', items: MOMO_JEWELS, color: '#d6b06a' },
     ],
     icon: (
       <>

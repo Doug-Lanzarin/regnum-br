@@ -11,6 +11,7 @@ import {
 import WarMap, { useWarStatus } from './WarMap.jsx'
 import MaterialsMap from './MaterialsMap.jsx'
 import { WARMASTER_REALMS } from './joias.js'
+import { CHAMPION_ARMORS, CHAMPION_WEAPONS } from './champion.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -147,12 +148,14 @@ const ITEM_SECTIONS = [
     id: 'armaduras',
     label: 'Armaduras',
     desc: 'Conjuntos e peças',
+    topics: [{ id: 'champion', label: 'Champion', groups: CHAMPION_ARMORS }],
     icon: <path d="M12 3.5 5 6v5.5c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6z" />,
   },
   {
     id: 'armas',
     label: 'Armas',
     desc: 'Espadas, arcos, cajados e mais',
+    topics: [{ id: 'champion', label: 'Champion', groups: CHAMPION_WEAPONS }],
     icon: (
       <>
         <path d="M14.5 4H20v5.5L10 19.5 4.5 14z" />
@@ -217,7 +220,9 @@ const parseHash = () => {
   const group = topicObj?.groups ? (topicObj.groups.find((g) => g.id === sub3) ?? topicObj.groups[0]).id : null
   const itemObj = tab === 'items' ? ITEM_SECTIONS.find((x) => x.id === sub) : null
   const itemTopic = itemObj?.topics ? (itemObj.topics.find((t) => t.id === sub2) ?? itemObj.topics[0]) : null
-  const itemGroup = itemTopic?.groups ? (itemTopic.groups.find((g) => g.id === sub3) ?? itemTopic.groups[0]) : null
+  const itemGroup = itemTopic?.groups
+    ? (itemTopic.groups.find((g) => g.id === sub3) ?? itemTopic.groups.find((g) => g.items) ?? itemTopic.groups[0])
+    : null
   return {
     tab,
     section: info.id,
@@ -252,6 +257,80 @@ function useHashTab() {
     window.location.hash = ['info', section, topic, group].filter(Boolean).join('/')
   }
   return [route.tab, goTo, route, goToSection]
+}
+
+/** Card de armadura/arma no estilo do tooltip do jogo */
+function GearCard({ item }) {
+  return (
+    <article className="jewel gear">
+      <header className="jewel-head">
+        <img src={item.icon} alt="" className="jewel-icon" width="40" height="40" loading="lazy" />
+        <h3>{item.name}</h3>
+      </header>
+      <dl className="jewel-body">
+        {item.armor && (
+          <div className="jewel-damage">
+            <dt>Armadura:</dt>
+            <dd>{item.armor}</dd>
+          </div>
+        )}
+        {item.damage && (
+          <div className="jewel-damage">
+            <dt>Dano (+{item.damage.bonus}):</dt>
+            <dd>
+              <img src={`./joias/dano/${item.damage.icon}.png`} alt="" width="12" height="15" />
+              {item.damage.value}
+            </dd>
+          </div>
+        )}
+        {item.resist && (
+          <div>
+            <dt>Resistências:</dt>
+            <dd>{item.resist}</dd>
+          </div>
+        )}
+        <div>
+          <dt>Categoria:</dt>
+          <dd>{item.category}</dd>
+        </div>
+        {item.speed && (
+          <div>
+            <dt>Velocidade de ataque:</dt>
+            <dd>{item.speed}</dd>
+          </div>
+        )}
+        {item.range && (
+          <div>
+            <dt>Alcance:</dt>
+            <dd>{item.range}</dd>
+          </div>
+        )}
+        <div>
+          <dt>Durabilidade:</dt>
+          <dd>{item.durability}</dd>
+        </div>
+        <div>
+          <dt>Peso:</dt>
+          <dd>{item.weight}</dd>
+        </div>
+        <div className="jewel-level">Requer {item.requires}</div>
+      </dl>
+      {item.stats.length > 0 && (
+        <ul className="jewel-stats">
+          {item.stats.map((st) => (
+            <li key={st.text}>{st.text}</li>
+          ))}
+        </ul>
+      )}
+      <p className="gear-slots">
+        {item.socket
+          ? '1 encaixe vazio'
+          : item.upgrades
+            ? `${item.upgrades} níveis de melhoria`
+            : 'Sem níveis de melhoria'}
+      </p>
+    </article>
+  )
 }
 
 function JewelCard({ item }) {
@@ -367,7 +446,7 @@ const navChevron = (
 /** Abas internas de uma seção de Items (ex.: Jóias → Warmaster → Alsius/Ignis/Syrtis) */
 function ItemTopics({ section, topic, group }) {
   const t = section.topics.find((x) => x.id === topic) ?? section.topics[0]
-  const g = t.groups?.find((x) => x.id === group) ?? t.groups?.[0]
+  const g = t.groups?.find((x) => x.id === group) ?? t.groups?.find((x) => x.items) ?? t.groups?.[0]
   const href = (...parts) => '#' + ['items', section.id, ...parts].join('/')
   return (
     <>
@@ -385,7 +464,7 @@ function ItemTopics({ section, topic, group }) {
       </nav>
 
       {t.groups && (
-        <nav className="groupnav" aria-label={`${t.label} por reino`}>
+        <nav className="groupnav" aria-label={`${t.label} por ${section.id === 'joias' ? 'reino' : 'classe'}`}>
           {t.groups.map((x) => (
             <a
               key={x.id}
@@ -401,17 +480,27 @@ function ItemTopics({ section, topic, group }) {
         </nav>
       )}
 
-      {g ? (
-        <section key={g.id} className="info-section">
-          <div className="jewel-grid" style={{ '--group-color': g.color }}>
-            {g.items.map((item) => (
-              <JewelCard key={item.id} item={item} />
-            ))}
+      {g?.items ? (
+        <section key={g.id} className="info-section" style={{ '--group-color': g.color }}>
+          {g.set && (
+            <div className="set-bonus">
+              <span className="set-bonus-title">Bônus com o conjunto Champion completo</span>
+              <ul>
+                {g.set.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <div className="jewel-grid">
+            {g.items.map((item) =>
+              section.id === 'joias' ? <JewelCard key={item.id} item={item} /> : <GearCard key={item.id} item={item} />,
+            )}
           </div>
         </section>
       ) : (
-        <div className="info-empty info-section">
-          <strong>{t.label}</strong>
+        <div key={g?.id} className="info-empty info-section">
+          <strong>{g ? `${t.label} · ${g.label}` : t.label}</strong>
           <span>Em breve</span>
         </div>
       )}

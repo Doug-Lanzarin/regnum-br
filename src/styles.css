@@ -1068,6 +1068,43 @@ button {
   color: #ff8a7a;
 }
 
+.set-bonus {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--group-color) 9%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--group-color) 35%, var(--line));
+}
+
+.set-bonus-title {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--group-color);
+}
+
+.set-bonus ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.86rem;
+  color: var(--ink);
+}
+
+.gear .jewel-stats {
+  padding-bottom: 6px;
+}
+
+.gear-slots {
+  margin: auto 0 0;
+  padding: 8px 14px 12px;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
 .info-section {
   margin-top: 16px;
   animation: view-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);

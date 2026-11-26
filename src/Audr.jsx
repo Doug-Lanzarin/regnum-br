@@ -106,7 +106,15 @@ function usePanZoom(ref) {
 
 const POLL_MS = 5000
 const RATIO = 1278 / 1425
-const time = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+const time = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' })
+const NAME_KEY = 'regnum-br:audr-name'
+const loadName = () => {
+  try {
+    return localStorage.getItem(NAME_KEY) ?? ''
+  } catch {
+    return ''
+  }
+}
 const when = new Intl.DateTimeFormat('pt-BR', {
   weekday: 'long',
   day: '2-digit',
@@ -121,7 +129,15 @@ export default function Audr() {
   const [state, setState] = useState({ loading: true, mark: null, error: null, persistent: true, end: null })
   const [pending, setPending] = useState(null)
   const [saving, setSaving] = useState(false)
+  const [name, setName] = useState(loadName)
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    if (!pending) return
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [pending])
   const mapRef = useRef(null)
+  const formRef = useRef(null)
 
   const load = useCallback(async () => {
     try {
@@ -144,6 +160,12 @@ export default function Audr() {
     }
   }, [load])
 
+  // ao escolher um ponto, rola até o formulário (no celular ele fica abaixo do mapa)
+  const hasPending = Boolean(pending)
+  useEffect(() => {
+    if (hasPending) formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [hasPending])
+
   const pz = usePanZoom(mapRef)
   const { view } = pz
 
@@ -155,14 +177,20 @@ export default function Audr() {
     if (x >= 0 && x <= 1 && y >= 0 && y <= 1) setPending({ x, y })
   }
 
-  const confirm = async () => {
-    if (!pending) return
+  const confirm = async (e) => {
+    e?.preventDefault()
+    if (!pending || !name.trim()) return
+    try {
+      localStorage.setItem(NAME_KEY, name.trim())
+    } catch {
+      /* ignora */
+    }
     setSaving(true)
     try {
       const res = await fetch('./api/audr', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pending),
+        body: JSON.stringify({ ...pending, name: name.trim() }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Não foi possível salvar.')
@@ -186,7 +214,7 @@ export default function Audr() {
             {state.loading
               ? 'Carregando…'
               : mark
-                ? `Marcado às ${time.format(new Date(mark.at))}`
+                ? `Marcado por ${mark.name ?? 'alguém'} às ${time.format(new Date(mark.at))}`
                 : 'Nenhuma marcação ainda. Toque no mapa para marcar.'}
           </p>
         </div>
@@ -207,7 +235,12 @@ export default function Audr() {
         >
           <img src="./audr/mapa.jpg" alt="Mapa do Audr" draggable="false" />
           {mark && (
-            <span className="audr-pin" style={{ left: `${mark.x * 100}%`, top: `${mark.y * 100}%` }} aria-label="Marcação atual" />
+            <div className="audr-mark" style={{ left: `${mark.x * 100}%`, top: `${mark.y * 100}%` }}>
+              <span className="audr-pin" aria-label="Marcação atual" />
+              <span className="audr-label">
+                <b>{mark.name ?? 'Alguém'}</b> · {time.format(new Date(mark.at))}
+              </span>
+            </div>
           )}
           {pending && (
             <span className="audr-pin pending" style={{ left: `${pending.x * 100}%`, top: `${pending.y * 100}%` }} aria-label="Nova marcação" />
@@ -233,17 +266,35 @@ export default function Audr() {
       </p>
 
       {pending && (
-        <div className="audr-confirm" role="dialog" aria-label="Confirmar marcação">
-          <span>{mark ? 'Substituir a marcação atual por esta posição?' : 'Marcar esta posição para todos?'}</span>
+        <form ref={formRef} className="audr-confirm" onSubmit={confirm} aria-label="Confirmar marcação">
+          <span className="audr-confirm-title">
+            {mark ? 'Substituir a marcação atual por esta posição?' : 'Marcar esta posição para todos?'}
+          </span>
+          <label className="audr-field">
+            <span>Seu nome</span>
+            <input
+              type="text"
+              value={name}
+              maxLength={24}
+              required
+              autoFocus={!name}
+              placeholder="Ex.: Nayru"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+          <div className="audr-field">
+            <span>Horário da marcação</span>
+            <strong>{time.format(new Date(now))} (Brasília)</strong>
+          </div>
           <div className="audr-actions">
             <button type="button" className="audr-btn ghost" onClick={() => setPending(null)} disabled={saving}>
               Cancelar
             </button>
-            <button type="button" className="audr-btn" onClick={confirm} disabled={saving}>
+            <button type="submit" className="audr-btn" disabled={saving || !name.trim()}>
               {saving ? 'Salvando…' : 'Confirmar'}
             </button>
           </div>
-        </div>
+        </form>
       )}
 
       {state.error && <p className="audr-error">{state.error}</p>}

@@ -2033,6 +2033,38 @@ button {
   color: var(--muted);
 }
 
+.audr-mark {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.audr-mark .audr-pin {
+  left: 0;
+  top: 0;
+}
+
+.audr-label {
+  position: absolute;
+  left: 0;
+  bottom: 14px;
+  transform: translateX(-50%) scale(var(--inv, 1));
+  transform-origin: 50% 100%;
+  padding: 4px 9px;
+  border-radius: 8px;
+  background: rgba(16, 19, 26, 0.92);
+  border: 1px solid rgba(255, 77, 77, 0.6);
+  color: #fff;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.audr-label b {
+  color: #ffb4b4;
+}
+
 .audr-pin {
   position: absolute;
   width: 22px;
@@ -2062,6 +2094,7 @@ button {
 }
 
 .audr-confirm {
+  scroll-margin-bottom: 120px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2075,9 +2108,54 @@ button {
   font-size: 0.9rem;
 }
 
+.audr-confirm-title {
+  width: 100%;
+  font-weight: 600;
+}
+
+.audr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 180px;
+  font-size: 0.86rem;
+}
+
+.audr-field > span {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.audr-field input {
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface-alt);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+
+.audr-field input:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 0;
+}
+
+.audr-field strong {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
 .audr-actions {
   display: flex;
   gap: 8px;
+  margin-left: auto;
 }
 
 .audr-btn {

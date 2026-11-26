@@ -91,9 +91,14 @@ export default async function handler(req, res) {
       if (!Number.isFinite(x) || !Number.isFinite(y) || x < 0 || x > 1 || y < 0 || y > 1) {
         return send(400, { ...base, error: 'Posição inválida.' })
       }
+      const name = String(body.name ?? '')
+        .replace(/[\u0000-\u001f\u007f<>]/g, '')
+        .trim()
+        .slice(0, 24)
+      if (!name) return send(400, { ...base, error: 'Informe seu nome para marcar.' })
       const ip = String(req.headers?.['x-forwarded-for'] ?? req.socket?.remoteAddress ?? 'anon').split(',')[0].trim()
       if (!(await store.allow(ip))) return send(429, { ...base, error: 'Aguarde alguns segundos para marcar de novo.' })
-      const mark = { x: Math.round(x * 10000) / 10000, y: Math.round(y * 10000) / 10000, at: now }
+      const mark = { x: Math.round(x * 10000) / 10000, y: Math.round(y * 10000) / 10000, at: now, name }
       await store.set(JSON.stringify(mark), win.end)
       return send(200, { ...base, mark })
     }

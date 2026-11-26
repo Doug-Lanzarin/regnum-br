@@ -12,6 +12,7 @@ import WarMap, { useWarStatus } from './WarMap.jsx'
 import MaterialsMap from './MaterialsMap.jsx'
 import { WARMASTER_REALMS } from './joias.js'
 import { CHAMPION_ARMORS, CHAMPION_WEAPONS } from './champion.js'
+import { MAGNANITA_ARMORS } from './magnanita.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -148,7 +149,10 @@ const ITEM_SECTIONS = [
     id: 'armaduras',
     label: 'Armaduras',
     desc: 'Conjuntos e peças',
-    topics: [{ id: 'champion', label: 'Champion', groups: CHAMPION_ARMORS }],
+    topics: [
+      { id: 'champion', label: 'Champion', groups: CHAMPION_ARMORS },
+      { id: 'magnanita', label: 'Magnanita', groups: MAGNANITA_ARMORS },
+    ],
     icon: <path d="M12 3.5 5 6v5.5c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6z" />,
   },
   {
@@ -259,6 +263,17 @@ function useHashTab() {
   return [route.tab, goTo, route, goToSection]
 }
 
+const RES_TYPES = ['Cortante', 'Perfurante', 'Esmagador', 'Fogo', 'Gelo', 'Eletricidade']
+const RES_ICONS = ['cortante', 'perfurante', 'esmagamento', 'fogo', 'gelo', 'eletrico']
+
+/** 300000 → "3 dias 11:20:00" */
+function formatLongTime(sec) {
+  const d = Math.floor(sec / 86400)
+  const p = (n) => String(n).padStart(2, '0')
+  const hms = `${p(Math.floor((sec % 86400) / 3600))}:${p(Math.floor((sec % 3600) / 60))}:${p(sec % 60)}`
+  return d ? `${d} ${d > 1 ? 'dias' : 'dia'} ${hms}` : hms
+}
+
 /** Card de armadura/arma no estilo do tooltip do jogo */
 function GearCard({ item }) {
   return (
@@ -283,10 +298,20 @@ function GearCard({ item }) {
             </dd>
           </div>
         )}
-        {item.resist && (
+        {typeof item.resist === 'string' && (
           <div>
             <dt>Resistências:</dt>
             <dd>{item.resist}</dd>
+          </div>
+        )}
+        {Array.isArray(item.resist) && (
+          <div className="gear-res" aria-label="Resistências">
+            {item.resist.map((r, i) => (
+              <span key={i} className={`gear-res-item res-${r.toLowerCase()}`} title={`${RES_TYPES[i]}: ${r}`}>
+                <img src={`./joias/dano/${RES_ICONS[i]}.png`} alt={RES_TYPES[i]} width="12" height="15" />
+                {r}
+              </span>
+            ))}
           </div>
         )}
         <div>
@@ -313,6 +338,12 @@ function GearCard({ item }) {
           <dt>Peso:</dt>
           <dd>{item.weight}</dd>
         </div>
+        {item.itemLevel && (
+          <div>
+            <dt>Nível do item:</dt>
+            <dd>{item.itemLevel}</dd>
+          </div>
+        )}
         <div className="jewel-level">Requer {item.requires}</div>
       </dl>
       {item.stats.length > 0 && (
@@ -329,11 +360,44 @@ function GearCard({ item }) {
             ? `${item.upgrades} níveis de melhoria`
             : 'Sem níveis de melhoria'}
       </p>
+      {(item.paintable || item.bound) && (
+        <p className="gear-flags">
+          {item.paintable && <span>Pintável nos canais A, B</span>}
+          {item.bound && <span className="gear-bound">Vinculado à conta</span>}
+        </p>
+      )}
+      {item.craft && (
+        <dl className="gear-craft">
+          <div>
+            <dt>Êxito</dt>
+            <dd>{item.craft.chance}%</dd>
+          </div>
+          <div>
+            <dt>Tempo para craftar</dt>
+            <dd>{formatLongTime(item.craft.time)}</dd>
+          </div>
+          <div>
+            <dt>Nível craft</dt>
+            <dd>{item.craft.level}</dd>
+          </div>
+          <div className="gear-craft-mats">
+            <dt>Materiais necessários</dt>
+            <dd>
+              {item.craft.materials.map((m) => (
+                <span key={m.name}>
+                  <img src={m.icon} alt="" width="18" height="18" />
+                  <b>{m.qty}×</b> {m.name}
+                </span>
+              ))}
+            </dd>
+          </div>
+        </dl>
+      )}
       {item.cost != null && (
         <footer className="gear-cost">
           <span>Custo</span>
           <strong>
-            <img src="./champion/moeda.png" alt="" width="16" height="17" />
+            <img src={item.coin ?? './champion/moeda.png'} alt="" width="16" height="17" />
             {item.cost.toLocaleString('pt-BR')}
           </strong>
         </footer>
@@ -493,7 +557,7 @@ function ItemTopics({ section, topic, group }) {
         <section key={g.id} className="info-section" style={{ '--group-color': g.color }}>
           {g.set && (
             <div className="set-bonus">
-              <span className="set-bonus-title">Bônus com o conjunto Champion completo</span>
+              <span className="set-bonus-title">{g.setTitle ?? 'Bônus com o conjunto Champion completo'}</span>
               <ul>
                 {g.set.map((x) => (
                   <li key={x}>{x}</li>

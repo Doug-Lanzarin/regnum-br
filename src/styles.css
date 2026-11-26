@@ -1105,6 +1105,99 @@ button {
   color: var(--muted);
 }
 
+.gear-res {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px 8px;
+  margin: 2px 0 4px;
+}
+
+.gear-res-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.res-boa {
+  color: #7bd389;
+}
+
+.res-ruim {
+  color: #ff8a7a;
+}
+
+.res-normal {
+  color: var(--ink-2);
+}
+
+.gear-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0 14px 8px;
+  font-size: 0.74rem;
+  color: var(--ink-2);
+}
+
+.gear-bound {
+  color: #e0906a;
+}
+
+.gear-craft {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px 14px;
+  margin: 0;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line-soft);
+  font-size: 0.78rem;
+}
+
+.gear-craft dt {
+  margin-bottom: 2px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.gear-craft dd {
+  margin: 0;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.gear-craft-mats {
+  grid-column: 1 / -1;
+}
+
+.gear-craft-mats dd {
+  white-space: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.gear-craft-mats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gear-craft-mats img {
+  border-radius: 4px;
+}
+
+.gear-craft-mats b {
+  color: var(--gold);
+}
+
 .gear-cost {
   display: flex;
   align-items: center;

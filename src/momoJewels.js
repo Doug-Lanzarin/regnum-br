@@ -6,7 +6,7 @@ const W = './magnanita/moeda-w.png'
 const m = (id, name, qty) => ({ id, name, qty, icon: `./epicos/mat/${id}.png` })
 const craft = (chance, time, level, materials, cost) => ({ chance, time, level, materials, costs: [{ coin: W, value: cost }] })
 
-export const MOMO_JEWELS = [
+const JEWELS = [
   {
     craft: craft(100, 3600, 8, [
         m('encantamento', 'Encantamento', 3),
@@ -39,3 +39,7 @@ export const MOMO_JEWELS = [
     stats: [{ text: 'Mana +125' }, { text: 'Velocidade de conjuração +6%' }],
   },
 ]
+
+// Os dois anéis do Rei Momo usam a mesma receita
+const RECIPE = JEWELS.find((x) => x.craft).craft
+export const MOMO_JEWELS = JEWELS.map((x) => ({ ...x, craft: x.craft ?? RECIPE }))

@@ -24,7 +24,7 @@ const j = (id, name, base, o) => ({
   epic: true,
 })
 
-export const EPIC_JEWELS = {
+const JEWELS = {
   daenrha: [
     j('daen-anel-furia', 'Anel da Fúria Ígnea', ANEL, {
       craft: craft(80, 7200, 9, [
@@ -103,3 +103,11 @@ export const EPIC_JEWELS = {
     }),
   ],
 }
+
+// Todas as joias de um mesmo épico usam a mesma receita (a do anel que tem receita no print)
+export const EPIC_JEWELS = Object.fromEntries(
+  Object.entries(JEWELS).map(([boss, list]) => {
+    const recipe = list.find((x) => x.craft)?.craft
+    return [boss, list.map((x) => ({ ...x, craft: x.craft ?? recipe }))]
+  }),
+)

@@ -14,7 +14,8 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 - Contagem regressiva ao vivo em cada card, com retrato e cor do reino
 - Destaque para o chefe que reaparece primeiro e lista de próximos horários em cada card
 - A contagem parte sempre dos horários fixos acima, somando 61 horas a cada ciclo
-- Barra de navegação flutuante com as abas Início, Épicos, Crafting e Items
+- Barra de navegação flutuante com as abas Início, Épicos, Crafting, Audr e Items
+- Aba Audr (só de sexta 12:00 a domingo 16:00, horário de Brasília): mapa com uma única marcação compartilhada, salva no Upstash Redis pela função `api/audr.js`
 - Aba Items com navegação em lista: Jóias, Armaduras e Armas
 - Jóias → Warmaster: joias de cada reino (Alsius, Ignis, Syrtis), dados em `src/joias.js`
 - Armaduras e Armas → Champion: peças por classe, dados em `src/champion.js`

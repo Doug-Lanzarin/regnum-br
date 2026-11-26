@@ -1928,6 +1928,139 @@ button {
   color: var(--muted);
 }
 
+/* ---------- Audr ---------- */
+.audr {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.audr-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 14px;
+}
+
+.audr-title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.audr-sub {
+  margin: 4px 0 0;
+  font-size: 0.88rem;
+  color: var(--ink-2);
+}
+
+.audr-until {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.audr-map {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+  cursor: crosshair;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.audr-map img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.audr-pin {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #ff4d4d;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.5);
+  animation: audr-pulse 1.6s ease-out infinite;
+  pointer-events: none;
+}
+
+.audr-pin.pending {
+  background: transparent;
+  border: 3px dashed #ffd24d;
+  animation: none;
+}
+
+@keyframes audr-pulse {
+  0% {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5), 0 0 0 0 rgba(255, 77, 77, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5), 0 0 0 22px rgba(255, 77, 77, 0);
+  }
+}
+
+.audr-confirm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid rgba(214, 176, 106, 0.45);
+  font-size: 0.9rem;
+}
+
+.audr-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.audr-btn {
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--gold);
+  color: #1a1d24;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.audr-btn.ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.audr-btn:disabled {
+  opacity: 0.6;
+}
+
+.audr-error {
+  margin: 10px 0 0;
+  font-size: 0.84rem;
+  color: #ff8a7a;
+}
+
+.audr-note {
+  margin: 10px 2px 0;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
 /* ---------- Barra de navegação flutuante ---------- */
 .tabbar {
   position: fixed;
@@ -1938,7 +2071,7 @@ button {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  width: min(540px, calc(100% - 32px));
+  width: min(620px, calc(100% - 32px));
   padding: 8px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--surface) 82%, transparent);

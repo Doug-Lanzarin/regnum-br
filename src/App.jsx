@@ -10,6 +10,8 @@ import {
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
 import MaterialsMap from './MaterialsMap.jsx'
+import Audr from './Audr.jsx'
+import { audrWindow } from './audrWindow.js'
 import { WARMASTER_REALMS } from './joias.js'
 import { CHAMPION_ARMORS, CHAMPION_WEAPONS } from './champion.js'
 import { MAGNANITA_ARMORS } from './magnanita.js'
@@ -127,6 +129,17 @@ const TABS = [
     ),
   },
   {
+    id: 'audr',
+    label: 'Audr',
+    onlyInWindow: true,
+    icon: (
+      <>
+        <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" />
+        <circle cx="12" cy="10" r="2.5" />
+      </>
+    ),
+  },
+  {
     id: 'items',
     label: 'Items',
     icon: (
@@ -234,7 +247,7 @@ const INFO_SECTIONS = [
 const parseHash = () => {
   const [rawId, sub, sub2, sub3] = window.location.hash.replace('#', '').split('/')
   const id = rawId === 'info' ? 'crafting' : rawId // links antigos da aba Informações
-  const tab = TABS.some((t) => t.id === id) ? id : 'inicio'
+  const tab = TABS.some((t) => t.id === id) && (id !== 'audr' || audrWindow().open) ? id : 'inicio'
   const info = INFO_SECTIONS.find((x) => x.id === sub) ?? INFO_SECTIONS[0]
   const topicObj = info.topics ? (info.topics.find((t) => t.id === sub2) ?? info.topics[0]) : null
   const group = topicObj?.groups ? (topicObj.groups.find((g) => g.id === sub3) ?? topicObj.groups[0]).id : null
@@ -856,10 +869,11 @@ function InfoView({ section, topic, group, onSection }) {
   )
 }
 
-function TabBar({ active, onChange }) {
+function TabBar({ active, onChange, audrOpen }) {
+  const tabs = TABS.filter((t) => !t.onlyInWindow || audrOpen)
   return (
-    <nav className="tabbar" aria-label="Navegação principal">
-      {TABS.map((t) => (
+    <nav className="tabbar" aria-label="Navegação principal" style={{ gridTemplateColumns: `repeat(${tabs.length}, 1fr)` }}>
+      {tabs.map((t) => (
         <button
           key={t.id}
           type="button"
@@ -961,6 +975,11 @@ export default function App() {
   const now = useNow()
   const spawns = SPAWNS
   const [tab, goTo, route] = useHashTab()
+  const audrOpen = audrWindow(now).open
+  // a janela do Audr fechou com a aba aberta: volta para o início
+  useEffect(() => {
+    if (tab === 'audr' && !audrOpen) window.location.hash = 'inicio'
+  }, [tab, audrOpen])
   const warStatus = useWarStatus(WAR_WORLD)
 
   const rows = useMemo(
@@ -999,6 +1018,8 @@ export default function App() {
 
         {tab === 'crafting' && <CraftingView />}
 
+        {tab === 'audr' && audrOpen && <Audr />}
+
         {tab === 'items' && <ItemsView section={route.itemSection} topic={route.itemTopic} group={route.itemGroup} />}
       </main>
 
@@ -1008,7 +1029,7 @@ export default function App() {
         </footer>
       )}
 
-      <TabBar active={tab} onChange={goTo} />
+      <TabBar active={tab} onChange={goTo} audrOpen={audrOpen} />
     </div>
   )
 }

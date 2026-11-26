@@ -155,3 +155,51 @@ export const MAGNANITA_ARMORS = [
     ],
   },
 ]
+
+// ---- Complementos (encantamentos) ----
+const OURO = icon('moeda-ouro')
+const W = icon('moeda-w')
+const ENC = { name: 'Encantamento', icon: icon('encantamento') }
+const comp = (id, name, good, bad, mats) => ({
+  id,
+  name,
+  icon: icon(id),
+  category: 'Complemento',
+  weight: '100 g',
+  requires: 'Nível 55',
+  stats: [{ text: good }, { text: bad, tone: 'bad' }],
+  upgrades: null,
+  bound: true,
+  craft: { chance: 100, time: 20 * 60, level: 8, materials: mats },
+  costs: [
+    { coin: OURO, value: 25000 },
+    { coin: W, value: 5000 },
+  ],
+})
+const m = (id, name, qty) => ({ name, icon: icon(id), qty })
+
+MAGNANITA_ARMORS.push({
+  id: 'complementos',
+  label: 'Complementos',
+  color: '#c08bff',
+  items: [
+    comp('enc-hammerstar', 'Encantamento Florestal de Hammerstar', 'Proteção contra gelo +1', 'Proteção contra dano cortante -1', [
+      m('carvao-pinho', 'Carvão de pinho das n…', 5),
+      { ...ENC, qty: 1 },
+      m('colmilho', 'Presa de dentes de …', 11),
+      m('terra-podzol', 'Terra podzol', 5),
+    ]),
+    comp('enc-alatar', 'Encantamento Galvânico de Alatar', 'Proteção contra eletricidade +1', 'Proteção contra dano esmagador -1', [
+      m('casulo-seda-imperial', 'Casulo de seda imperial', 5),
+      { ...ENC, qty: 1 },
+      m('cristal-ambar', 'Cristal de âmbar polido', 11),
+      m('pelo-tigre', 'Tufo de pelo de tigre b…', 5),
+    ]),
+    comp('enc-sultar', 'Encantamento Desértico de Sultar', 'Proteção contra fogo +1', 'Proteção contra dano perfurante -1', [
+      m('flor-lantana', 'Flor de lantana', 5),
+      { ...ENC, qty: 1 },
+      m('cristal-pedra-solar', 'Cristal de pedra solar', 11),
+      m('flor-espada-prateada', 'Flor de espada prateada', 5),
+    ]),
+  ],
+})

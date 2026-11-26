@@ -330,15 +330,17 @@ function GearCard({ item }) {
             <dd>{item.range}</dd>
           </div>
         )}
-        <div>
-          <dt>Durabilidade:</dt>
-          <dd>{item.durability}</dd>
-        </div>
+        {item.durability != null && (
+          <div>
+            <dt>Durabilidade:</dt>
+            <dd>{item.durability}</dd>
+          </div>
+        )}
         <div>
           <dt>Peso:</dt>
           <dd>{item.weight}</dd>
         </div>
-        {item.itemLevel && (
+        {item.itemLevel != null && (
           <div>
             <dt>Nível do item:</dt>
             <dd>{item.itemLevel}</dd>
@@ -349,17 +351,19 @@ function GearCard({ item }) {
       {item.stats.length > 0 && (
         <ul className="jewel-stats">
           {item.stats.map((st) => (
-            <li key={st.text}>{st.text}</li>
+            <li key={st.text} className={st.tone === 'bad' ? 'bad' : ''}>
+              {st.text}
+            </li>
           ))}
         </ul>
       )}
-      <p className="gear-slots">
+      {(item.socket || item.upgrades != null) && <p className="gear-slots">
         {item.socket
           ? '1 encaixe vazio'
           : item.upgrades
             ? `${item.upgrades} níveis de melhoria`
             : 'Sem níveis de melhoria'}
-      </p>
+      </p>}
       {(item.paintable || item.bound) && (
         <p className="gear-flags">
           {item.paintable && <span>Pintável nos canais A, B</span>}
@@ -393,13 +397,17 @@ function GearCard({ item }) {
           </div>
         </dl>
       )}
-      {item.cost != null && (
+      {(item.costs ?? (item.cost != null ? [{ coin: item.coin ?? './champion/moeda.png', value: item.cost }] : [])).length > 0 && (
         <footer className="gear-cost">
           <span>Custo</span>
-          <strong>
-            <img src={item.coin ?? './champion/moeda.png'} alt="" width="16" height="17" />
-            {item.cost.toLocaleString('pt-BR')}
-          </strong>
+          <span className="gear-cost-values">
+            {(item.costs ?? [{ coin: item.coin ?? './champion/moeda.png', value: item.cost }]).map((c) => (
+              <strong key={c.coin}>
+                <img src={c.coin} alt="" width="16" height="17" />
+                {c.value.toLocaleString('pt-BR')}
+              </strong>
+            ))}
+          </span>
         </footer>
       )}
     </article>

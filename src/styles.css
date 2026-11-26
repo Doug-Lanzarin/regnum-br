@@ -1209,6 +1209,13 @@ button {
   color: var(--muted);
 }
 
+.gear-cost-values {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 14px;
+}
+
 .gear-cost strong {
   display: inline-flex;
   align-items: center;

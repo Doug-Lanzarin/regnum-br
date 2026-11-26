@@ -15,6 +15,7 @@ import { CHAMPION_ARMORS, CHAMPION_WEAPONS } from './champion.js'
 import { MAGNANITA_ARMORS } from './magnanita.js'
 import { EPIC_WEAPONS } from './epicWeapons.js'
 import { EPIC_JEWELS } from './epicJewels.js'
+import { HALLOWEEN_JEWELS } from './halloweenJewels.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -151,6 +152,7 @@ const ITEM_SECTIONS = [
     topics: [
       { id: 'warmaster', label: 'Warmaster', groups: WARMASTER_REALMS },
       { id: 'epicos', label: 'Épicos', groups: EPIC_JEWEL_GROUPS },
+      { id: 'halloween', label: 'Halloween', items: HALLOWEEN_JEWELS },
     ],
     icon: (
       <>
@@ -369,6 +371,7 @@ function GearCard({ item }) {
         )}
         <div className="jewel-level">Requer {item.requires}</div>
       </dl>
+      {item.lore && <p className="jewel-lore">{item.lore}</p>}
       {item.stats.length > 0 && (
         <ul className="jewel-stats">
           {item.stats.map((st) => (
@@ -557,7 +560,9 @@ const navChevron = (
 /** Abas internas de uma seção de Items (ex.: Jóias → Warmaster → Alsius/Ignis/Syrtis) */
 function ItemTopics({ section, topic, group }) {
   const t = section.topics.find((x) => x.id === topic) ?? section.topics[0]
-  const g = t.groups?.find((x) => x.id === group) ?? t.groups?.find((x) => x.items) ?? t.groups?.[0]
+  const g = t.items
+    ? { id: t.id, items: t.items, color: t.color ?? '#c08bff' }
+    : (t.groups?.find((x) => x.id === group) ?? t.groups?.find((x) => x.items) ?? t.groups?.[0])
   const href = (...parts) => '#' + ['items', section.id, ...parts].join('/')
   return (
     <>
@@ -605,7 +610,7 @@ function ItemTopics({ section, topic, group }) {
           )}
           <div className="jewel-grid">
             {g.items.map((item) =>
-              section.id === 'joias' ? <JewelCard key={item.id} item={item} /> : <GearCard key={item.id} item={item} />,
+              section.id === 'joias' && !item.craft ? <JewelCard key={item.id} item={item} /> : <GearCard key={item.id} item={item} />,
             )}
           </div>
         </section>

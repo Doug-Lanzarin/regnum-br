@@ -81,27 +81,27 @@ export const EPIC_WEAPONS = {
   ],
   thorkul: [
     w('thorkul-sopro', 'Sopro Desintegrador de Thorkul de Aço Fino (Mestre)', {
-      icon: false, bonus: 21, parts: [['fogo', '11-16'], ['gelo', '52-69']],
+      bonus: 21, parts: [['fogo', '11-16'], ['gelo', '52-69']],
       category: 'Cajados', speed: 'Média', range: 30, weight: '6 Kg', level: 72, cls: 'Mago',
       stats: ['Velocidade de conjuração +5%', 'Inteligência +7', 'Velocidade de ataque +5%', 'Chance de crítico +16%'],
     }),
     w('thorkul-mandibula', 'Mandíbula Assassina de Thorkul de Aço Fino (Mestre)', {
-      icon: false, bonus: 41, parts: [['cortante', '368-403'], ['perfurante', '30'], ['gelo', '25']],
+      bonus: 41, parts: [['cortante', '368-403'], ['perfurante', '30'], ['gelo', '25']],
       category: 'Espadas', speed: 'Lenta', weight: '15 Kg', level: 71, cls: 'Bárbaro',
       stats: ['Força +5', 'Constituição +3', 'Chance de crítico +32%'],
     }),
     w('thorkul-investida', 'Investida Precisa de Thorkul de Madeira Endurecida (Mestre)', {
-      icon: false, bonus: 27, parts: [['perfurante', '58-74'], ['gelo', '19-24']],
+      bonus: 27, parts: [['perfurante', '58-74'], ['gelo', '19-24']],
       category: 'Arcos curtos', speed: 'Rápida', range: 25, durability: '186/186', weight: '6 Kg', level: 70, cls: 'Arqueiro',
       stats: ['Destreza +5', 'Alcance de ataque +5%', 'Concentração +5', 'Chance de crítico +18%'],
     }),
     w('thorkul-ponta', 'Ponta Assassina de Thorkul de Aço Fino (Mestre)', {
-      icon: false, bonus: 41, parts: [['perfurante', '358-398'], ['gelo', '30']],
+      bonus: 41, parts: [['perfurante', '358-398'], ['gelo', '30']],
       category: 'Lanças', speed: 'Lenta', range: 2, weight: '15 Kg', level: 67, cls: 'Bárbaro',
       stats: ['Força +6', 'Velocidade de ataque +5%', 'Dano crítico +10%', 'Chance de crítico +32%'],
     }),
     w('thorkul-embestida', 'Embestida de Thorkul de Aço Fino (Mestre)', {
-      icon: false, bonus: 41, parts: [['perfurante', '108-126'], ['esmagamento', '150-185'], ['gelo', '30']],
+      bonus: 41, parts: [['perfurante', '108-126'], ['esmagamento', '150-185'], ['gelo', '30']],
       category: 'Martelos', speed: 'Lenta', weight: '8 Kg', level: 67, cls: 'Guerreiro',
       stats: ['Força +5', 'Velocidade de ataque +5%', 'Chance de crítico +32%'],
     }),

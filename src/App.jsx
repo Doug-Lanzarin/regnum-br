@@ -346,8 +346,10 @@ function CraftDetails({ craft }) {
 
 /** Card de armadura/arma no estilo do tooltip do jogo */
 function GearCard({ item }) {
+  const [open, setOpen] = useState(false)
+  const collapsible = Boolean(item.craft?.collapsible)
   return (
-    <article className="jewel gear">
+    <article className={`jewel gear ${collapsible ? 'jewel-craftable' : ''} ${open ? 'open' : ''}`}>
       <header className="jewel-head">
         <ItemIcon src={item.icon} name={item.name} className="jewel-icon" size={40} />
         <h3 className={item.rarity === 'Mágico' ? 'gear-magic-name' : item.rarity === 'Superior' ? undefined : item.rarity ? 'gear-epic-name' : undefined}>{item.name}</h3>
@@ -448,7 +450,31 @@ function GearCard({ item }) {
           {item.bound && <span className="gear-bound">Vinculado à conta</span>}
         </p>
       )}
-      {item.craft && <CraftDetails craft={item.craft} />}
+      {item.craft && !collapsible && <CraftDetails craft={item.craft} />}
+      {collapsible && (
+        <button type="button" className="jewel-craft-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+          {open ? 'Ocultar crafting' : 'Ver crafting'}
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+      )}
+      {collapsible && open && (
+        <div className="jewel-craft">
+          <CraftDetails craft={item.craft} />
+          <footer className="gear-cost">
+            <span>Custo</span>
+            <span className="gear-cost-values">
+              {item.craft.costs.map((c) => (
+                <strong key={c.coin}>
+                  <img src={c.coin} alt="" width="16" height="17" />
+                  {c.value.toLocaleString('pt-BR')}
+                </strong>
+              ))}
+            </span>
+          </footer>
+        </div>
+      )}
       {(item.costs ?? (item.cost != null ? [{ coin: item.coin ?? './champion/moeda.png', value: item.cost }] : [])).length > 0 && (
         <footer className="gear-cost">
           <span>Custo</span>

@@ -17,61 +17,126 @@ const w = (id, name, o) => ({
   requires: `${o.cls} Nível 55`,
   stats: o.stats.map((text) => ({ text })),
   rarity: o.rarity ?? 'Épico',
+  craft: o.craft,
   lore: o.lore,
   section: o.section ?? 'Novas',
+})
+
+
+// ---- Receitas de crafting (prints do jogo) ----
+const W_COIN = './magnanita/moeda-w.png'
+const mat = (id, name, qty) => ({ name, qty, icon: `./epicos/mat/${id}.png` })
+const TABUA = (qty) => ({ name: 'Tábua de madeira endure…', qty, icon: './chefes/sambro-arco-longo-m3.png' })
+const epicCraft = (materials, cost = 100000) => ({
+  chance: 80, time: 2 * 3600, level: 9, materials, costs: [{ coin: W_COIN, value: cost }], collapsible: true,
+})
+const TK_WOOD = epicCraft([
+  mat('essencia-putrida-thorkul', 'Essência pútrida de Thorkul', 1),
+  TABUA(10),
+  mat('ponta-pua-thorkul', 'Ponta de espinho de Thorkul', 60),
+  mat('encantamento', 'Encantamento', 10),
+  mat('musculo-coracao-thorkul', 'Músculo de coração de T…', 3),
+  mat('lingote-aco-fino', 'Lingote de aço fino', 10),
+  mat('pele-grossa-thorkul', 'Pele grossa de Thorkul', 180),
+  mat('presa-afiada-thorkul', 'Presa afiada de Tho…', 25),
+])
+const TK_STEEL = epicCraft([
+  mat('encantamento', 'Encantamento', 10),
+  mat('presa-afiada-thorkul', 'Presa afiada de Tho…', 25),
+  mat('pele-grossa-thorkul', 'Pele grossa de Thorkul', 180),
+  mat('essencia-putrida-thorkul', 'Essência pútrida de Thorkul', 1),
+  mat('lingote-aco-fino', 'Lingote de aço fino', 20),
+  mat('ponta-pua-thorkul', 'Ponta de espinho de Thorkul', 60),
+  mat('musculo-coracao-thorkul', 'Músculo de coração de T…', 3),
+])
+
+/** Receita padrão das armas épicas: armas de madeira usam tábua e 10 lingotes; as de aço, 20 lingotes */
+const bossCraft = (m) => ({
+  wood: epicCraft([
+    m.essence(1), TABUA(10), m.cloth(60), mat('encantamento', 'Encantamento', 10),
+    m.rare(3), mat('lingote-aco-fino', 'Lingote de aço fino', 10), m.part(180), m.small(25),
+  ]),
+  steel: epicCraft([
+    mat('encantamento', 'Encantamento', 10), m.small(25), m.part(180), m.essence(1),
+    mat('lingote-aco-fino', 'Lingote de aço fino', 20), m.cloth(60), m.rare(3),
+  ]),
+})
+const DAEN = bossCraft({
+  essence: (q) => mat('essencia-hirviente-daen', 'Essência fervente de Da…', q),
+  cloth: (q) => mat('tecidos-antigos-daen', 'Tecidos antigos de Dae…', q),
+  rare: (q) => mat('runa-invocacao-daen', 'Runa de invocação de D…', q),
+  part: (q) => mat('fragmento-escudo-daen', 'Fragmento de escudo de …', q),
+  small: (q) => mat('faja-ritualistica-daen', 'Faixa ritualística de Da…', q),
+})
+const EVE = bossCraft({
+  essence: (q) => mat('essencia-magica-evendim', 'Essência mágica de Evendim', q),
+  cloth: (q) => mat('farrapos-evendim', 'Farrapos inscritos de Ev…', q),
+  rare: (q) => mat('gema-antiga-evendim', 'Gema antiga de Evendim', q),
+  part: (q) => mat('fragmento-armadura-evendim', 'Fragmento de armadura d…', q),
+  small: (q) => mat('osso-espectral-evendim', 'Osso espectral de Evendim', q),
 })
 
 const NEW_WEAPONS = {
   daenrha: [
     w('daen-bengala', 'Bengala Fulminante do Vingador de Aço Fino (Mestre)', {
+      craft: DAEN.wood,
       bonus: 21, parts: [['fogo', '55-68'], ['eletrico', '11-16']],
       category: 'Cajados', speed: 'Média', range: 30, weight: '6 Kg', level: 75, cls: 'Mago',
       stats: ['Velocidade de conjuração +5%', 'Inteligência +7', 'Constituição +4', 'Chance de crítico +16%'],
     }),
     w('daen-carrasco', 'Carrasco dos Deuses de Aço Fino (Mestre)', {
+      craft: DAEN.steel,
       bonus: 41, parts: [['cortante', '368-403'], ['fogo', '30']],
       category: 'Espadas', speed: 'Lenta', weight: '15 Kg', level: 66, cls: 'Bárbaro',
       stats: ['Força +6', 'Velocidade de ataque +5%', 'Chance de crítico +32%'],
     }),
     w('daen-projecao', 'Projeção Ígnea de Madeira Endurecida (Mestre)', {
+      craft: DAEN.wood,
       bonus: 27, parts: [['perfurante', '106-126'], ['fogo', '18-23']],
       category: 'Arcos longos', speed: 'Lenta', range: 30, durability: '186/186', weight: '6 Kg', level: 66, cls: 'Arqueiro',
       stats: ['Destreza +5', 'Velocidade de ataque +5%', 'Chance de crítico +18%'],
     }),
     w('daen-trovao', 'Trovão do Deserto de Aço Fino (Mestre)', {
+      craft: DAEN.steel,
       bonus: 41, parts: [['perfurante', '108-118'], ['esmagamento', '160-183'], ['fogo', '30']],
       category: 'Maças', speed: 'Lenta', weight: '8 Kg', level: 67, cls: 'Guerreiro',
       stats: ['Força +5', 'Chance de crítico +32%'],
     }),
     w('daen-tormenta', 'Tormenta Desértica de Aço Fino (Mestre)', {
-      bonus: 41, parts: [['perfurante', '188-238'], ['fogo', '30']],
+      craft: DAEN.steel,
+      bonus: 41, parts: [['cortante', '30'], ['perfurante', '188-238']],
       category: 'Lanças', speed: 'Média', range: 2, weight: '8 Kg', level: 67, cls: 'Guerreiro',
       stats: ['Força +5', 'Dano crítico +20%', 'Chance de crítico +32%'],
     }),
   ],
   evendim: [
     w('evendim-veneno', 'Veneno do Rei Lich de Aço Fino (Mestre)', {
+      craft: EVE.wood,
 bonus: 21, parts: [['gelo', '11-16'], ['eletrico', '51-73']],
       category: 'Cajados', speed: 'Média', range: 30, weight: '6 Kg', level: 73, cls: 'Mago',
       stats: ['Velocidade de conjuração +5%', 'Inteligência +7', 'Vida +50', 'Chance de crítico +16%'],
     }),
     w('evendim-arremetida', 'Arremetida Poderosa de Evendim de Aço Fino (Mestre)', {
-bonus: 41, parts: [['esmagamento', '444-508'], ['eletrico', '30']],
+      craft: EVE.steel,
+bonus: 41, parts: [['esmagamento', '444-508'], ['gelo', '30']],
       category: 'Martelos', speed: 'Muito lenta', weight: '15 Kg', level: 67, cls: 'Bárbaro',
       stats: ['Força +6', 'Velocidade de ataque +5%', 'Chance de crítico +32%'],
     }),
     w('evendim-garra', 'Garra Inevitável dos Mortos-Vivos de Madeira Endurecida (Mestre)', {
-bonus: 27, parts: [['perfurante', '78-98'], ['eletrico', '17-22']],
+      craft: EVE.wood,
+bonus: 27, parts: [['perfurante', '78-98'], ['gelo', '17-22']],
       category: 'Arcos longos', speed: 'Média', range: 30, durability: '186/186', weight: '6 Kg', level: 66, cls: 'Arqueiro',
       stats: ['Destreza +5', 'Dano crítico +15%', 'Chance de crítico +18%'],
     }),
     w('evendim-carga', 'Carga Poderosa dos Mortos-Vivos de Aço Fino (Mestre)', {
-bonus: 41, parts: [['cortante', '285-315'], ['eletrico', '30']],
+      craft: EVE.steel,
+bonus: 41, parts: [['cortante', '285-315'], ['gelo', '30']],
       category: 'Machados', speed: 'Média', weight: '15 Kg', level: 66, cls: 'Bárbaro',
       stats: ['Constituição +6', 'Velocidade de ataque +5%', 'Chance de crítico +32%'],
     }),
     w('evendim-fio', 'Fio Sombrio dos Mortos-Vivos de Aço Fino (Mestre)', {
-bonus: 41, parts: [['cortante', '180-200'], ['esmagamento', '20-30'], ['eletrico', '20']],
+      craft: EVE.steel,
+bonus: 41, parts: [['cortante', '180-200'], ['esmagamento', '20-30'], ['fogo', '20']],
       category: 'Espadas', speed: 'Média', weight: '8 Kg', level: 64, cls: 'Guerreiro',
       stats: ['Força +5', 'Chance de crítico +32%'],
     }),
@@ -83,27 +148,32 @@ bonus: 41, parts: [['perfurante', '180-245'], ['eletrico', '30']],
   ],
   thorkul: [
     w('thorkul-sopro', 'Sopro Desintegrador de Thorkul de Aço Fino (Mestre)', {
+      craft: TK_WOOD,
       bonus: 21, parts: [['fogo', '11-16'], ['gelo', '52-69']],
       category: 'Cajados', speed: 'Média', range: 30, weight: '6 Kg', level: 72, cls: 'Mago',
       stats: ['Velocidade de conjuração +5%', 'Inteligência +7', 'Velocidade de ataque +5%', 'Chance de crítico +16%'],
     }),
     w('thorkul-mandibula', 'Mandíbula Assassina de Thorkul de Aço Fino (Mestre)', {
+      craft: TK_STEEL,
       bonus: 41, parts: [['cortante', '368-403'], ['perfurante', '30'], ['gelo', '25']],
       category: 'Espadas', speed: 'Lenta', weight: '15 Kg', level: 71, cls: 'Bárbaro',
       stats: ['Força +5', 'Constituição +3', 'Chance de crítico +32%'],
     }),
     w('thorkul-investida', 'Investida Precisa de Thorkul de Madeira Endurecida (Mestre)', {
-      bonus: 27, parts: [['perfurante', '58-74'], ['gelo', '19-24']],
+      craft: TK_WOOD,
+      bonus: 27, parts: [['perfurante', '58-74'], ['esmagamento', '19-24']],
       category: 'Arcos curtos', speed: 'Rápida', range: 25, durability: '186/186', weight: '6 Kg', level: 70, cls: 'Arqueiro',
       stats: ['Destreza +5', 'Alcance de ataque +5%', 'Concentração +5', 'Chance de crítico +18%'],
     }),
     w('thorkul-ponta', 'Ponta Assassina de Thorkul de Aço Fino (Mestre)', {
-      bonus: 41, parts: [['perfurante', '358-398'], ['gelo', '30']],
+      craft: TK_STEEL,
+      bonus: 41, parts: [['perfurante', '358-398'], ['esmagamento', '30']],
       category: 'Lanças', speed: 'Lenta', range: 2, weight: '15 Kg', level: 67, cls: 'Bárbaro',
       stats: ['Força +6', 'Velocidade de ataque +5%', 'Dano crítico +10%', 'Chance de crítico +32%'],
     }),
     w('thorkul-embestida', 'Embestida de Thorkul de Aço Fino (Mestre)', {
-      bonus: 41, parts: [['perfurante', '108-126'], ['esmagamento', '150-185'], ['gelo', '30']],
+      craft: TK_STEEL,
+      bonus: 41, parts: [['cortante', '30'], ['perfurante', '108-126'], ['esmagamento', '150-185']],
       category: 'Martelos', speed: 'Lenta', weight: '8 Kg', level: 67, cls: 'Guerreiro',
       stats: ['Força +5', 'Velocidade de ataque +5%', 'Chance de crítico +32%'],
     }),

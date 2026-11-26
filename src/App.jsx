@@ -22,6 +22,7 @@ import { MOMO_JEWELS } from './momoJewels.js'
 import { AQUANTIS_JEWELS } from './aquantisJewels.js'
 import { ALGAROS_JEWELS } from './algarosJewels.js'
 import { BOSS_WEAPONS } from './bossWeapons.js'
+import { MAGNANITA_WEAPONS } from './magnanitaWeapons.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -197,6 +198,7 @@ const ITEM_SECTIONS = [
     desc: 'Espadas, arcos, cajados e mais',
     topics: [
       { id: 'champion', label: 'Champion', groups: CHAMPION_WEAPONS },
+      { id: 'magnanita', label: 'Magnanita', groups: MAGNANITA_WEAPONS },
       { id: 'epicos', label: 'Épicos', groups: EPIC_WEAPON_GROUPS },
       { id: 'chefes', label: 'Chefes', groups: BOSS_WEAPONS },
     ],
@@ -422,8 +424,10 @@ function GearCard({ item }) {
           ))}
         </ul>
       )}
-      {(item.socket || item.upgrades != null) && <p className="gear-slots">
-        {item.socket
+      {(item.socket || item.sockets || item.upgrades != null) && <p className="gear-slots">
+        {item.sockets
+          ? `${item.sockets} encaixes vazios`
+          : item.socket
           ? '1 encaixe vazio'
           : item.upgrades
             ? `${item.upgrades} níveis de melhoria`

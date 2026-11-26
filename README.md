@@ -20,6 +20,7 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 - Jóias → Warmaster: joias de cada reino (Alsius, Ignis, Syrtis), dados em `src/joias.js`
 - Armaduras e Armas → Champion: peças por classe, dados em `src/champion.js`
 - Armaduras → Magnanita: peças por classe com crafting e custo, dados em `src/magnanita.js`
+- Armaduras → Mercenário: peças de Guerreiro, Arqueiro e Mago, dados em `src/mercenario.js`
 - Armas → Épicos: armas de Daen Rha, Evendim e Thorkul, dados em `src/epicWeapons.js`
 - Armas → Magnanita: armas de Arqueiro, Mago, Bárbaro e Cavaleiro (Nível 55 Arcano e Nível 45 Artesão), dados em `src/magnanitaWeapons.js`
 - Armas → Chefes: armas de chefes por reino e por chefe, dados em `src/bossWeapons.js`

@@ -15,6 +15,7 @@ import { audrWindow } from './audrWindow.js'
 import { WARMASTER_REALMS } from './joias.js'
 import { CHAMPION_ARMORS, CHAMPION_WEAPONS } from './champion.js'
 import { MAGNANITA_ARMORS } from './magnanita.js'
+import { MERCENARIO_ARMORS } from './mercenario.js'
 import { EPIC_WEAPONS } from './epicWeapons.js'
 import { EPIC_JEWELS } from './epicJewels.js'
 import { HALLOWEEN_JEWELS } from './halloweenJewels.js'
@@ -189,6 +190,7 @@ const ITEM_SECTIONS = [
     topics: [
       { id: 'champion', label: 'Champion', groups: CHAMPION_ARMORS },
       { id: 'magnanita', label: 'Magnanita', groups: MAGNANITA_ARMORS },
+      { id: 'mercenario', label: 'Mercenário', groups: MERCENARIO_ARMORS },
     ],
     icon: <path d="M12 3.5 5 6v5.5c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6z" />,
   },

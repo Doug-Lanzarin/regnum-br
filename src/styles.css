@@ -1973,11 +1973,64 @@ button {
   user-select: none;
 }
 
+.audr-map {
+  touch-action: none;
+}
+
+.audr-layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
 .audr-map img {
   display: block;
   width: 100%;
   height: 100%;
   pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.audr-zoom {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 2;
+}
+
+.audr-zoom button {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.audr-zoom button.reset {
+  font-size: 1.05rem;
+}
+
+.audr-zoom button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.audr-hint {
+  margin: 8px 2px 0;
+  font-size: 0.76rem;
+  color: var(--muted);
 }
 
 .audr-pin {
@@ -1985,7 +2038,7 @@ button {
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(var(--inv, 1));
   background: #ff4d4d;
   border: 3px solid #fff;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.5);

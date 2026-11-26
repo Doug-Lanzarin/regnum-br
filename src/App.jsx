@@ -18,6 +18,7 @@ import { EPIC_JEWELS } from './epicJewels.js'
 import { HALLOWEEN_JEWELS } from './halloweenJewels.js'
 import { MOMO_JEWELS } from './momoJewels.js'
 import { AQUANTIS_JEWELS } from './aquantisJewels.js'
+import { ALGAROS_JEWELS } from './algarosJewels.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -152,6 +153,7 @@ const ITEM_SECTIONS = [
     label: 'Jóias',
     desc: 'Anéis e amuletos',
     topics: [
+      { id: 'algaros', label: 'Algaros (Gold)', items: ALGAROS_JEWELS, color: '#f5d04a' },
       { id: 'warmaster', label: 'Warmaster', groups: WARMASTER_REALMS },
       { id: 'epicos', label: 'Épicos', groups: EPIC_JEWEL_GROUPS },
       { id: 'halloween', label: 'Halloween', items: HALLOWEEN_JEWELS },
@@ -505,6 +507,12 @@ function JewelCard({ item }) {
           </li>
         ))}
       </ul>
+      {item.price && (
+        <footer className="gear-cost">
+          <span>Preço</span>
+          <strong className="gold-price">{item.price} gold</strong>
+        </footer>
+      )}
       {item.epic && <p className="gear-rarity">Épico</p>}
       {canCraft && (
         <button type="button" className="jewel-craft-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>

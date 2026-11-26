@@ -21,6 +21,7 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 - Armaduras → Magnanita: peças por classe com crafting e custo, dados em `src/magnanita.js`
 - Armas → Épicos: armas de Daen Rha, Evendim e Thorkul, dados em `src/epicWeapons.js`
 - Jóias → Épicos: joias de Daen Rha, Evendim e Thorkul, dados em `src/epicJewels.js`
+- Jóias → Algaros (Gold): joias compradas com gold, dados em `src/algarosJewels.js`
 - Jóias → Halloween: amuletos de Vare Eidahan, dados em `src/halloweenJewels.js`
 - Aba Crafting com as receitas (dados em `src/crafting.js`): ao tocar numa receita, abre a probabilidade de êxito, o tempo para craftar e os materiais necessários
 - Contador de reset do Xymerald na aba Início (a cada 23 horas, mesma regra do Regnum Warlords, horário de Brasília)

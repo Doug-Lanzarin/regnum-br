@@ -1132,6 +1132,33 @@ button {
   color: var(--ink-2);
 }
 
+.jewel-damage dt {
+  white-space: nowrap;
+}
+
+.gear-dmg {
+  flex-wrap: wrap;
+  gap: 4px 10px !important;
+}
+
+.gear-dmg span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gear-epic-name {
+  color: #e7a6ff;
+}
+
+.gear-rarity {
+  margin: 0;
+  padding: 0 14px 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #e7a6ff;
+}
+
 .gear-flags {
   display: flex;
   flex-wrap: wrap;

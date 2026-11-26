@@ -13,6 +13,7 @@ import MaterialsMap from './MaterialsMap.jsx'
 import { WARMASTER_REALMS } from './joias.js'
 import { CHAMPION_ARMORS, CHAMPION_WEAPONS } from './champion.js'
 import { MAGNANITA_ARMORS } from './magnanita.js'
+import { EPIC_WEAPONS } from './epicWeapons.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -134,7 +135,7 @@ const TABS = [
 /** Armas dos épicos: uma sub-aba por chefe (conteúdo em breve) */
 const EPIC_WEAPON_GROUPS = ['daenrha', 'evendim', 'thorkul'].map((id) => {
   const b = BOSSES.find((x) => x.id === id)
-  return { id, label: b.name, color: b.color, items: null }
+  return { id, label: b.name, color: b.color, items: EPIC_WEAPONS[id] ?? null }
 })
 
 /** Seções da aba Items (navegação em lista) */
@@ -288,8 +289,8 @@ function GearCard({ item }) {
   return (
     <article className="jewel gear">
       <header className="jewel-head">
-        <img src={item.icon} alt="" className="jewel-icon" width="40" height="40" loading="lazy" />
-        <h3>{item.name}</h3>
+        <ItemIcon src={item.icon} name={item.name} className="jewel-icon" size={40} />
+        <h3 className={item.rarity ? 'gear-epic-name' : undefined}>{item.name}</h3>
       </header>
       <dl className="jewel-body">
         {item.armor && (
@@ -301,9 +302,13 @@ function GearCard({ item }) {
         {item.damage && (
           <div className="jewel-damage">
             <dt>Dano (+{item.damage.bonus}):</dt>
-            <dd>
-              <img src={`./joias/dano/${item.damage.icon}.png`} alt="" width="12" height="15" />
-              {item.damage.value}
+            <dd className="gear-dmg">
+              {(item.damage.parts ?? [[item.damage.icon, item.damage.value]]).map(([type, value]) => (
+                <span key={type + value}>
+                  <img src={`./joias/dano/${type}.png`} alt={type} width="12" height="15" />
+                  {value}
+                </span>
+              ))}
             </dd>
           </div>
         )}
@@ -373,6 +378,7 @@ function GearCard({ item }) {
             ? `${item.upgrades} níveis de melhoria`
             : 'Sem níveis de melhoria'}
       </p>}
+      {item.rarity && <p className="gear-rarity">{item.rarity}</p>}
       {(item.paintable || item.bound) && (
         <p className="gear-flags">
           {item.paintable && <span>Pintável nos canais A, B</span>}

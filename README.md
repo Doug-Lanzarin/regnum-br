@@ -19,6 +19,7 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 - Jóias → Warmaster: joias de cada reino (Alsius, Ignis, Syrtis), dados em `src/joias.js`
 - Armaduras e Armas → Champion: peças por classe, dados em `src/champion.js`
 - Armaduras → Magnanita: peças por classe com crafting e custo, dados em `src/magnanita.js`
+- Armas → Épicos: armas de Daen Rha, Evendim e Thorkul, dados em `src/epicWeapons.js`
 - Aba Crafting com as receitas (dados em `src/crafting.js`): ao tocar numa receita, abre a probabilidade de êxito, o tempo para craftar e os materiais necessários
 - Contador de reset do Xymerald na aba Início (a cada 23 horas, mesma regra do Regnum Warlords, horário de Brasília)
 - Mapa de guerra na aba Início (servidor Ra), com dados lidos direto do site oficial championsofregnum.com pela função `api/wz.js` e atualizados a cada minuto

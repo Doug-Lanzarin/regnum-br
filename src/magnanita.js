@@ -57,6 +57,7 @@ const piece = (cls, res) => (id, name, category, weight, ingots, time, cost, opt
 const barbaro = piece('Bárbaro', RES_GUERREIRO)
 const cavaleiro = piece('Cavaleiro', RES_GUERREIRO)
 const cacador = piece('Caçador', RES_CACADOR)
+const atirador = piece('Atirador', RES_CACADOR)
 const bruxo = piece('Bruxo', RES_MAGO)
 const conjurador = piece('Conjurador', RES_MAGO)
 
@@ -107,7 +108,20 @@ export const MAGNANITA_ARMORS = [
       cacador('cacador-perneiras', 'Perneiras Ancestrais de Caçador de Magnanita (Artesão)', 'Perneiras', '13 Kg', 4, T_4D, 60000),
     ],
   },
-  { id: 'atirador', label: 'Atirador', color: ARQUEIRO, items: null },
+  {
+    id: 'atirador',
+    label: 'Atirador',
+    color: ARQUEIRO,
+    setTitle: 'Bônus com as 5 peças do conjunto Magnanita',
+    set: ['+10% Alcance de ataque', '+12 Destreza'],
+    items: [
+      atirador('atirador-elmo', 'Elmo Ancestral de Atirador de Magnanita (Artesão)', 'Elmos', '6 Kg', 3, T_3D, 45000),
+      atirador('atirador-peitoral', 'Peitoral Ancestral de Atirador de Magnanita (Artesão)', 'Peitorais', '23 Kg', 7, T_8D, 105000),
+      atirador('atirador-ombreiras', 'Ombreiras Ancestrais de Atirador de Magnanita (Artesão)', 'Ombreiras', '6 Kg', 3, T_3D, 45000),
+      atirador('atirador-manoplas', 'Manoplas Ancestrais de Atirador de Magnanita (Artesão)', 'Manoplas', '6 Kg', 3, T_3D, 45000),
+      atirador('atirador-perneiras', 'Perneiras Ancestrais de Atirador de Magnanita (Artesão)', 'Perneiras', '13 Kg', 4, T_4D, 60000),
+    ],
+  },
   {
     id: 'conjurador',
     label: 'Conjurador',

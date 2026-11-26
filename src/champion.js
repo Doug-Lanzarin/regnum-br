@@ -11,6 +11,7 @@ const MAGO = '#8fb8ff'
 const SET_DES = ['+10 Destreza', '+10% Velocidade de movimento (só em Battlezones)']
 const SET_INT = ['+10 Inteligência', '+10% Velocidade de movimento (só em Battlezones)']
 const SET_CON = ['+10 Constituição', '+10% Velocidade de movimento (só em Battlezones)']
+const SET_FOR = ['+10 Força', '+10% Velocidade de movimento (só em Battlezones)']
 
 /** Peça de armadura de aço fino (+9) ou tecido fino (+7) */
 const armor = (id, name, category, weight, bonus, opts = {}) => ({
@@ -55,7 +56,7 @@ const withClass = (list, cls) => list.map((it) => ({ ...it, requires: `${cls} N�
 
 const CLASSES = [
   { id: 'cavaleiro', label: 'Cavaleiro', color: GUERREIRO, set: SET_CON },
-  { id: 'barbaro', label: 'Bárbaro', color: GUERREIRO, set: SET_CON },
+  { id: 'barbaro', label: 'Bárbaro', color: GUERREIRO, set: SET_FOR },
   { id: 'cacador', label: 'Caçador', color: ARQUEIRO, set: SET_DES },
   { id: 'atirador', label: 'Atirador', color: ARQUEIRO, set: SET_DES },
   { id: 'conjurador', label: 'Conjurador', color: MAGO, set: SET_INT },
@@ -70,6 +71,13 @@ const ARMORS = {
     armor('cavaleiro-manoplas', 'Manoplas de Campeão Cavaleiro de Aço Fino (Artesão)', 'Manoplas', '8 Kg', ['Chance de crítico +15%']),
     armor('cavaleiro-perneiras', 'Perneiras de Campeão Cavaleiro de Aço Fino (Artesão)', 'Perneiras', '23 Kg', ['Velocidade de movimento +5%']),
     armor('cavaleiro-escudo', 'Escudo de Campeão Cavaleiro de Aço Fino (Artesão)', 'Escudos', '20 Kg', ['Bloqueio +15', 'Constituição +5'], { upgrades: 0 }),
+  ],
+  barbaro: [
+    armor('barbaro-elmo', 'Elmo de Campeão Bárbaro de Aço Fino (Artesão)', 'Elmos', '8 Kg', ['Mana +150']),
+    armor('barbaro-peitoral', 'Peitoral de Campeão Bárbaro de Aço Fino (Artesão)', 'Peitorais', '30 Kg', ['Constituição +5']),
+    armor('barbaro-ombreiras', 'Ombreiras de Campeão Bárbaro de Aço Fino (Artesão)', 'Ombreiras', '8 Kg', ['Força +5']),
+    armor('barbaro-manoplas', 'Manoplas de Campeão Bárbaro de Aço Fino (Artesão)', 'Manoplas', '8 Kg', ['Chance de crítico +15%']),
+    armor('barbaro-perneiras', 'Perneiras de Campeão Bárbaro de Aço Fino (Artesão)', 'Perneiras', '23 Kg', ['Velocidade de ataque +10%']),
   ],
   cacador: [
     armor('cacador-elmo', 'Elmo de Campeão Caçador de Aço Fino (Artesão)', 'Elmos', '8 Kg', ['Mana +150']),

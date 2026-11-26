@@ -116,6 +116,48 @@ const TABS = [
       </>
     ),
   },
+  {
+    id: 'items',
+    label: 'Items',
+    icon: (
+      <>
+        <path d="M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z" />
+        <path d="M3 6.5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1V9H3zM10 12.5h4" />
+      </>
+    ),
+  },
+]
+
+/** Seções da aba Items (navegação em lista) */
+const ITEM_SECTIONS = [
+  {
+    id: 'joias',
+    label: 'Jóias',
+    desc: 'Anéis e amuletos',
+    icon: (
+      <>
+        <path d="M7.5 4h9L20 9l-8 11L4 9z" />
+        <path d="M4 9h16M9.5 9 12 20l2.5-11" />
+      </>
+    ),
+  },
+  {
+    id: 'armaduras',
+    label: 'Armaduras',
+    desc: 'Conjuntos e peças',
+    icon: <path d="M12 3.5 5 6v5.5c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6z" />,
+  },
+  {
+    id: 'eventos',
+    label: 'Eventos',
+    desc: 'Itens de eventos',
+    icon: (
+      <>
+        <rect x="4" y="5.5" width="16" height="14.5" rx="2" />
+        <path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" />
+      </>
+    ),
+  },
 ]
 
 const INFO_SECTIONS = [
@@ -160,7 +202,8 @@ const parseHash = () => {
   const info = INFO_SECTIONS.find((x) => x.id === sub) ?? INFO_SECTIONS[0]
   const topicObj = info.topics ? (info.topics.find((t) => t.id === sub2) ?? info.topics[0]) : null
   const group = topicObj?.groups ? (topicObj.groups.find((g) => g.id === sub3) ?? topicObj.groups[0]).id : null
-  return { tab, section: info.id, topic: topicObj?.id ?? null, group }
+  const itemSection = tab === 'items' && ITEM_SECTIONS.some((x) => x.id === sub) ? sub : null
+  return { tab, section: info.id, topic: topicObj?.id ?? null, group, itemSection }
 }
 
 /** Aba e sub-aba guardadas na URL: o botão voltar funciona e dá para compartilhar o link */
@@ -170,7 +213,7 @@ function useHashTab() {
     const onHash = () => {
       const next = parseHash()
       setRoute((prev) => {
-        if (next.tab !== prev.tab) window.scrollTo({ top: 0 })
+        if (next.tab !== prev.tab || next.itemSection !== prev.itemSection) window.scrollTo({ top: 0 })
         return next
       })
     }
@@ -178,7 +221,8 @@ function useHashTab() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
   const goTo = (id) => {
-    if (id === route.tab) window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (id === 'items' && route.tab === 'items' && route.itemSection) window.location.hash = 'items'
+    else if (id === route.tab) window.scrollTo({ top: 0, behavior: 'smooth' })
     else window.location.hash = id
   }
   const goToSection = (section, topic, group) => {
@@ -288,6 +332,57 @@ function RecipeItem({ recipe, open, onToggle }) {
         </div>
       </div>
     </li>
+  )
+}
+
+const navChevron = (
+  <svg className="nav-chevron" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="m9 6 6 6-6 6" />
+  </svg>
+)
+
+/** Aba Items: lista de seções; ao tocar, abre a seção com um "voltar" */
+function ItemsView({ section }) {
+  const current = ITEM_SECTIONS.find((x) => x.id === section)
+
+  if (!current) {
+    return (
+      <nav className="nav-list" aria-label="Items">
+        {ITEM_SECTIONS.map((x) => (
+          <a key={x.id} className="nav-row" href={`#items/${x.id}`}>
+            <span className="nav-row-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                {x.icon}
+              </svg>
+            </span>
+            <span className="nav-row-text">
+              <strong>{x.label}</strong>
+              <span>{x.desc}</span>
+            </span>
+            {navChevron}
+          </a>
+        ))}
+      </nav>
+    )
+  }
+
+  return (
+    <section className="item-page">
+      <a className="nav-back" href="#items">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m15 6-6 6 6 6" />
+        </svg>
+        Items
+      </a>
+      <h1 className="item-page-title">{current.label}</h1>
+      <div className="info-empty">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          {current.icon}
+        </svg>
+        <strong>{current.label}</strong>
+        <span>Em breve</span>
+      </div>
+    </section>
   )
 }
 
@@ -501,7 +596,7 @@ const SPAWNS = Object.fromEntries(BOSSES.map((b) => [b.id, Date.parse(b.lastSpaw
 export default function App() {
   const now = useNow()
   const spawns = SPAWNS
-  const [tab, goTo] = useHashTab()
+  const [tab, goTo, route] = useHashTab()
   const warStatus = useWarStatus(WAR_WORLD)
 
   const rows = useMemo(
@@ -539,9 +634,11 @@ export default function App() {
         )}
 
         {tab === 'crafting' && <CraftingView />}
+
+        {tab === 'items' && <ItemsView section={route.itemSection} />}
       </main>
 
-      {tab !== 'crafting' && (
+      {(tab === 'inicio' || tab === 'epicos') && (
         <footer className="foot">
           Horários no fuso do seu dispositivo · {Intl.DateTimeFormat().resolvedOptions().timeZone}
         </footer>

@@ -131,6 +131,12 @@ const TABS = [
   },
 ]
 
+/** Armas dos épicos: uma sub-aba por chefe (conteúdo em breve) */
+const EPIC_WEAPON_GROUPS = ['daenrha', 'evendim', 'thorkul'].map((id) => {
+  const b = BOSSES.find((x) => x.id === id)
+  return { id, label: b.name, color: b.color, items: null }
+})
+
 /** Seções da aba Items (navegação em lista) */
 const ITEM_SECTIONS = [
   {
@@ -159,7 +165,10 @@ const ITEM_SECTIONS = [
     id: 'armas',
     label: 'Armas',
     desc: 'Espadas, arcos, cajados e mais',
-    topics: [{ id: 'champion', label: 'Champion', groups: CHAMPION_WEAPONS }],
+    topics: [
+      { id: 'champion', label: 'Champion', groups: CHAMPION_WEAPONS },
+      { id: 'epicos', label: 'Épicos', groups: EPIC_WEAPON_GROUPS },
+    ],
     icon: (
       <>
         <path d="M14.5 4H20v5.5L10 19.5 4.5 14z" />

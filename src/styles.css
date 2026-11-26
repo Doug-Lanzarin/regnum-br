@@ -295,6 +295,28 @@ button {
   animation: view-in 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.view-next {
+  animation-name: view-from-right;
+}
+
+.view-prev {
+  animation-name: view-from-left;
+}
+
+@keyframes view-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+}
+
+@keyframes view-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+}
+
 @keyframes view-in {
   from {
     opacity: 0;
@@ -2264,8 +2286,23 @@ button {
 
 .tab.active {
   color: var(--accent-strong);
+}
+
+.tab {
+  position: relative;
+  z-index: 1;
+}
+
+.tab-pill {
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  border-radius: 999px;
   background: var(--accent-soft);
   box-shadow: inset 0 0 0 1px rgba(177, 171, 255, 0.22);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
 }
 
 .tab.active svg {
@@ -2577,4 +2614,300 @@ button {
   justify-content: center;
   margin-top: 4px;
   text-decoration: none;
+}
+
+/* ---------- Animações ---------- */
+
+/* contagem estilo placar */
+.roll {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.roll-ch {
+  display: inline-block;
+  animation: roll-in 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes roll-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.55em);
+  }
+}
+
+/* última hora antes do spawn: brilho pulsando na cor do reino */
+.bc-soon {
+  animation: soon-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes soon-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px var(--realm-color), var(--shadow-card);
+  }
+  50% {
+    box-shadow: 0 0 0 1px var(--realm-color), 0 0 26px -2px color-mix(in srgb, var(--realm-color) 60%, transparent), var(--shadow-card);
+  }
+}
+
+/* acabou de reaparecer: flash no retrato e tremor no texto */
+.bc-spawned .bc-emblem {
+  animation: spawn-flash 1.6s ease-out infinite;
+}
+
+@keyframes spawn-flash {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--realm-color) 90%, transparent), var(--shadow-pop);
+    filter: brightness(1.6);
+  }
+  60% {
+    box-shadow: 0 0 0 14px transparent, var(--shadow-pop);
+    filter: brightness(1);
+  }
+}
+
+.bc-spawn-text {
+  color: var(--realm-color);
+  font-size: 1.15rem;
+  animation: spawn-shake 2.4s ease-in-out infinite;
+}
+
+@keyframes spawn-shake {
+  0%,
+  86%,
+  100% {
+    transform: none;
+  }
+  88% {
+    transform: translateX(-3px) rotate(-1deg);
+  }
+  91% {
+    transform: translateX(3px) rotate(1deg);
+  }
+  94% {
+    transform: translateX(-2px);
+  }
+  97% {
+    transform: translateX(2px);
+  }
+}
+
+/* cards entrando em cascata */
+.grid > *,
+.jewel-grid > *,
+.nav-list > .nav-row,
+.recipe-list > .recipe,
+.home-next,
+.xy-card,
+.wz,
+.panel,
+.mm,
+.crafting-group {
+  animation: card-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+.grid > :nth-child(2), .jewel-grid > :nth-child(2), .nav-list > :nth-child(2), .recipe-list > :nth-child(2), .xy-card { animation-delay: 0.05s; }
+.grid > :nth-child(3), .jewel-grid > :nth-child(3), .nav-list > :nth-child(3), .recipe-list > :nth-child(3), .wz { animation-delay: 0.1s; }
+.grid > :nth-child(4), .jewel-grid > :nth-child(4), .recipe-list > :nth-child(4), .panel { animation-delay: 0.15s; }
+.jewel-grid > :nth-child(5), .recipe-list > :nth-child(5) { animation-delay: 0.2s; }
+.jewel-grid > :nth-child(6), .recipe-list > :nth-child(6) { animation-delay: 0.25s; }
+.jewel-grid > :nth-child(7), .recipe-list > :nth-child(7) { animation-delay: 0.3s; }
+.jewel-grid > :nth-child(8), .recipe-list > :nth-child(8) { animation-delay: 0.35s; }
+.jewel-grid > :nth-child(n + 9), .recipe-list > :nth-child(n + 9) { animation-delay: 0.4s; }
+
+/* dropdown de crafting com altura animada */
+.recipe-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.recipe-collapse.open {
+  grid-template-rows: 1fr;
+}
+
+.recipe-collapse-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.recipe-collapse .recipe-panel {
+  animation: none;
+}
+
+.recipe-collapse.open .recipe-materials li {
+  animation: card-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.recipe-collapse.open .recipe-materials li:nth-child(2) { animation-delay: 0.05s; }
+.recipe-collapse.open .recipe-materials li:nth-child(3) { animation-delay: 0.1s; }
+.recipe-collapse.open .recipe-materials li:nth-child(4) { animation-delay: 0.15s; }
+.recipe-collapse.open .recipe-materials li:nth-child(n + 5) { animation-delay: 0.2s; }
+
+/* mapa de guerra: forte que mudou de dono e placar */
+.wz-forts li.changed {
+  animation: fort-changed 1.2s ease-in-out 5;
+  border-radius: 8px;
+}
+
+@keyframes fort-changed {
+  50% {
+    background: color-mix(in srgb, var(--owner-color, var(--accent)) 22%, transparent);
+  }
+}
+
+.wz-score-num {
+  display: inline-block;
+  animation: score-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes score-pop {
+  from {
+    transform: scale(1.5);
+    color: var(--realm-color);
+  }
+}
+
+/* Audr: marcação caindo com onda */
+.audr-mark {
+  animation: pin-drop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes pin-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+}
+
+.audr-ripple {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #ff4d4d;
+  transform: translate(-50%, -50%) scale(var(--inv, 1));
+  animation: pin-wave 1.2s ease-out 0.35s both;
+  pointer-events: none;
+}
+
+@keyframes pin-wave {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+    width: 120px;
+    height: 120px;
+  }
+}
+
+.audr-label {
+  animation: label-in 0.4s ease-out 0.3s both;
+}
+
+@keyframes label-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+/* Audr off: olhos piscando e neve */
+.audr-off {
+  position: relative;
+  overflow: hidden;
+}
+
+.audr-off-card {
+  position: relative;
+  z-index: 1;
+}
+
+.audr-off-figure {
+  position: relative;
+  width: 150px;
+  animation: audr-float 4s ease-in-out infinite;
+}
+
+.audr-off-figure .audr-off-npc {
+  display: block;
+  width: 100%;
+  margin: 0;
+  animation: none;
+}
+
+.audr-eye {
+  position: absolute;
+  top: 16%;
+  width: 4.5%;
+  height: 1.6%;
+  border-radius: 50%;
+  background: #1b1d22;
+  transform: translate(-50%, -50%) scaleY(0);
+  animation: audr-blink 5s infinite;
+}
+
+@keyframes audr-blink {
+  0%,
+  92%,
+  100% {
+    transform: translate(-50%, -50%) scaleY(0);
+  }
+  95% {
+    transform: translate(-50%, -50%) scaleY(1);
+  }
+}
+
+.audr-snow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.audr-snow span {
+  position: absolute;
+  top: -10px;
+  border-radius: 50%;
+  background: #dfe6ff;
+  animation: snow-fall linear infinite;
+}
+
+@keyframes snow-fall {
+  to {
+    transform: translate(var(--drift, 0), 110vh);
+  }
+}
+
+/* ondinha ao tocar */
+.ripple-host {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.18;
+  transform: scale(0);
+  pointer-events: none;
+  animation: ripple 0.55s ease-out forwards;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
 }

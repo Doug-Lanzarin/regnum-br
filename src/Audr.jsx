@@ -235,7 +235,8 @@ export default function Audr() {
         >
           <img src="./audr/mapa.jpg" alt="Mapa do Audr" draggable="false" />
           {mark && (
-            <div className="audr-mark" style={{ left: `${mark.x * 100}%`, top: `${mark.y * 100}%` }}>
+            <div key={mark.at} className="audr-mark" style={{ left: `${mark.x * 100}%`, top: `${mark.y * 100}%` }}>
+              <span className="audr-ripple" aria-hidden="true" />
               <span className="audr-pin" aria-label="Marcação atual" />
               <span className="audr-label">
                 <b>{mark.name ?? 'Alguém'}</b> · {time.format(new Date(mark.at))}

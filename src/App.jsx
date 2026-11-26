@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import {
   BOSSES,
   RESPAWN_HOURS,
@@ -10,6 +10,7 @@ import {
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
 import MaterialsMap from './MaterialsMap.jsx'
+import { JUST_SPAWNED_MS, RollingText } from './anim.jsx'
 import Audr from './Audr.jsx'
 import { audrWindow } from './audrWindow.js'
 import { WARMASTER_REALMS } from './joias.js'
@@ -40,9 +41,14 @@ function BossCard({ boss, lastSpawn, now, featured }) {
   const [iconFailed, setIconFailed] = useState(false)
   const cycle = getCycle(lastSpawn, now)
   const upcoming = [1, 2, 3].map((i) => cycle.next + i * RESPAWN_MS)
+  const soon = cycle.remaining > 0 && cycle.remaining <= 60 * 60 * 1000
+  const justSpawned = now - cycle.prev < JUST_SPAWNED_MS && cycle.prev > lastSpawn
 
   return (
-    <article className={`bc-card ${featured ? 'bc-featured' : ''}`} style={{ '--realm-color': boss.color }}>
+    <article
+      className={`bc-card ${featured ? 'bc-featured' : ''} ${soon ? 'bc-soon' : ''} ${justSpawned ? 'bc-spawned' : ''}`}
+      style={{ '--realm-color': boss.color }}
+    >
       {featured && <span className="bc-featured-tag">Próximo a reaparecer</span>}
 
       <div className="bc-header">
@@ -66,12 +72,12 @@ function BossCard({ boss, lastSpawn, now, featured }) {
       </div>
 
       <div className="bc-countdown">
-        <span className="bc-countdown-label">
-          {cycle.remaining <= 0 ? 'Status' : 'Reaparece em'}
-        </span>
-        <span className="bc-countdown-value" role="timer">
-          {cycle.remaining <= 0 ? 'Pode já ter reaparecido' : formatDuration(cycle.remaining)}
-        </span>
+        <span className="bc-countdown-label">{justSpawned ? 'Status' : 'Reaparece em'}</span>
+        {justSpawned ? (
+          <span className="bc-countdown-value bc-spawn-text">Pode já ter reaparecido!</span>
+        ) : (
+          <RollingText text={formatDuration(cycle.remaining)} className="bc-countdown-value" />
+        )}
       </div>
 
       <dl className="bc-meta">
@@ -582,36 +588,40 @@ function RecipeItem({ recipe, open, onToggle }) {
         </svg>
       </button>
 
-      <div id={panelId} className="recipe-panel" hidden={!open}>
-        <dl className="recipe-stats">
-          <div>
-            <dt>Probabilidade de êxito</dt>
-            <dd>
-              <span className="recipe-chance">{recipe.chance}%</span>
-              <span className="recipe-bar" aria-hidden="true">
-                <span style={{ width: `${recipe.chance}%` }} />
-              </span>
-            </dd>
+      <div id={panelId} className={`recipe-collapse ${open ? 'open' : ''}`} inert={!open}>
+        <div className="recipe-collapse-inner">
+          <div className="recipe-panel">
+            <dl className="recipe-stats">
+              <div>
+                <dt>Probabilidade de êxito</dt>
+                <dd>
+                  <span className="recipe-chance">{recipe.chance}%</span>
+                  <span className="recipe-bar" aria-hidden="true">
+                    <span style={{ width: `${recipe.chance}%` }} />
+                  </span>
+                </dd>
+              </div>
+              <div>
+                <dt>Tempo para craftar</dt>
+                <dd>
+                  <span className="recipe-time">{formatCraftTime(recipe.time)}</span>
+                  <span className="recipe-time-game">{formatGameTime(recipe.time)}</span>
+                </dd>
+              </div>
+            </dl>
+            <div className="recipe-materials">
+              <span className="recipe-label">Materiais necessários</span>
+              <ul>
+                {recipe.materials.map((m) => (
+                  <li key={m.name}>
+                    <ItemIcon src={m.icon} name={m.name} className="recipe-mat-icon" size={28} />
+                    <span className="recipe-qty">{m.qty}×</span>
+                    <span>{m.name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div>
-            <dt>Tempo para craftar</dt>
-            <dd>
-              <span className="recipe-time">{formatCraftTime(recipe.time)}</span>
-              <span className="recipe-time-game">{formatGameTime(recipe.time)}</span>
-            </dd>
-          </div>
-        </dl>
-        <div className="recipe-materials">
-          <span className="recipe-label">Materiais necessários</span>
-          <ul>
-            {recipe.materials.map((m) => (
-              <li key={m.name}>
-                <ItemIcon src={m.icon} name={m.name} className="recipe-mat-icon" size={28} />
-                <span className="recipe-qty">{m.qty}×</span>
-                <span>{m.name}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </li>
@@ -877,8 +887,34 @@ function InfoView({ section, topic, group, onSection }) {
 
 function TabBar({ active, onChange, audrOpen }) {
   const tabs = TABS.filter((t) => !t.onlyInWindow || audrOpen)
+  const navRef = useRef(null)
+  const [pill, setPill] = useState(null)
+
+  // posiciona o indicador deslizante sob a aba ativa (e acompanha mudanças de tamanho)
+  useLayoutEffect(() => {
+    const nav = navRef.current
+    if (!nav) return
+    const place = () => {
+      const el = nav.querySelector('.tab.active')
+      if (el) setPill({ x: el.offsetLeft, w: el.offsetWidth })
+    }
+    place()
+    const ro = new ResizeObserver(place)
+    ro.observe(nav)
+    nav.querySelectorAll('.tab').forEach((t) => ro.observe(t))
+    return () => ro.disconnect()
+  }, [active, tabs.length])
+
   return (
-    <nav className="tabbar" aria-label="Navegação principal" style={{ gridTemplateColumns: `repeat(${tabs.length}, 1fr)` }}>
+    <nav
+      ref={navRef}
+      className="tabbar"
+      aria-label="Navegação principal"
+      style={{ gridTemplateColumns: `repeat(${tabs.length}, 1fr)` }}
+    >
+      {pill && (
+        <span className="tab-pill" aria-hidden="true" style={{ transform: `translateX(${pill.x}px)`, width: pill.w }} />
+      )}
       {tabs.map((t) => (
         <button
           key={t.id}
@@ -911,9 +947,7 @@ function XymeraldCard({ now }) {
       </div>
       <div className="xy-countdown">
         <span className="xy-label">Reseta em</span>
-        <span className="xy-value" role="timer">
-          {formatDuration(resetAt - now)}
-        </span>
+        <RollingText text={formatDuration(resetAt - now)} className="xy-value" />
         <span className="xy-at">
           {formatBrasilia(resetAt)}
           <span className="xy-tz-long"> (horário de Brasília)</span>
@@ -928,7 +962,10 @@ function HomeView({ rows, now, onOpenEpics, war }) {
   const [first, ...others] = rows
   return (
     <>
-      <section className="home-next" style={{ '--realm-color': first.boss.color }}>
+      <section
+        className={`home-next ${first.cycle.remaining <= 60 * 60 * 1000 ? 'bc-soon' : ''}`}
+        style={{ '--realm-color': first.boss.color }}
+      >
         <img src={first.boss.icon} alt="" className="home-portrait" />
         <div className="home-next-text">
           <span className="home-kicker">
@@ -938,9 +975,7 @@ function HomeView({ rows, now, onOpenEpics, war }) {
           <span className="home-realm">{first.boss.realm}</span>
         </div>
         <div className="home-next-time">
-          <span className="home-countdown">
-            {first.cycle.remaining <= 0 ? 'Agora' : formatDuration(first.cycle.remaining)}
-          </span>
+          <RollingText text={formatDuration(first.cycle.remaining)} className="home-countdown" />
           <span className="home-when">{formatDate(first.cycle.next)}</span>
         </div>
       </section>
@@ -959,7 +994,7 @@ function HomeView({ rows, now, onOpenEpics, war }) {
                 <strong>{boss.name}</strong>
                 <span>{formatDate(cycle.next)}</span>
               </div>
-              <span className="home-list-time">{formatDuration(cycle.remaining)}</span>
+              <RollingText text={formatDuration(cycle.remaining)} className="home-list-time" />
             </li>
           ))}
         </ul>
@@ -982,6 +1017,14 @@ export default function App() {
   const spawns = SPAWNS
   const [tab, goTo, route] = useHashTab()
   const audrOpen = audrWindow(now).open
+  // direção da transição entre abas (desliza para a esquerda ou direita)
+  const tabOrder = TABS.map((t) => t.id)
+  const prevTab = useRef(tab)
+  const dirRef = useRef('none')
+  if (prevTab.current !== tab) {
+    dirRef.current = tabOrder.indexOf(tab) > tabOrder.indexOf(prevTab.current) ? 'next' : 'prev'
+    prevTab.current = tab
+  }
   // a janela do Audr fechou com a aba aberta: volta para o início
   useEffect(() => {
     if (tab === 'audr' && !audrOpen) window.location.hash = 'inicio'
@@ -998,7 +1041,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <main key={tab} className="view">
+      <main key={tab} className={`view view-${dirRef.current}`}>
         {tab === 'inicio' && <HomeView
             rows={rows}
             now={now}

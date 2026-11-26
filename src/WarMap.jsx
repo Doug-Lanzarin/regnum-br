@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BOSSES } from './bosses.js'
 
 const REALM_COLOR = Object.fromEntries(BOSSES.map((b) => [b.realm, b.color]))
@@ -82,6 +82,24 @@ export default function WarMap({ world, status }) {
 
   useEffect(() => setImgFailed(false), [world, data?.updated])
 
+  // fortes que mudaram de dono na última atualização: pulsam por alguns segundos
+  const prevOwners = useRef(null)
+  const [changed, setChanged] = useState(() => new Set())
+  useEffect(() => {
+    if (!data?.realms) return
+    const owners = new Map(data.realms.flatMap((x) => x.forts.map((f) => [f.name, f.owner])))
+    if (prevOwners.current) {
+      const diff = [...owners].filter(([n, o]) => prevOwners.current.get(n) && prevOwners.current.get(n) !== o).map(([n]) => n)
+      if (diff.length) {
+        setChanged(new Set(diff))
+        const id = setTimeout(() => setChanged(new Set()), 8000)
+        prevOwners.current = owners
+        return () => clearTimeout(id)
+      }
+    }
+    prevOwners.current = owners
+  }, [data])
+
   const realms = data?.realms ?? []
   const held = Object.fromEntries(
     REALMS.map((r) => [
@@ -132,7 +150,7 @@ export default function WarMap({ world, status }) {
         <div className="wz-score" aria-label="Fortes por reino">
           {REALMS.map((r) => (
             <div key={r} style={{ '--realm-color': REALM_COLOR[r] }}>
-              <strong>{held[r]}</strong>
+              <strong key={held[r]} className="wz-score-num">{held[r]}</strong>
               <span>{r}</span>
             </div>
           ))}
@@ -153,7 +171,7 @@ export default function WarMap({ world, status }) {
               </div>
               <ul className="wz-forts">
                 {forts.map((f) => (
-                  <li key={f.name} className={f.captured ? 'captured' : ''}>
+                  <li key={f.name} className={`${f.captured ? 'captured' : ''} ${changed.has(f.name) ? 'changed' : ''}`}>
                     <span className="wz-fort-num">{f.number}</span>
                     <span className="wz-fort-name">{f.name}</span>
                     <span className="wz-owner" style={{ '--owner-color': REALM_COLOR[f.owner] }}>

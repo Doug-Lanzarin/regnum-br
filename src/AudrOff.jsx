@@ -21,6 +21,12 @@ function countdown(ms) {
   return `${m}m ${sec}s`
 }
 
+// flocos de neve (posições fixas para não mudar a cada render)
+const SNOW = Array.from({ length: 28 }, (_, i) => {
+  const r = (n) => ((Math.sin(i * 12.9898 + n * 78.233) * 43758.5453) % 1 + 1) % 1
+  return { x: r(1) * 100, s: 2 + r(2) * 3, d: 9 + r(3) * 10, delay: r(4) * 18, o: 0.25 + r(5) * 0.45, drift: -20 + r(6) * 40 }
+})
+
 /** Página mostrada em /audr quando o Audr está fechado */
 export default function AudrOff() {
   const [now, setNow] = useState(() => Date.now())
@@ -37,8 +43,28 @@ export default function AudrOff() {
 
   return (
     <main className="audr-off">
+      <div className="audr-snow" aria-hidden="true">
+        {SNOW.map((f, i) => (
+          <span
+            key={i}
+            style={{
+              left: `${f.x}%`,
+              width: f.s,
+              height: f.s,
+              animationDuration: `${f.d}s`,
+              animationDelay: `${-f.delay}s`,
+              opacity: f.o,
+              '--drift': `${f.drift}px`,
+            }}
+          />
+        ))}
+      </div>
       <div className="audr-off-card">
-        <img src="./audr/audr-npc.png" alt="Audr, Regnum Coins Merchant" className="audr-off-npc" width="516" height="996" />
+        <div className="audr-off-figure">
+          <img src="./audr/audr-npc.png" alt="Audr, Regnum Coins Merchant" className="audr-off-npc" width="512" height="996" />
+          <span className="audr-eye" style={{ left: '44.7%' }} aria-hidden="true" />
+          <span className="audr-eye" style={{ left: '53.3%' }} aria-hidden="true" />
+        </div>
         <span className="audr-off-badge">
           <span className="audr-off-dot" /> Offline
         </span>

@@ -297,6 +297,37 @@ function formatLongTime(sec) {
   return d ? `${d} ${d > 1 ? 'dias' : 'dia'} ${hms}` : hms
 }
 
+/** Detalhes de crafting (êxito, tempo, nível, materiais) */
+function CraftDetails({ craft }) {
+  return (
+    <dl className="gear-craft">
+      <div>
+        <dt>Êxito</dt>
+        <dd>{craft.chance}%</dd>
+      </div>
+      <div>
+        <dt>Tempo para craftar</dt>
+        <dd>{formatLongTime(craft.time)}</dd>
+      </div>
+      <div>
+        <dt>Nível craft</dt>
+        <dd>{craft.level}</dd>
+      </div>
+      <div className="gear-craft-mats">
+        <dt>Materiais necessários</dt>
+        <dd>
+          {craft.materials.map((m) => (
+            <span key={m.name}>
+              <img src={m.icon} alt="" width="18" height="18" />
+              <b>{m.qty}×</b> {m.name}
+            </span>
+          ))}
+        </dd>
+      </div>
+    </dl>
+  )
+}
+
 /** Card de armadura/arma no estilo do tooltip do jogo */
 function GearCard({ item }) {
   return (
@@ -399,33 +430,7 @@ function GearCard({ item }) {
           {item.bound && <span className="gear-bound">Vinculado à conta</span>}
         </p>
       )}
-      {item.craft && (
-        <dl className="gear-craft">
-          <div>
-            <dt>Êxito</dt>
-            <dd>{item.craft.chance}%</dd>
-          </div>
-          <div>
-            <dt>Tempo para craftar</dt>
-            <dd>{formatLongTime(item.craft.time)}</dd>
-          </div>
-          <div>
-            <dt>Nível craft</dt>
-            <dd>{item.craft.level}</dd>
-          </div>
-          <div className="gear-craft-mats">
-            <dt>Materiais necessários</dt>
-            <dd>
-              {item.craft.materials.map((m) => (
-                <span key={m.name}>
-                  <img src={m.icon} alt="" width="18" height="18" />
-                  <b>{m.qty}×</b> {m.name}
-                </span>
-              ))}
-            </dd>
-          </div>
-        </dl>
-      )}
+      {item.craft && <CraftDetails craft={item.craft} />}
       {(item.costs ?? (item.cost != null ? [{ coin: item.coin ?? './champion/moeda.png', value: item.cost }] : [])).length > 0 && (
         <footer className="gear-cost">
           <span>Custo</span>
@@ -444,9 +449,25 @@ function GearCard({ item }) {
 }
 
 function JewelCard({ item }) {
+  const [open, setOpen] = useState(false)
+  const canCraft = Boolean(item.craft)
   return (
-    <article className="jewel">
-      <header className="jewel-head">
+    <article className={`jewel ${canCraft ? 'jewel-craftable' : ''} ${open ? 'open' : ''}`}>
+      <header
+        className="jewel-head"
+        {...(canCraft && {
+          role: 'button',
+          tabIndex: 0,
+          'aria-expanded': open,
+          onClick: () => setOpen((v) => !v),
+          onKeyDown: (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              setOpen((v) => !v)
+            }
+          },
+        })}
+      >
         <img src={item.icon} alt="" className="jewel-icon" width="40" height="40" loading="lazy" />
         <h3 className={item.epic ? 'gear-epic-name' : undefined}>{item.name}</h3>
       </header>
@@ -485,6 +506,30 @@ function JewelCard({ item }) {
         ))}
       </ul>
       {item.epic && <p className="gear-rarity">Épico</p>}
+      {canCraft && (
+        <button type="button" className="jewel-craft-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+          {open ? 'Ocultar crafting' : 'Ver crafting'}
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </button>
+      )}
+      {canCraft && open && (
+        <div className="jewel-craft">
+          <CraftDetails craft={item.craft} />
+          <footer className="gear-cost">
+            <span>Custo</span>
+            <span className="gear-cost-values">
+              {item.craft.costs.map((c) => (
+                <strong key={c.coin}>
+                  <img src={c.coin} alt="" width="16" height="17" />
+                  {c.value.toLocaleString('pt-BR')}
+                </strong>
+              ))}
+            </span>
+          </footer>
+        </div>
+      )}
     </article>
   )
 }
@@ -621,7 +666,7 @@ function ItemTopics({ section, topic, group }) {
           )}
           <div className="jewel-grid">
             {g.items.map((item) =>
-              section.id === 'joias' && !item.craft ? <JewelCard key={item.id} item={item} /> : <GearCard key={item.id} item={item} />,
+              section.id === 'joias' && !item.gear ? <JewelCard key={item.id} item={item} /> : <GearCard key={item.id} item={item} />,
             )}
           </div>
         </section>

@@ -2,8 +2,20 @@
 
 const icon = (id) => `./momo/${id}.png`
 
+const W = './magnanita/moeda-w.png'
+const m = (id, name, qty) => ({ id, name, qty, icon: `./epicos/mat/${id}.png` })
+const craft = (chance, time, level, materials, cost) => ({ chance, time, level, materials, costs: [{ coin: W, value: cost }] })
+
 export const MOMO_JEWELS = [
   {
+    craft: craft(100, 3600, 8, [
+        m('encantamento', 'Encantamento', 3),
+        m('chifre-momo', 'Chifre de Momo', 25),
+        m('tecido-momo', 'Tecido de Momo', 70),
+        m('lingote-aco-fino', 'Lingote de aço fino', 1),
+        m('pelo-momo', 'Pelo de Momo', 30),
+        m('alma-momo', 'Alma de Momo', 1),
+      ], 50000),
     id: 'anel-coragem',
     name: 'Anel da Coragem do Rei Momo',
     icon: icon('anel-coragem'),

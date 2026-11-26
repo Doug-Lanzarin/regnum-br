@@ -21,6 +21,7 @@ const amulet = (id, name, lore, stats) => ({
   stats: stats.map((text) => ({ text })),
   upgrades: null,
   bound: true,
+  gear: true, // mostra o crafting direto no card
   craft: { chance: 100, time: 5, level: 9, materials: mats(16, 12) },
   costs: [{ coin: W, value: 90000 }],
 })

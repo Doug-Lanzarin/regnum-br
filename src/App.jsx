@@ -14,6 +14,7 @@ import { WARMASTER_REALMS } from './joias.js'
 import { CHAMPION_ARMORS, CHAMPION_WEAPONS } from './champion.js'
 import { MAGNANITA_ARMORS } from './magnanita.js'
 import { EPIC_WEAPONS } from './epicWeapons.js'
+import { EPIC_JEWELS } from './epicJewels.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -133,10 +134,13 @@ const TABS = [
 ]
 
 /** Armas dos épicos: uma sub-aba por chefe (conteúdo em breve) */
-const EPIC_WEAPON_GROUPS = ['daenrha', 'evendim', 'thorkul'].map((id) => {
-  const b = BOSSES.find((x) => x.id === id)
-  return { id, label: b.name, color: b.color, items: EPIC_WEAPONS[id] ?? null }
-})
+const epicGroups = (data) =>
+  ['daenrha', 'evendim', 'thorkul'].map((id) => {
+    const b = BOSSES.find((x) => x.id === id)
+    return { id, label: b.name, color: b.color, items: data[id] ?? null }
+  })
+const EPIC_WEAPON_GROUPS = epicGroups(EPIC_WEAPONS)
+const EPIC_JEWEL_GROUPS = epicGroups(EPIC_JEWELS)
 
 /** Seções da aba Items (navegação em lista) */
 const ITEM_SECTIONS = [
@@ -144,7 +148,10 @@ const ITEM_SECTIONS = [
     id: 'joias',
     label: 'Jóias',
     desc: 'Anéis e amuletos',
-    topics: [{ id: 'warmaster', label: 'Warmaster', groups: WARMASTER_REALMS }],
+    topics: [
+      { id: 'warmaster', label: 'Warmaster', groups: WARMASTER_REALMS },
+      { id: 'epicos', label: 'Épicos', groups: EPIC_JEWEL_GROUPS },
+    ],
     icon: (
       <>
         <path d="M7.5 4h9L20 9l-8 11L4 9z" />
@@ -434,7 +441,7 @@ function JewelCard({ item }) {
     <article className="jewel">
       <header className="jewel-head">
         <img src={item.icon} alt="" className="jewel-icon" width="40" height="40" loading="lazy" />
-        <h3>{item.name}</h3>
+        <h3 className={item.epic ? 'gear-epic-name' : undefined}>{item.name}</h3>
       </header>
       <dl className="jewel-body">
         {item.damage && (
@@ -454,8 +461,15 @@ function JewelCard({ item }) {
           <dt>Peso:</dt>
           <dd>{item.weight}</dd>
         </div>
+        {item.itemLevel != null && (
+          <div>
+            <dt>Nível do item:</dt>
+            <dd>{item.itemLevel}</dd>
+          </div>
+        )}
         <div className="jewel-level">Requer Nível {item.level}</div>
       </dl>
+      {item.lore && <p className="jewel-lore">{item.lore}</p>}
       <ul className="jewel-stats">
         {item.stats.map((st) => (
           <li key={st.text} className={st.tone === 'bad' ? 'bad' : ''}>
@@ -463,6 +477,7 @@ function JewelCard({ item }) {
           </li>
         ))}
       </ul>
+      {item.epic && <p className="gear-rarity">Épico</p>}
     </article>
   )
 }

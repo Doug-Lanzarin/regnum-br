@@ -1051,6 +1051,15 @@ button {
   color: var(--muted);
 }
 
+.jewel-lore {
+  margin: 0;
+  padding: 10px 14px 0;
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
 .jewel-stats {
   margin: 0;
   padding: 10px 14px 14px;

@@ -862,6 +862,10 @@ button {
   scrollbar-width: none;
 }
 
+.topicnav {
+  scroll-behavior: smooth;
+}
+
 .topicnav::-webkit-scrollbar {
   display: none;
 }

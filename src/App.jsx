@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   BOSSES,
   RESPAWN_HOURS,
@@ -17,6 +17,7 @@ import { EPIC_WEAPONS } from './epicWeapons.js'
 import { EPIC_JEWELS } from './epicJewels.js'
 import { HALLOWEEN_JEWELS } from './halloweenJewels.js'
 import { MOMO_JEWELS } from './momoJewels.js'
+import { AQUANTIS_JEWELS } from './aquantisJewels.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -155,6 +156,7 @@ const ITEM_SECTIONS = [
       { id: 'epicos', label: 'Épicos', groups: EPIC_JEWEL_GROUPS },
       { id: 'halloween', label: 'Halloween', items: HALLOWEEN_JEWELS },
       { id: 'momo', label: 'Momo', items: MOMO_JEWELS, color: '#d6b06a' },
+      { id: 'aquantis', label: 'Aquantis', items: AQUANTIS_JEWELS, color: '#6ec9e6' },
     ],
     icon: (
       <>
@@ -561,14 +563,21 @@ const navChevron = (
 
 /** Abas internas de uma seção de Items (ex.: Jóias → Warmaster → Alsius/Ignis/Syrtis) */
 function ItemTopics({ section, topic, group }) {
+  const navRef = useRef(null)
   const t = section.topics.find((x) => x.id === topic) ?? section.topics[0]
+  // no celular as abas podem passar da largura: rola até a aba ativa
+  useEffect(() => {
+    const nav = navRef.current
+    const active = nav?.querySelector('.topicnav-item.active')
+    if (nav && active) nav.scrollTo({ left: active.offsetLeft - nav.clientWidth / 2 + active.offsetWidth / 2 })
+  }, [t.id])
   const g = t.items
     ? { id: t.id, items: t.items, color: t.color ?? '#c08bff' }
     : (t.groups?.find((x) => x.id === group) ?? t.groups?.find((x) => x.items) ?? t.groups?.[0])
   const href = (...parts) => '#' + ['items', section.id, ...parts].join('/')
   return (
     <>
-      <nav className="topicnav" aria-label={`Tópicos de ${section.label}`}>
+      <nav ref={navRef} className="topicnav" aria-label={`Tópicos de ${section.label}`}>
         {section.topics.map((x) => (
           <a
             key={x.id}

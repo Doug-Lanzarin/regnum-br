@@ -334,7 +334,7 @@ function GearCard({ item }) {
     <article className="jewel gear">
       <header className="jewel-head">
         <ItemIcon src={item.icon} name={item.name} className="jewel-icon" size={40} />
-        <h3 className={item.rarity ? 'gear-epic-name' : undefined}>{item.name}</h3>
+        <h3 className={item.rarity === 'Mágico' ? 'gear-magic-name' : item.rarity ? 'gear-epic-name' : undefined}>{item.name}</h3>
       </header>
       <dl className="jewel-body">
         {item.armor && (
@@ -423,7 +423,7 @@ function GearCard({ item }) {
             ? `${item.upgrades} níveis de melhoria`
             : 'Sem níveis de melhoria'}
       </p>}
-      {item.rarity && <p className="gear-rarity">{item.rarity}</p>}
+      {item.rarity && <p className={`gear-rarity ${item.rarity === 'Mágico' ? 'magic' : ''}`}>{item.rarity}</p>}
       {(item.paintable || item.bound) && (
         <p className="gear-flags">
           {item.paintable && <span>Pintável nos canais A, B</span>}
@@ -606,6 +606,18 @@ const navChevron = (
   </svg>
 )
 
+/** Agrupa itens pelo campo `section` (ex.: Novas / Antigas), mantendo a ordem */
+function groupBySection(items) {
+  if (!items.some((x) => x.section)) return [[null, items]]
+  const map = new Map()
+  for (const it of items) {
+    const k = it.section ?? 'Outros'
+    if (!map.has(k)) map.set(k, [])
+    map.get(k).push(it)
+  }
+  return [...map.entries()]
+}
+
 /** Abas internas de uma seção de Items (ex.: Jóias → Warmaster → Alsius/Ignis/Syrtis) */
 function ItemTopics({ section, topic, group }) {
   const navRef = useRef(null)
@@ -664,11 +676,20 @@ function ItemTopics({ section, topic, group }) {
               </ul>
             </div>
           )}
-          <div className="jewel-grid">
-            {g.items.map((item) =>
-              section.id === 'joias' && !item.gear ? <JewelCard key={item.id} item={item} /> : <GearCard key={item.id} item={item} />,
-            )}
-          </div>
+          {groupBySection(g.items).map(([label, list]) => (
+            <div key={label ?? 'all'} className="item-subsection">
+              {label && <h2 className="item-subsection-title">{label}</h2>}
+              <div className="jewel-grid">
+                {list.map((item) =>
+                  section.id === 'joias' && !item.gear ? (
+                    <JewelCard key={item.id} item={item} />
+                  ) : (
+                    <GearCard key={item.id} item={item} />
+                  ),
+                )}
+              </div>
+            </div>
+          ))}
         </section>
       ) : (
         <div key={g?.id} className="info-empty info-section">

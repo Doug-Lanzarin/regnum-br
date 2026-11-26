@@ -1211,6 +1211,14 @@ button {
   color: #e7a6ff;
 }
 
+.gear-magic-name {
+  color: #8fd18f;
+}
+
+.gear-rarity.magic {
+  color: #8fd18f;
+}
+
 .gear-rarity {
   margin: 0;
   padding: 0 14px 8px;
@@ -1310,6 +1318,29 @@ button {
   font-size: 0.95rem;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
+}
+
+.item-subsection + .item-subsection {
+  margin-top: 26px;
+}
+
+.item-subsection-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px 2px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--group-color, var(--gold));
+}
+
+.item-subsection-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
 }
 
 .info-section {

@@ -10,7 +10,7 @@ import {
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
 import MaterialsMap from './MaterialsMap.jsx'
-import { JUST_SPAWNED_MS, RollingText } from './anim.jsx'
+import { EmberBackground, JUST_SPAWNED_MS, RollingText } from './anim.jsx'
 import Audr from './Audr.jsx'
 import { audrWindow } from './audrWindow.js'
 import { WARMASTER_REALMS } from './joias.js'
@@ -1067,6 +1067,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <EmberBackground color={tab === 'inicio' ? rows[0].boss.color : '#ffa565'} />
       <main key={tab} className={`view view-${dirRef.current}`}>
         {tab === 'inicio' && <HomeView
             rows={rows}

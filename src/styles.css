@@ -2889,3 +2889,53 @@ button {
   }
 }
 
+
+/* ---------- Brasas no fundo ---------- */
+.embers {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.embers span {
+  position: absolute;
+  bottom: -12px;
+  border-radius: 50%;
+  background: var(--ember);
+  box-shadow: 0 0 6px 1px var(--ember);
+  opacity: 0;
+  animation-name: ember-rise, ember-flicker;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  transition: background 1.2s ease, box-shadow 1.2s ease;
+}
+
+@keyframes ember-rise {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--o);
+  }
+  80% {
+    opacity: calc(var(--o) * 0.7);
+  }
+  100% {
+    transform: translate(var(--drift), -105vh);
+    opacity: 0;
+  }
+}
+
+@keyframes ember-flicker {
+  50% {
+    filter: brightness(1.6);
+  }
+}
+
+.app > :not(.embers):not(.tabbar) {
+  position: relative;
+  z-index: 1;
+}

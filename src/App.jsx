@@ -10,6 +10,7 @@ import {
 } from './bosses.js'
 import WarMap, { useWarStatus } from './WarMap.jsx'
 import MaterialsMap from './MaterialsMap.jsx'
+import { WARMASTER_REALMS } from './joias.js'
 import { CRAFTING_GROUPS, formatCraftTime, formatGameTime } from './crafting.js'
 import { formatBrasilia, nextXymeraldReset } from './xymerald.js'
 
@@ -134,6 +135,7 @@ const ITEM_SECTIONS = [
     id: 'joias',
     label: 'Jóias',
     desc: 'Anéis e amuletos',
+    topics: [{ id: 'warmaster', label: 'Warmaster', groups: WARMASTER_REALMS }],
     icon: (
       <>
         <path d="M7.5 4h9L20 9l-8 11L4 9z" />
@@ -213,8 +215,18 @@ const parseHash = () => {
   const info = INFO_SECTIONS.find((x) => x.id === sub) ?? INFO_SECTIONS[0]
   const topicObj = info.topics ? (info.topics.find((t) => t.id === sub2) ?? info.topics[0]) : null
   const group = topicObj?.groups ? (topicObj.groups.find((g) => g.id === sub3) ?? topicObj.groups[0]).id : null
-  const itemSection = tab === 'items' && ITEM_SECTIONS.some((x) => x.id === sub) ? sub : null
-  return { tab, section: info.id, topic: topicObj?.id ?? null, group, itemSection }
+  const itemObj = tab === 'items' ? ITEM_SECTIONS.find((x) => x.id === sub) : null
+  const itemTopic = itemObj?.topics ? (itemObj.topics.find((t) => t.id === sub2) ?? itemObj.topics[0]) : null
+  const itemGroup = itemTopic?.groups ? (itemTopic.groups.find((g) => g.id === sub3) ?? itemTopic.groups[0]) : null
+  return {
+    tab,
+    section: info.id,
+    topic: topicObj?.id ?? null,
+    group,
+    itemSection: itemObj?.id ?? null,
+    itemTopic: itemTopic?.id ?? null,
+    itemGroup: itemGroup?.id ?? null,
+  }
 }
 
 /** Aba e sub-aba guardadas na URL: o botão voltar funciona e dá para compartilhar o link */
@@ -352,8 +364,63 @@ const navChevron = (
   </svg>
 )
 
+/** Abas internas de uma seção de Items (ex.: Jóias → Warmaster → Alsius/Ignis/Syrtis) */
+function ItemTopics({ section, topic, group }) {
+  const t = section.topics.find((x) => x.id === topic) ?? section.topics[0]
+  const g = t.groups?.find((x) => x.id === group) ?? t.groups?.[0]
+  const href = (...parts) => '#' + ['items', section.id, ...parts].join('/')
+  return (
+    <>
+      <nav className="topicnav" aria-label={`Tópicos de ${section.label}`}>
+        {section.topics.map((x) => (
+          <a
+            key={x.id}
+            href={href(x.id)}
+            className={`topicnav-item ${x.id === t.id ? 'active' : ''}`}
+            aria-current={x.id === t.id ? 'page' : undefined}
+          >
+            {x.label}
+          </a>
+        ))}
+      </nav>
+
+      {t.groups && (
+        <nav className="groupnav" aria-label={`${t.label} por reino`}>
+          {t.groups.map((x) => (
+            <a
+              key={x.id}
+              href={href(t.id, x.id)}
+              className={`groupnav-item ${x.id === g.id ? 'active' : ''}`}
+              style={{ '--group-color': x.color }}
+              aria-current={x.id === g.id ? 'page' : undefined}
+            >
+              <span className="groupnav-dot" />
+              {x.label}
+            </a>
+          ))}
+        </nav>
+      )}
+
+      {g ? (
+        <section key={g.id} className="info-section">
+          <div className="jewel-grid" style={{ '--group-color': g.color }}>
+            {g.items.map((item) => (
+              <JewelCard key={item.id} item={item} />
+            ))}
+          </div>
+        </section>
+      ) : (
+        <div className="info-empty info-section">
+          <strong>{t.label}</strong>
+          <span>Em breve</span>
+        </div>
+      )}
+    </>
+  )
+}
+
 /** Aba Items: lista de seções; ao tocar, abre a seção com um "voltar" */
-function ItemsView({ section }) {
+function ItemsView({ section, topic, group }) {
   const current = ITEM_SECTIONS.find((x) => x.id === section)
 
   if (!current) {
@@ -386,13 +453,18 @@ function ItemsView({ section }) {
         Items
       </a>
       <h1 className="item-page-title">{current.label}</h1>
-      <div className="info-empty">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          {current.icon}
-        </svg>
-        <strong>{current.label}</strong>
-        <span>Em breve</span>
-      </div>
+
+      {current.topics ? (
+        <ItemTopics section={current} topic={topic} group={group} />
+      ) : (
+        <div className="info-empty">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            {current.icon}
+          </svg>
+          <strong>{current.label}</strong>
+          <span>Em breve</span>
+        </div>
+      )}
     </section>
   )
 }
@@ -646,7 +718,7 @@ export default function App() {
 
         {tab === 'crafting' && <CraftingView />}
 
-        {tab === 'items' && <ItemsView section={route.itemSection} />}
+        {tab === 'items' && <ItemsView section={route.itemSection} topic={route.itemTopic} group={route.itemGroup} />}
       </main>
 
       {(tab === 'inicio' || tab === 'epicos') && (

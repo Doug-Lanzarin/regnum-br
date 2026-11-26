@@ -868,6 +868,9 @@ button {
 
 .topicnav-item {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
   min-height: 42px;
   padding: 0 2px;
   border: none;
@@ -921,6 +924,7 @@ button {
 }
 
 .groupnav-item {
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;

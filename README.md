@@ -16,6 +16,7 @@ Os horários estão no fuso de Brasília (UTC-3) e ficam definidos em `src/bosse
 - A contagem parte sempre dos horários fixos acima, somando 61 horas a cada ciclo
 - Barra de navegação flutuante com as abas Início, Épicos, Crafting e Items
 - Aba Items com navegação em lista: Jóias, Armaduras, Armas e Eventos
+- Jóias → Warmaster: joias de cada reino (Alsius, Ignis, Syrtis), dados em `src/joias.js`
 - Aba Crafting com as receitas (dados em `src/crafting.js`): ao tocar numa receita, abre a probabilidade de êxito, o tempo para craftar e os materiais necessários
 - Contador de reset do Xymerald na aba Início (a cada 23 horas, mesma regra do Regnum Warlords, horário de Brasília)
 - Mapa de guerra na aba Início (servidor Ra), com dados lidos direto do site oficial championsofregnum.com pela função `api/wz.js` e atualizados a cada minuto
